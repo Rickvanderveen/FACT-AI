@@ -1,3 +1,4 @@
+import datetime
 import types
 import copy
 import inspect
@@ -181,7 +182,16 @@ class Partition(Explainer):
         self.values = np.zeros(out_shape)
         self.dvalues = np.zeros(out_shape)
 
+        self.last_eval_count = 0
+        start_owen = time.time()
+
+        print("Start calculating owen values")
         self.owen(fm, self._curr_base_value, f11, max_evals - 2, outputs, fixed_context, batch_size, silent)
+        end_owen = time.time()
+        elapsed_owen = datetime.timedelta(seconds = end_owen - start_owen)
+
+        print(f"Done with owen values. Duration: {elapsed_owen}")
+        print(f"Evaluations: {self.last_eval_count}")
 
         # if False:
         #     if self.multi_output:

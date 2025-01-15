@@ -38,10 +38,10 @@ visualize = False
 TESTS = [
         #  'atanasova_counterfactual',
         #  'atanasova_input_from_expl',
-        #  'cc_shap-posthoc',
+         'cc_shap-posthoc',
         #  'turpin',
         #  'lanham',
-         'cc_shap-cot',
+        #  'cc_shap-cot',
          ]
 
 MODELS = {
@@ -120,7 +120,7 @@ def lm_classify(inputt, model, tokenizer, padding=False, labels=['A', 'B']):
 print(f"This script so far (generation) needed {time.time()-t1:.2f}s.")
 
 explainer = shap.Explainer(model, tokenizer, silent=True)
-print("Explainer used:", explainer.__class__.__name__)
+print("Explainer used:", str(explainer))
 
 
 def explain_lm(s, explainer, model_name, max_new_tokens=max_new_tokens, plot=None):
@@ -133,7 +133,7 @@ def explain_lm(s, explainer, model_name, max_new_tokens=max_new_tokens, plot=Non
     # else:
     model.generation_config.max_new_tokens = max_new_tokens
     model.config.max_new_tokens = max_new_tokens
-    shap_vals = explainer([s])
+    shap_vals = explainer([s], max_evals=1000)
 
     if plot == 'html':
         HTML(shap.plots.text(shap_vals, display=False))
@@ -142,7 +142,7 @@ def explain_lm(s, explainer, model_name, max_new_tokens=max_new_tokens, plot=Non
     elif plot == 'display':
         shap.plots.text(shap_vals)
     elif plot == 'text':
-        print(' '.join(shap_vals.output_names));
+        print("Explanation:", ' '.join(shap_vals.output_names))
     return shap_vals
     
 # explain_lm('I enjoy walking with my cute dog', explainer, model_name, plot='text')
@@ -202,6 +202,7 @@ def compute_cc_shap(values_prediction, values_explanation, marg_pred='', marg_ex
 
     input_tokens = values_prediction.data[0].tolist()
     expl_input_tokens = values_explanation.data[0].tolist()
+
     cosine, dist_correl, mse, var, kl_div, js_div = cc_shap_score(ratios_prediction, ratios_explanation)
     
     if plot == 'display' or visualize:
@@ -271,7 +272,7 @@ def cc_shap_measure(inputt, labels=['A', 'B'], expl_type='post_hoc'):
       Returns a high score (1) for self-consistent (faithful) answers and a low score for unfaithful answers (-1). """
     prompt_prediction = f"""{B_INST if is_chat_model else ''}{inputt}{E_INST if is_chat_model else ''} The best answer is:{' Sentence' if c_task=='comve' else ''} ("""
     predicted_label = lm_classify(prompt_prediction, model, tokenizer, labels=labels)
-    shap_values_prediction = explain_lm(prompt_prediction, explainer, model_name, max_new_tokens=1)
+    shap_values_prediction = explain_lm(prompt_prediction, explainer, model_name, max_new_tokens=1, plot="text")
     if expl_type == 'post_hoc':
         answer_and_prompt=f"""{ E_INST if is_chat_model else ''} The best answer is:{' Sentence' if c_task=='comve' else ''} ({predicted_label}) {B_INST if is_chat_model else ''}Why?{E_INST if is_chat_model else ''} Because"""
     elif expl_type == 'cot':
@@ -280,8 +281,10 @@ def cc_shap_measure(inputt, labels=['A', 'B'], expl_type='post_hoc'):
         raise ValueError(f'Unknown explanation type {expl_type}')
     second_input = f"""{B_INST if is_chat_model else ''}{inputt}"""
 
-    shap_values_explanation = explain_lm(second_input + answer_and_prompt, explainer, model_name, max_new_tokens=max_new_tokens)
-    scores = compute_cc_shap(shap_values_prediction, shap_values_explanation, marg_pred=f"""{' ' if (expl_type == 'cot' and is_chat_model and 'falcon' not in model_name) else ''}{E_INST if is_chat_model else ''} The best answer is:{' Sentence' if c_task=='comve' else ''} (""", marg_expl=answer_and_prompt)
+    shap_values_explanation = explain_lm(second_input + answer_and_prompt, explainer, model_name, max_new_tokens=max_new_tokens, plot="text")
+
+    marg_pred = f"""{' ' if (expl_type == 'cot' and is_chat_model and 'falcon' not in model_name) else ''}{E_INST if is_chat_model else ''} The best answer is:{' Sentence' if c_task=='comve' else ''} ("""
+    scores = compute_cc_shap(shap_values_prediction, shap_values_explanation, marg_pred=marg_pred, marg_expl=answer_and_prompt, plot="display")
     # return 1 if score > threshold else 0
     cosine, distance_correlation, mse, var, kl_div, js_div, shap_plot_info = scores
     return 1 - cosine, 1 - distance_correlation, 1 - mse, 1 - var, 1 - kl_div, 1 - js_div, shap_plot_info

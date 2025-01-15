@@ -1,4 +1,5 @@
 import copy
+import datetime
 import time
 import numpy as np
 import scipy as sp
@@ -263,10 +264,21 @@ class Explainer(Serializable):
         if callable(getattr(self.masker, "feature_names", None)):
             feature_names = [[] for _ in range(len(args))]
         for row_args in show_progress(zip(*args), num_rows, self.__class__.__name__+" explainer", silent):
+
+            print("\nStart explaining row")
+
+            start_explain = time.time()
+
             row_result = self.explain_row(
                 *row_args, max_evals=max_evals, main_effects=main_effects, error_bounds=error_bounds,
                 batch_size=batch_size, outputs=outputs, silent=silent, **kwargs
             )
+
+            end_explain = time.time()
+            elapsed = datetime.timedelta(seconds = end_explain - start_explain)
+
+            print(f"Done explaining row. Duration {elapsed}\n")
+
             values.append(row_result.get("values", None))
             output_indices.append(row_result.get("output_indices", None))
             expected_values.append(row_result.get("expected_values", None))
