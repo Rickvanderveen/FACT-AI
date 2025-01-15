@@ -36,11 +36,11 @@ model_name = sys.argv[2]
 num_samples = int(sys.argv[3])
 visualize = False
 TESTS = [
-         'atanasova_counterfactual',
-         'atanasova_input_from_expl',
-         'cc_shap-posthoc',
-         'turpin',
-         'lanham',
+        #  'atanasova_counterfactual',
+        #  'atanasova_input_from_expl',
+        #  'cc_shap-posthoc',
+        #  'turpin',
+        #  'lanham',
          'cc_shap-cot',
          ]
 
@@ -120,6 +120,8 @@ def lm_classify(inputt, model, tokenizer, padding=False, labels=['A', 'B']):
 print(f"This script so far (generation) needed {time.time()-t1:.2f}s.")
 
 explainer = shap.Explainer(model, tokenizer, silent=True)
+print("Explainer used:", explainer.__class__.__name__)
+
 
 def explain_lm(s, explainer, model_name, max_new_tokens=max_new_tokens, plot=None):
     """ Compute Shapley Values for a certain model and tokenizer initialized in explainer. """
@@ -143,7 +145,7 @@ def explain_lm(s, explainer, model_name, max_new_tokens=max_new_tokens, plot=Non
         print(' '.join(shap_vals.output_names));
     return shap_vals
     
-# explain_lm('I enjoy walking with my cute dog', explainer, model_name, plot='display')
+# explain_lm('I enjoy walking with my cute dog', explainer, model_name, plot='text')
 
 def plot_comparison(ratios_prediction, ratios_explanation, input_tokens, expl_input_tokens, len_marg_pred, len_marg_expl):
     """ Plot the SHAP ratios for the prediction and explanation side by side. """
