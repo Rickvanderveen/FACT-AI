@@ -26,6 +26,9 @@ import cc_shap_logger as cc_log
 cc_log.setup_logger()
 
 logger = logging.getLogger("shap")
+logger_question = logging.getLogger("shap.prediction")
+logger_answer = logging.getLogger("shap.answer")
+logger_explanation = logging.getLogger("shap.explanation")
 
 logger.info(f"Cuda is available: {torch.cuda.is_available()}")
 
@@ -71,8 +74,6 @@ logger.info(f"Tokenized: {tokenizer([''], return_tensors='pt', padding=False, ad
 logger.info(f"Tokenized: {tokenizer([''], return_tensors='pt', padding=False, add_special_tokens=False).input_ids.shape[1]}")
 
 
-quit()
-
 model_pipeline = pipeline.Pipeline.from_pretrained(
     full_model_name,
     dtype,
@@ -80,9 +81,11 @@ model_pipeline = pipeline.Pipeline.from_pretrained(
 )
 
 prompt = "When do I enjoy walking with my cute dog? On (A): a rainy day, or (B): a sunny day. The answer is: ("
+
 labels = ["A", "B"]
-# labels = ['Y', 'X', 'A', 'B', 'var' ,'Y']
-model_pipeline.lm_classify(prompt, labels)
+answer = model_pipeline.lm_classify(prompt, padding=False, labels=labels)
+logger_question.info(prompt)
+logger_answer.info(answer)
 
 explainer = shap.Explainer(
     model_pipeline.model,
@@ -90,6 +93,22 @@ explainer = shap.Explainer(
     algorithm="auto",
     silent=True
 )
+
+explain_prediction = model_pipeline.explain_lm(
+    prompt,
+    explainer,
+    max_new_tokens=20,
+    plot=None,
+)
+
+logger_answer.info(f"Time to compute {explain_prediction.compute_time} seconds")
+logger_answer.info(f"op_history {explain_prediction.op_history}")
+logger_answer.info(f"feature_names {explain_prediction.feature_names}")
+logger_answer.info(f"output_dims {explain_prediction.output_dims}")
+logger_answer.info(f"output_indexes {explain_prediction.output_indexes}")
+logger_answer.info(f"output_names {explain_prediction.output_names}")
+logger_answer.info(f"shape {explain_prediction.shape}")
+logger_answer.info(f"data {explain_prediction.data}")
 
 quit()
 

@@ -1,6 +1,7 @@
 import datetime
 import logging
 import time
+from typing import Literal
 import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -123,7 +124,7 @@ class Pipeline:
         label = labels[np.argmax(label_scores)]
         return label
 
-    def explain_lm(self, prompt, explainer, max_new_tokens, plot=None):
+    def explain_lm(self, prompt, explainer, max_new_tokens, plot: Literal["html", "display", "text"] | None = None):
         """ Compute Shapley Values for a certain model and tokenizer initialized in explainer."""
 
         if len(prompt) < 0:
@@ -150,9 +151,24 @@ class Pipeline:
         return shap_vals
 
 
-# print(lm_generate('I enjoy walking with my cute dog.', model, tokenizer, max_new_tokens=max_new_tokens))
+# print(lm_generate(
+#     'I enjoy walking with my cute dog.',
+#     model,
+#     tokenizer,
+#     max_new_tokens=max_new_tokens)
+# )
 
-# lm_classify('When do I enjoy walking with my cute dog? On (A): a rainy day, or (B): a sunny day. The answer is: (', model, tokenizer, labels=['Y', 'X', 'A', 'B', 'var' ,'Y']) # somehow the model has two ',', ',' with different ids
+# lm_classify(
+#     'When do I enjoy walking with my cute dog? On (A): a rainy day, or (B): a sunny day. The answer is: (',
+#     model,
+#     tokenizer,
+#     labels=['Y', 'X', 'A', 'B', 'var' ,'Y']
+# ) # somehow the model has two ',', ',' with different ids
 
-# explain_lm('I enjoy walking with my cute dog', explainer, model_name, plot='display')
+# explain_lm(
+#     'I enjoy walking with my cute dog', 
+#     explainer, 
+#     model_name, 
+#     plot='display'
+# )
 

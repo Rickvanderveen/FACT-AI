@@ -40,6 +40,7 @@ class ColoredFormatter(logging.Formatter):
 
 
 def setup_logger():
+    adjust_all_loggers()
     # Get the root logger
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
@@ -50,6 +51,21 @@ def setup_logger():
 
     # Add the handler to the logger
     logger.addHandler(console_handler)
+
+def adjust_all_loggers(default_level=logging.ERROR):
+    # Get all defined loggers
+    all_loggers = logging.root.manager.loggerDict
+
+    # Loop through all loggers and set their levels
+    for logger_name, logger_obj in all_loggers.items():
+        # Ensure it's a logger
+        if isinstance(logger_obj, logging.Logger):
+            # Ignore shap loggers
+            if logger_name.startswith("shap"):
+                continue
+
+            # Set the level to default
+            logger_obj.setLevel(default_level)
 
 if __name__ == "__main__":
     setup_logger()
