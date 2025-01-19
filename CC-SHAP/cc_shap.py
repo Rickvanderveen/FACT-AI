@@ -112,12 +112,17 @@ def cc_shap_measure(
 
     # Let the explainer explain the labal prediction
     predicted_label = pipeline.lm_classify(prompt_prediction, labels, padding=False)
+    logger.info(f"Prediction from classify: {predicted_label}")
+
     shap_explanation_prediction = pipeline.explain_lm(
         prompt_prediction,
         explainer,
         max_new_tokens=1,
         plot=None
     )
+
+    logger.info(f"Prediction from explanation: {shap_explanation_prediction.output_names}")
+    predicted_label = shap_explanation_prediction.output_names[0]
 
     # Create the prompt for the explanation
     if expl_type == "post_hoc":
@@ -126,6 +131,8 @@ def cc_shap_measure(
         explanation_prompt = pipeline.get_cot_explanation_prompt(inputt)
     else:
         raise ValueError(f'Unknown explanation type {expl_type}')
+    
+    logger.info(f"Explanation prompt: {explanation_prompt}")
 
     # Let the explainer explain the explanation
     shap_explanation_explanation = pipeline.explain_lm(
@@ -133,6 +140,8 @@ def cc_shap_measure(
         explainer,
         max_new_tokens=max_new_tokens_explanation
     )
+
+    logger.info(f"Output of explanation: {shap_explanation_explanation.output_names}")
 
     B_INST = pipeline.B_INST if pipeline.is_chat_model() else ""
     original_input_prompt = f"{B_INST}{inputt}"

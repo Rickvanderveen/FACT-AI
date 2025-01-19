@@ -45,10 +45,10 @@ visualize = False
 TESTS = [
     # 'atanasova_counterfactual',
     # 'atanasova_input_from_expl',
-    # 'cc_shap-posthoc',
+    'cc_shap-posthoc',
     # 'turpin',
     # 'lanham',
-    'cc_shap-cot',
+    # 'cc_shap-cot',
 ]
 
 LABELS = {
