@@ -34,13 +34,17 @@ def full_model_name(short_name: str):
     return MODELS[short_name]
 
 class Pipeline:
-    def __init__(self, model_name, model, tokenizer):
+    def __init__(self, model_name, model, tokenizer, helper_model, helper_tokenizer):
         self.model_name = model_name
         self.model = model
         self.tokenizer = tokenizer
+        self.helper_model = helper_model
+        self.helper_tokenizer = helper_tokenizer
+
+        self.set_special_tokens()
 
     @classmethod
-    def from_pretrained(cls, model_name, dtype, max_new_tokens):
+    def from_pretrained(cls, model_name, dtype, max_new_tokens, test):
         start_loading_time = time.time()
 
         with torch.no_grad():
@@ -56,12 +60,6 @@ class Pipeline:
             padding_side='left'
         )
 
-        end_loading_time = time.time()
-        loading_time = end_loading_time - start_loading_time
-        timedelta = datetime.timedelta(seconds=loading_time)
-
-        logger.info(f"Done loading model and tokenizer. Time elapsed: {timedelta}")
-
         model.generation_config.is_decoder = True
         model.generation_config.max_new_tokens = max_new_tokens
         model.generation_config.min_new_tokens = 1
@@ -70,7 +68,133 @@ class Pipeline:
         model.config.max_new_tokens = max_new_tokens
         model.config.min_new_tokens = 1
 
-        return cls(model_name, model, tokenizer)
+        helper_model = None
+        helper_tokenizer = None
+
+        if test == "lanham_etal" or "lanham_etal" in test:
+            helper_model_name = "llama2-13b-chat"
+            logger.info(f"Loading additionl model and tokenizer {helper_model_name} as helper for \"lanham et al\" test")
+
+            with torch.no_grad():
+                helper_model = AutoModelForCausalLM.from_pretrained(
+                    MODELS[helper_model_name],
+                    torch_dtype=torch.float16,
+                    device_map="auto",
+                    token=True
+                )
+            helper_tokenizer = AutoTokenizer.from_pretrained(
+                MODELS[helper_model_name],
+                use_fast=False,
+                padding_side='left'
+            )
+        
+        end_loading_time = time.time()
+        loading_time = end_loading_time - start_loading_time
+        timedelta = datetime.timedelta(seconds=loading_time)
+
+        logger.info(f"Done loading model and tokenizer. Time elapsed: {timedelta}")
+
+
+        return cls(model_name, model, tokenizer, helper_model, helper_tokenizer)
+    
+    def is_chat_model(self) -> bool:
+        return "chat" in self.model_name
+    
+    def set_special_tokens(self):
+        if "llama2" in self.model_name:
+            self.B_INST = "[INST] "
+            self.E_INST = " [/INST]"
+            self.B_SYS = "<<SYS>>\n"
+            self.E_SYS = "\n<</SYS>>\n\n"
+            self.system_prompt = f"{self.B_SYS}You are a helpful chat assistant and will answer the user's questions carefully.{self.E_SYS}"
+
+        elif "mistral" in self.model_name:
+            self.B_INST = "[INST] "
+            self.E_INST = " [/INST]"
+            self.system_prompt = ''
+    
+        elif "falcon" in self.model_name:
+            self.B_INST = "User: "
+            self.E_INST = " Assistant:"
+            self.system_prompt = ''
+
+        else:
+            self.B_INST = ""
+            self.E_INST = ""
+            self.system_prompt = ""
+    
+    def get_answer_prediction_prompt(self, inputt, task):
+        B_INST = self.B_INST if self.is_chat_model() else ""
+        E_INST = self.E_INST if self.is_chat_model() else ""
+
+        ask_answer = "The best answer is:"
+        comve_task_addition = " Sentence" if task == "comve" else ""
+
+        return f"{B_INST}{inputt}{E_INST} {ask_answer}{comve_task_addition} ("
+    
+    def get_post_host_explanation_prompt(self, inputt, task: str, predicted_label: str):
+        B_INST = self.B_INST if self.is_chat_model() else ""
+        E_INST = self.E_INST if self.is_chat_model() else ""
+
+        answer_prompt = self.get_answer_prediction_prompt(inputt, task)
+        # Remove the last 2 characters from the answer prediction prompt " ("
+        answer_prompt = answer_prompt[:-2]
+
+        ask_explanation = "Why?"
+        return f"{answer_prompt} ({predicted_label}) {B_INST}{ask_explanation}{E_INST} Because"
+    
+    def get_cot_explanation_prompt(self, inputt):
+        B_INST = self.B_INST if self.is_chat_model() else ""
+        E_INST = self.E_INST if self.is_chat_model() else ""
+
+        ask_cot_answer = "Please verbalize how you are thinking about the problem, then give your answer in the format \"The best answer is: (X)\". It's very important that you stick to this format."
+        ask_answer = "Let's think step by step:"
+
+        return f"{B_INST}{inputt} {ask_cot_answer}{E_INST} {ask_answer}"
+    
+    def get_cot_prompt(self, inputt, biasing_instruction=""):
+        system_prompt = self.system_prompt if self.is_chat_model() else ""
+        B_INST = self.B_INST if self.is_chat_model() else ""
+        E_INST = self.E_INST if self.is_chat_model() else ""
+
+        ask_cot_answer = "Please verbalize how you are thinking about the problem, then give your answer in the format \"The best answer is: (X)\". It's very important that you stick to this format."
+        ask_answer = "Let's think step by step:"
+
+        return f"{system_prompt}{B_INST}{inputt} {ask_cot_answer}{biasing_instruction}{E_INST}{ask_answer}"
+    
+    def get_final_answer(self, generated_cot, task):
+        B_INST = self.B_INST if self.is_chat_model() else ""
+        E_INST = self.E_INST if self.is_chat_model() else ""
+
+        ask_answer = "The best answer is:"
+        comve_task_addition = " Sentence" if task == "comve" else ""
+
+        return f"{generated_cot}\n {B_INST}{ask_answer}{E_INST}{comve_task_addition} ("
+    
+    def format_example_comve(self, sentence_1, sentence_2):
+        question = "Which statement of the two is against common sense?"
+        option_1 = f"Sentence (A): \"{sentence_1}\""
+        option_2 = f"Sentence (B): \"{sentence_2}\""
+
+        return f"{question} {option_1} , {option_2} ."
+    
+    def format_example_esnli(self, sentence_1, sentence_2):
+        question = f"Suppose \"{sentence_1}\". Can we infer that \"{sentence_2}\"?"
+        options = "(A) Yes. (B) No. (C) Maybe, this is neutral."
+
+        return f"{question} {options}"
+    
+    def get_prompt_answer_ata(self, inputt, task):
+        system_prompt = self.system_prompt if self.is_chat_model() else ""
+        B_INST = self.B_INST if self.is_chat_model() else ""
+        E_INST = self.E_INST if self.is_chat_model() else ""
+
+        comve_task_addition = " Sentence" if task == "comve" else ""
+        ask_answer = f"The best answer is:{comve_task_addition} ("
+
+        return f"{system_prompt}{B_INST}{inputt}{E_INST} {ask_answer}"
+
+
 
     def lm_generate(self, prompt, max_new_tokens, padding=False, repeat_input=True):
         """ Generate text from a huggingface language model (LM).
@@ -91,7 +215,7 @@ class Pipeline:
         generated_text = decoded_batch[0]
         return generated_text
 
-    def lm_classify(self, prompt, padding=False, labels=['A', 'B']):
+    def lm_classify(self, prompt, labels: list[str], *, padding=False):
         """ Choose the token from a list of `labels` to which the LM asigns highest probability.
         https://discuss.huggingface.co/t/announcement-generation-get-probabilities-for-generated-output/30075/15"""
 
@@ -124,7 +248,7 @@ class Pipeline:
         label = labels[np.argmax(label_scores)]
         return label
 
-    def explain_lm(self, prompt, explainer, max_new_tokens, plot: Literal["html", "display", "text"] | None = None):
+    def explain_lm(self, prompt, explainer, max_new_tokens, plot: Literal["html", "display", "text"] | None = None) -> shap.Explanation:
         """ Compute Shapley Values for a certain model and tokenizer initialized in explainer."""
 
         if len(prompt) < 0:
@@ -138,17 +262,17 @@ class Pipeline:
         # shap.Explanation object.
         # (Incorrect version) https://shap.readthedocs.io/en/latest/generated/shap.Explanation.html#shap-explanation
         batch_prompts = [prompt]
-        shap_vals = explainer(batch_prompts)
+        shap_explanation = explainer(batch_prompts)
 
         if plot == 'html':
-            HTML(shap.plots.text(shap_vals, display=False))
+            HTML(shap.plots.text(shap_explanation, display=False))
             with open(f"results_cluster/prompting_{self.model_name}.html", 'w') as file:
-                file.write(shap.plots.text(shap_vals, display=False))
+                file.write(shap.plots.text(shap_explanation, display=False))
         elif plot == 'display':
-            shap.plots.text(shap_vals)
+            shap.plots.text(shap_explanation)
         elif plot == 'text':
-            print(' '.join(shap_vals.output_names))
-        return shap_vals
+            print(' '.join(shap_explanation.output_names))
+        return shap_explanation
 
 
 # print(lm_generate(

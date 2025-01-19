@@ -23,12 +23,13 @@ class ColoredFormatter(logging.Formatter):
         log_name = "[%(name)s]"
         message = "%(message)s"
         line_number = "%(lineno)s"
+        filename = "%(filename)s"
 
         log_format = f"{time} {log_name} {color_level}"
 
         # Add the linenumber only if its a debug log
         if level_name == "DEBUG":
-            log_format += f"Line {line_number}"
+            log_format += f"{filename} {line_number}"
 
         # Add the message 
         log_format += f": {message}"

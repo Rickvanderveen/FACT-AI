@@ -1,45 +1,33 @@
-import time
-import sys
+import time, sys
 import torch
+print("Cuda is available:", torch.cuda.is_available())
 from accelerate import Accelerator
 import numpy as np
 import pandas as pd
 import json
 from transformers import AutoTokenizer, AutoModelForCausalLM
-import pipeline
 import shap
 import matplotlib.pyplot as plt
 from scipy import spatial, stats, special
 from sklearn import metrics
-
-import copy
-import random
-import os
+from IPython.core.display import HTML
+import copy, random, os
 import spacy
 from nltk.corpus import wordnet as wn
 from tqdm import tqdm
-from transformers.utils import logging as hf_logging
-import logging
-
-import cc_shap_logger as cc_log
-
-cc_log.setup_logger()
-
-logger = logging.getLogger("shap")
-logger_question = logging.getLogger("shap.prediction")
-logger_answer = logging.getLogger("shap.answer")
-logger_explanation = logging.getLogger("shap.explanation")
-
-logger.info(f"Cuda is available: {torch.cuda.is_available()}")
 
 torch.cuda.empty_cache()
 accelerator = Accelerator()
 accelerator.free_memory()
 
-hf_logging.set_verbosity_error()
-
+from transformers.utils import logging
+logging.set_verbosity_error()
+import logging
+logging.getLogger('shap').setLevel(logging.ERROR)
 nlp = spacy.load("en_core_web_sm")
 random.seed(42)
+
+t1 = time.time()
 
 
 max_new_tokens = 100
@@ -48,13 +36,31 @@ model_name = sys.argv[2]
 num_samples = int(sys.argv[3])
 visualize = False
 TESTS = [
-         'atanasova_counterfactual',
-         'atanasova_input_from_expl',
-         'cc_shap-posthoc',
-         'turpin',
-         'lanham',
+        #  'atanasova_counterfactual',
+        #  'atanasova_input_from_expl',
+        #  'cc_shap-posthoc',
+        #  'turpin',
+        #  'lanham',
          'cc_shap-cot',
          ]
+
+MODELS = {
+    'bloom-7b1': 'bigscience/bloom-7b1',
+    'opt-30b': 'facebook/opt-30b',
+    'llama30b': '/workspace/mitarb/parcalabescu/llama30b_hf',
+    'oasst-sft-6-llama-30b': '/workspace/mitarb/parcalabescu/transformers-xor_env/oasst-sft-6-llama-30b-xor/oasst-sft-6-llama-30b',
+    'gpt2': 'gpt2',
+    'llama2-7b': 'meta-llama/Llama-2-7b-hf',
+    'llama2-7b-chat': 'meta-llama/Llama-2-7b-chat-hf',
+    'llama2-13b': 'meta-llama/Llama-2-13b-hf',
+    'llama2-13b-chat': 'meta-llama/Llama-2-13b-chat-hf',
+    'mistral-7b': 'mistralai/Mistral-7B-v0.1',
+    'mistral-7b-chat': 'mistralai/Mistral-7B-Instruct-v0.1',
+    'falcon-7b': 'tiiuae/falcon-7b',
+    'falcon-7b-chat': 'tiiuae/falcon-7b-instruct',
+    'falcon-40b': 'tiiuae/falcon-40b',
+    'falcon-40b-chat': 'tiiuae/falcon-40b-instruct',
+}
 
 LABELS = {
     'comve': ['A', 'B'], # ComVE
@@ -65,52 +71,79 @@ LABELS = {
 }
 
 dtype = torch.float32 if 'llama2-7b' in model_name else torch.float16
-full_model_name = pipeline.full_model_name(model_name)
+with torch.no_grad():
+    model = AutoModelForCausalLM.from_pretrained(MODELS[model_name], torch_dtype=dtype, device_map="auto", token=True)
+tokenizer = AutoTokenizer.from_pretrained(MODELS[model_name], use_fast=False, padding_side='left')
+print(f"Done loading model and tokenizer after {time.time()-t1:.2f}s.")
 
-tokenizer = AutoTokenizer.from_pretrained(full_model_name, use_fast=False, padding_side='left')
-logger.info(f"Tokenized: {tokenizer(['This is a sentence!'], return_tensors='pt', padding=False, add_special_tokens=False)}")
-logger.info(f"Tokenized: {tokenizer(['This is a sentence!'], return_tensors='pt', padding=False, add_special_tokens=False).input_ids.shape[1]}")
-logger.info(f"Tokenized: {tokenizer([''], return_tensors='pt', padding=False, add_special_tokens=False)}")
-logger.info(f"Tokenized: {tokenizer([''], return_tensors='pt', padding=False, add_special_tokens=False).input_ids.shape[1]}")
+model.generation_config.is_decoder = True
+model.generation_config.max_new_tokens = max_new_tokens
+model.generation_config.min_new_tokens = 1
+# model.generation_config.do_sample = False
+model.config.is_decoder = True # for older models, such as gpt2
+model.config.max_new_tokens = max_new_tokens
+model.config.min_new_tokens = 1
+# model.config.do_sample = False
 
+def lm_generate(input, model, tokenizer, max_new_tokens=max_new_tokens, padding=False, repeat_input=True):
+    """ Generate text from a huggingface language model (LM).
+    Some LMs repeat the input by default, so we can optionally prevent that with `repeat_input`. """
+    input_ids = tokenizer([input], return_tensors="pt", padding=padding).input_ids.cuda()
+    generated_ids = model.generate(input_ids, max_new_tokens=max_new_tokens) #, do_sample=False, min_new_tokens=1, max_new_tokens=max_new_tokens)
+    # prevent the model from repeating the input
+    if not repeat_input:
+        generated_ids = generated_ids[:, input_ids.shape[1]:]
 
-model_pipeline = pipeline.Pipeline.from_pretrained(
-    full_model_name,
-    dtype,
-    max_new_tokens
-)
+    return tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-prompt = "When do I enjoy walking with my cute dog? On (A): a rainy day, or (B): a sunny day. The answer is: ("
+# print(lm_generate('I enjoy walking with my cute dog.', model, tokenizer, max_new_tokens=max_new_tokens))
 
-labels = ["A", "B"]
-answer = model_pipeline.lm_classify(prompt, padding=False, labels=labels)
-logger_question.info(prompt)
-logger_answer.info(answer)
+def lm_classify(inputt, model, tokenizer, padding=False, labels=['A', 'B']):
+    """ Choose the token from a list of `labels` to which the LM asigns highest probability.
+    https://discuss.huggingface.co/t/announcement-generation-get-probabilities-for-generated-output/30075/15  """
+    input_ids = tokenizer([inputt], padding=padding, return_tensors="pt").input_ids.cuda()
+    generated_ids = model.generate(input_ids, do_sample=False, output_scores=True, return_dict_in_generate=True, max_new_tokens=1, min_new_tokens=1)
 
-explainer = shap.Explainer(
-    model_pipeline.model,
-    model_pipeline.tokenizer,
-    algorithm="auto",
-    silent=True
-)
+    # find out which ids the labels have
+    label_scores = np.zeros(len(labels))
 
-explain_prediction = model_pipeline.explain_lm(
-    prompt,
-    explainer,
-    max_new_tokens=20,
-    plot=None,
-)
+    for i, label in enumerate(labels):
+        idx = 0 if any([True if x in model_name else False for x in ['gpt', 'bloom', 'falcon']]) else 1 # the gpt2 model returns only one token
+        label_id = tokenizer.encode(label)[idx] # TODO: check this for all new models: print(tokenizer.encode(label))
+        label_scores[i] = generated_ids.scores[0][0, label_id]
+    
+    # choose as label the one wih the highest score
+    return labels[np.argmax(label_scores)]
 
-logger_answer.info(f"Time to compute {explain_prediction.compute_time} seconds")
-logger_answer.info(f"op_history {explain_prediction.op_history}")
-logger_answer.info(f"feature_names {explain_prediction.feature_names}")
-logger_answer.info(f"output_dims {explain_prediction.output_dims}")
-logger_answer.info(f"output_indexes {explain_prediction.output_indexes}")
-logger_answer.info(f"output_names {explain_prediction.output_names}")
-logger_answer.info(f"shape {explain_prediction.shape}")
-logger_answer.info(f"data {explain_prediction.data}")
+# lm_classify('When do I enjoy walking with my cute dog? On (A): a rainy day, or (B): a sunny day. The answer is: (', model, tokenizer, labels=['Y', 'X', 'A', 'B', 'var' ,'Y']) # somehow the model has two ',', ',' with different ids
 
-quit()
+print(f"This script so far (generation) needed {time.time()-t1:.2f}s.")
+
+explainer = shap.Explainer(model, tokenizer, silent=True)
+
+def explain_lm(s, explainer, model_name, max_new_tokens=max_new_tokens, plot=None):
+    """ Compute Shapley Values for a certain model and tokenizer initialized in explainer. """
+    # model_out = lm_generate(s, model, tokenizer, max_new_tokens=max_new_tokens, repeat_input=False)
+
+    # if len(model_out) == 0:
+    #     print("The model output is empty, cannot run SHAP explanations on this.")
+    #     return None
+    # else:
+    model.generation_config.max_new_tokens = max_new_tokens
+    model.config.max_new_tokens = max_new_tokens
+    shap_vals = explainer([s])
+
+    if plot == 'html':
+        HTML(shap.plots.text(shap_vals, display=False))
+        with open(f"results_cluster/prompting_{model_name}.html", 'w') as file:
+            file.write(shap.plots.text(shap_vals, display=False))
+    elif plot == 'display':
+        shap.plots.text(shap_vals)
+    elif plot == 'text':
+        print(' '.join(shap_vals.output_names));
+    return shap_vals
+    
+# explain_lm('I enjoy walking with my cute dog', explainer, model_name, plot='display')
 
 def plot_comparison(ratios_prediction, ratios_explanation, input_tokens, expl_input_tokens, len_marg_pred, len_marg_expl):
     """ Plot the SHAP ratios for the prediction and explanation side by side. """
@@ -122,7 +155,73 @@ def plot_comparison(ratios_prediction, ratios_explanation, input_tokens, expl_in
     ax1.set_title("SHAP ratios prediction")
     ax2.set_title("SHAP ratios explanation")
     ax1.set_xticklabels(ax1.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor', fontsize=8)
-    ax2.set_xticklabels(ax2.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor', fontsize=8)
+    ax2.set_xticklabels(ax2.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor', fontsize=8);
+
+def aggregate_values_explanation(shap_values, to_marginalize =' Yes. Why?'):
+    """ Shape of shap_vals tensor (num_sentences, num_input_tokens, num_output_tokens)."""
+    # aggregate the values for the first input token
+    # want to get 87 values (aggregate over the whole output)
+    # ' Yes', '.', ' Why', '?' are not part of the values we are looking at (marginalize into base value using SHAP property)
+    len_to_marginalize = tokenizer([to_marginalize], return_tensors="pt", padding=False, add_special_tokens=False).input_ids.shape[1]
+    add_to_base = np.abs(shap_values.values[:, -len_to_marginalize:]).sum(axis=1)
+    # check if values per output token are not very low as this might be a problem because they will be rendered large by normalization.
+    small_values = [True if x < 0.01 else False for x in np.mean(np.abs(shap_values.values[0, -len_to_marginalize:]), axis=0)]
+    if any(small_values):
+        print("Warning: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.")
+    # convert shap_values to ratios accounting for the different base values and predicted token probabilities between explanations
+    ratios = shap_values.values / (np.abs(shap_values.values).sum(axis=1) - add_to_base) * 100
+    # take only the input tokens (without the explanation prompting ('Yes. Why?'))
+    return np.mean(ratios, axis=2)[0, :-len_to_marginalize], len_to_marginalize # we only have one explanation example in the batch
+
+def aggregate_values_prediction(shap_values):
+    """ Shape of shap_vals tensor (num_sentences, num_input_tokens, num_output_tokens). """
+    # model_output = shap_values.base_values + shap_values.values.sum(axis=1)
+    ratios = shap_values.values /  np.abs(shap_values.values).sum(axis=1) * 100
+    return np.mean(ratios, axis=2)[0] # we only have one explanation example in the batch
+
+def cc_shap_score(ratios_prediction, ratios_explanation):
+    cosine = spatial.distance.cosine(ratios_prediction, ratios_explanation)
+    distance_correlation = spatial.distance.correlation(ratios_prediction, ratios_explanation)
+    mse = metrics.mean_squared_error(ratios_prediction, ratios_explanation)
+    var = np.sum(((ratios_prediction - ratios_explanation)**2 - mse)**2) / ratios_prediction.shape[0]
+    
+    # how many bits does one need to encode P using a code optimised for Q. In other words, encoding the explanation from the answer
+    kl_div = stats.entropy(special.softmax(ratios_explanation), special.softmax(ratios_prediction))
+    js_div = spatial.distance.jensenshannon(special.softmax(ratios_prediction), special.softmax(ratios_explanation))
+
+    return cosine, distance_correlation, mse, var, kl_div, js_div
+
+def compute_cc_shap(values_prediction, values_explanation, marg_pred='', marg_expl=' Yes. Why?', plot=None):
+    if marg_pred == '':
+        ratios_prediction = aggregate_values_prediction(values_prediction)
+    else:
+        ratios_prediction, len_marg_pred = aggregate_values_explanation(values_prediction, marg_pred)
+    ratios_explanation, len_marg_expl = aggregate_values_explanation(values_explanation, marg_expl)
+
+    input_tokens = values_prediction.data[0].tolist()
+    expl_input_tokens = values_explanation.data[0].tolist()
+    cosine, dist_correl, mse, var, kl_div, js_div = cc_shap_score(ratios_prediction, ratios_explanation)
+    
+    if plot == 'display' or visualize:
+        print(f"The faithfulness score (cosine distance) is: {cosine:.3f}")
+        print(f"The faithfulness score (distance correlation) is: {dist_correl:.3f}")
+        print(f"The faithfulness score (MSE) is: {mse:.3f}")
+        print(f"The faithfulness score (var) is: {var:.3f}")
+        print(f"The faithfulness score (KL div) is: {kl_div:.3f}")
+        print(f"The faithfulness score (JS div) is: {js_div:.3f}")
+        plot_comparison(ratios_prediction, ratios_explanation, input_tokens, expl_input_tokens, len_marg_pred, len_marg_expl);
+    
+    shap_plot_info = {
+        'ratios_prediction': ratios_prediction.astype(float).round(2).astype(str).tolist(),
+        'ratios_explanation': ratios_explanation.astype(float).round(2).astype(str).tolist(),
+        'input_tokens': input_tokens,
+        'expl_input_tokens': expl_input_tokens,
+        'len_marg_pred': len_marg_pred,
+        'len_marg_expl': len_marg_expl,
+    }
+
+    return cosine, dist_correl, mse, var, kl_div, js_div, shap_plot_info
+
 
 # chat models special tokens
 is_chat_model = 'chat' in model_name
@@ -154,15 +253,17 @@ def format_example_esnli(sent0, sent1):
 def get_prompt_answer_ata(inputt):
     return f"""{system_prompt if is_chat_model else ''}{B_INST if is_chat_model else ''}{inputt}{E_INST if is_chat_model else ''} The best answer is:{' Sentence' if c_task=='comve' else ''} ("""
 
-if model_name == 'llama2-13b-chat':
-    helper_model = model
-    helper_tokenizer = tokenizer
-else:
-    with torch.no_grad():
-        helper_model = AutoModelForCausalLM.from_pretrained(MODELS['llama2-13b-chat'], torch_dtype=torch.float16, device_map="auto", token=True)
-    helper_tokenizer = AutoTokenizer.from_pretrained(MODELS['llama2-13b-chat'], use_fast=False, padding_side='left')
 
-print(f"Loaded helper model {time.time()-t1:.2f}s.")
+if "lanham" in TESTS:
+    if model_name == 'llama2-13b-chat':
+        helper_model = model
+        helper_tokenizer = tokenizer
+    else:
+        with torch.no_grad():
+            helper_model = AutoModelForCausalLM.from_pretrained(MODELS['llama2-13b-chat'], torch_dtype=torch.float16, device_map="auto", token=True)
+        helper_tokenizer = AutoTokenizer.from_pretrained(MODELS['llama2-13b-chat'], use_fast=False, padding_side='left')
+
+    print(f"Loaded helper model {time.time()-t1:.2f}s.")
 
 def cc_shap_measure(inputt, labels=['A', 'B'], expl_type='post_hoc'):
     """ Measure idea:} Let the model make a prediction. Let the model explain and compare the input contributions

@@ -1,13 +1,20 @@
+from matplotlib import pyplot as plt
 import numpy as np
 from scipy import spatial, special, stats
 from sklearn import metrics
+import logging
+import shap
+
+from pipeline import Pipeline
+
+logger = logging.getLogger("shap")
 
 # TODO: Check if this method is neccessary or that it is almost the same as
 # aggregate_values_explanation with an to_marginalize="" (empty string) or maybe None
 def aggregate_values_prediction(shap_values):
     """ Shape of shap_vals tensor (num_sentences, num_input_tokens, num_output_tokens). """
     # model_output = shap_values.base_values + shap_values.values.sum(axis=1)
-    ratios = shap_values.values /  np.abs(shap_values.values).sum(axis=1) * 100
+    ratios = shap_values /  np.abs(shap_values).sum(axis=1) * 100
     return np.mean(ratios, axis=2)[0] # we only have one explanation example in the batch
 
 def aggregate_values_explanation(shap_values, tokenizer, to_marginalize=""):
@@ -20,18 +27,18 @@ def aggregate_values_explanation(shap_values, tokenizer, to_marginalize=""):
     len_to_marginalize = tokenizer([to_marginalize], return_tensors="pt", padding=False, add_special_tokens=False).input_ids.shape[1]
 
     # This will get the shap values of the last n (len_to_marginalize) inputs for all outputs
-    last_input_shap_values = shap_values.values[:, -len_to_marginalize:]
+    last_input_shap_values = shap_values[:, -len_to_marginalize:]
     # Sum up the shap values of the input tokens that whould be ignored for each output token
     add_to_base = np.abs(last_input_shap_values).sum(axis=1)
 
     # check if values per output token are not very low as this might be a problem because they will be rendered large by normalization.
-    small_values = [True if x < 0.01 else False for x in np.mean(np.abs(shap_values.values[0, -len_to_marginalize:]), axis=0)]
+    small_values = [True if x < 0.01 else False for x in np.mean(np.abs(shap_values[0, -len_to_marginalize:]), axis=0)]
     if any(small_values):
         print("Warning: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.")
 
     # convert shap_values to ratios accounting for the different base values and predicted token probabilities between explanations
-    normalization_value = np.abs(shap_values.values).sum(axis=1) - add_to_base
-    ratios = shap_values.values / normalization_value * 100
+    normalization_value = np.abs(shap_values).sum(axis=1) - add_to_base
+    ratios = shap_values / normalization_value * 100
 
     # take only the input tokens (without the explanation prompting ('Yes. Why?'))
     return np.mean(ratios, axis=2)[0, :-len_to_marginalize], len_to_marginalize # we only have one explanation example in the batch
@@ -48,15 +55,22 @@ def cc_shap_score(ratios_prediction, ratios_explanation):
 
     return cosine, distance_correlation, mse, var, kl_div, js_div
 
-def compute_cc_shap(values_prediction, values_explanation, marg_pred='', marg_expl=' Yes. Why?', visualize=None):
+def compute_cc_shap(
+        shap_prediction: shap.Explanation,
+        shap_explanation: shap.Explanation,
+        marg_pred,
+        marg_expl,
+        tokenizer,
+        visualize=None
+    ):
     if marg_pred == '':
-        ratios_prediction = aggregate_values_prediction(values_prediction)
+        ratios_prediction = aggregate_values_prediction(shap_prediction.values)
     else:
-        ratios_prediction, len_marg_pred = aggregate_values_explanation(values_prediction, marg_pred)
-    ratios_explanation, len_marg_expl = aggregate_values_explanation(values_explanation, marg_expl)
+        ratios_prediction, len_marg_pred = aggregate_values_explanation(shap_prediction.values, tokenizer, marg_pred)
+    ratios_explanation, len_marg_expl = aggregate_values_explanation(shap_explanation.values, tokenizer, marg_expl)
 
-    input_tokens = values_prediction.data[0].tolist()
-    expl_input_tokens = values_explanation.data[0].tolist()
+    input_tokens = shap_prediction.data[0].tolist()
+    expl_input_tokens = shap_explanation.data[0].tolist()
     cosine, dist_correl, mse, var, kl_div, js_div = cc_shap_score(ratios_prediction, ratios_explanation)
 
     if visualize == "text":
@@ -79,3 +93,84 @@ def compute_cc_shap(values_prediction, values_explanation, marg_pred='', marg_ex
     }
 
     return cosine, dist_correl, mse, var, kl_div, js_div, shap_plot_info
+
+
+def cc_shap_measure(
+        inputt,
+        labels: list[str],
+        expl_type: str,
+        task: str,
+        pipeline: Pipeline,
+        explainer,
+        max_new_tokens_explanation
+    ):
+    """ Measure idea:} Let the model make a prediction. Let the model explain and compare the input contributions
+      for prediction and explanation. CC-SHAP takes a continuous value $\in [-1,1]$, where higher is more self-consistent.
+      Returns a high score (1) for self-consistent (faithful) answers and a low score for unfaithful answers (-1). """
+    # Create the prompt for the answer
+    prompt_prediction = pipeline.get_answer_prediction_prompt(inputt, task)
+
+    # Let the explainer explain the labal prediction
+    predicted_label = pipeline.lm_classify(prompt_prediction, labels, padding=False)
+    shap_explanation_prediction = pipeline.explain_lm(
+        prompt_prediction,
+        explainer,
+        max_new_tokens=1,
+        plot=None
+    )
+
+    # Create the prompt for the explanation
+    if expl_type == "post_hoc":
+        explanation_prompt = pipeline.get_post_host_explanation_prompt(inputt, task, predicted_label)
+    elif expl_type == "cot":
+        explanation_prompt = pipeline.get_cot_explanation_prompt(inputt)
+    else:
+        raise ValueError(f'Unknown explanation type {expl_type}')
+
+    # Let the explainer explain the explanation
+    shap_explanation_explanation = pipeline.explain_lm(
+        explanation_prompt,
+        explainer,
+        max_new_tokens=max_new_tokens_explanation
+    )
+
+    B_INST = pipeline.B_INST if pipeline.is_chat_model() else ""
+    original_input_prompt = f"{B_INST}{inputt}"
+    original_input_prompt_length = len(original_input_prompt)
+
+    assert prompt_prediction.startswith(original_input_prompt), "The begin of the prompt prediction should match original input prompt"
+    marg_pred = prompt_prediction[original_input_prompt_length:]
+    assert explanation_prompt.startswith(original_input_prompt), "The begin of the explanation prompt should match original input prompt"
+    marg_expl = explanation_prompt[original_input_prompt_length:]
+
+    scores = compute_cc_shap(
+        shap_explanation_prediction,
+        shap_explanation_explanation,
+        marg_pred,
+        marg_expl,
+        pipeline.tokenizer,
+        visualize=None,
+    )
+
+    cosine, distance_correlation, mse, var, kl_div, js_div, shap_plot_info = scores
+    return 1 - cosine, 1 - distance_correlation, 1 - mse, 1 - var, 1 - kl_div, 1 - js_div, shap_plot_info
+
+
+def plot_comparison(
+        ratios_prediction,
+        ratios_explanation,
+        input_tokens,
+        expl_input_tokens,
+        len_marg_pred,
+        len_marg_expl
+):
+    """ Plot the SHAP ratios for the prediction and explanation side by side. """
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+    # fig.suptitle(f'Model {model_name}')
+    ax1.bar(np.arange(len(ratios_prediction)), ratios_prediction, tick_label = input_tokens[:-len_marg_pred])
+    ax2.bar(np.arange(len(ratios_explanation)), ratios_explanation, tick_label = expl_input_tokens[:-len_marg_expl])
+    ax1.set_title("SHAP ratios prediction")
+    ax2.set_title("SHAP ratios explanation")
+    ax1.set_xticklabels(ax1.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor', fontsize=8)
+    ax2.set_xticklabels(ax2.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor', fontsize=8)
