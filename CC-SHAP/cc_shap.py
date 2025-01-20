@@ -123,6 +123,8 @@ def cc_shap_measure(
         plot=None
     )
 
+    logger.info(f"Shap pred: {shap_explanation_prediction.values.shape}")
+
     logger.info(f"Prediction from explanation: {shap_explanation_prediction.output_names}")
     # Use the output (the predicted label) that was generated from the shap
     # explanation (with the explain_lm function)
@@ -136,7 +138,7 @@ def cc_shap_measure(
         explanation_prompt = pipeline.get_cot_explanation_prompt(inputt)
     else:
         raise ValueError(f'Unknown explanation type {expl_type}')
-    
+        
     logger.info(f"Explanation prompt: {explanation_prompt}")
 
     # Let the explainer explain the explanation
@@ -145,6 +147,8 @@ def cc_shap_measure(
         explainer,
         max_new_tokens=max_new_tokens_explanation
     )
+
+    logger.info(f"Shap expl: {shap_explanation_explanation.values.shape}")
 
     logger.info(f"Output of explanation: {shap_explanation_explanation.output_names}")
 

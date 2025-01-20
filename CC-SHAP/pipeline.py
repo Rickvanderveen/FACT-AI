@@ -220,7 +220,7 @@ class Pipeline:
         https://discuss.huggingface.co/t/announcement-generation-get-probabilities-for-generated-output/30075/15"""
 
         # Tokenize the prompt to token ids
-        input_ids = self.tokenizer([prompt], padding=padding, return_tensors="pt").input_ids
+        input_ids = self.tokenizer([prompt], padding=padding, return_tensors="pt").input_ids.cuda()
         # Generate the next token based on the tokenized prompt.
         # We set max_new_tokens at 1 since we only want a single label e.g. A or B
         generated_ids = self.model.generate(

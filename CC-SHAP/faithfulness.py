@@ -2,6 +2,7 @@ import argparse
 import datetime
 import time
 import sys
+import numpy as np
 import torch
 from accelerate import Accelerator
 import pandas as pd
@@ -61,15 +62,23 @@ parser.add_argument(
     type=str,
     help="The type of explainer to use (default: auto)."
 )
+parser.add_argument(
+    "--classify_pred",
+    action="store_true",
+    help="To use a seperate classify to predict the label or use them from the explanation"
+)
 
 # Parse the arguments
 args = parser.parse_args()
+
+logger.info(f"Args: {args}")
 
 # Access the arguments
 c_task = args.c_task
 model_name = args.model_name
 num_samples = args.number_of_samples
 explainer_type = args.explainer_type
+use_separate_classify_prediction = args.classify_pred
 
 visualize = False
 
@@ -110,16 +119,11 @@ elif explainer_type == "permutation":
     explainer = shap.PermutationExplainer(
         model_pipeline.model,
         model_pipeline.tokenizer,
+        silent=False,
     )
 elif explainer_type == "partition":
     explainer = shap.PartitionExplainer(
         model_pipeline.model_name,
-        model_pipeline.tokenizer,
-        silent=True
-    )
-elif explainer_type == "kernel":
-    explainer = shap.KernelExplainer(
-        model_pipeline.model,
         model_pipeline.tokenizer,
         silent=True
     )
@@ -242,7 +246,8 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             c_task,
             model_pipeline,
             explainer,
-            max_new_tokens
+            max_new_tokens,
+            use_separate_classify_prediction = use_separate_classify_prediction
         )
         score_post_hoc, dist_correl_ph, mse_ph, var_ph, kl_div_ph, js_div_ph, shap_plot_info_ph = cc_shap_measures
     else:
