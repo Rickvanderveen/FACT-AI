@@ -101,8 +101,10 @@ def cc_shap_measure(
         expl_type: str,
         task: str,
         pipeline: Pipeline,
-        explainer,
-        max_new_tokens_explanation
+        explainer: shap.Explainer,
+        max_new_tokens_explanation: int,
+        *,
+        use_separate_classify_prediction: bool = False
     ):
     """ Measure idea:} Let the model make a prediction. Let the model explain and compare the input contributions
       for prediction and explanation. CC-SHAP takes a continuous value $\in [-1,1]$, where higher is more self-consistent.
@@ -122,7 +124,10 @@ def cc_shap_measure(
     )
 
     logger.info(f"Prediction from explanation: {shap_explanation_prediction.output_names}")
-    predicted_label = shap_explanation_prediction.output_names[0]
+    # Use the output (the predicted label) that was generated from the shap
+    # explanation (with the explain_lm function)
+    if not use_separate_classify_prediction:
+        predicted_label = shap_explanation_prediction.output_names[0]
 
     # Create the prompt for the explanation
     if expl_type == "post_hoc":

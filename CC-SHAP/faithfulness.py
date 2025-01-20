@@ -1,3 +1,4 @@
+import argparse
 import datetime
 import time
 import sys
@@ -37,9 +38,39 @@ random.seed(42)
 
 
 max_new_tokens = 100
-c_task = sys.argv[1]
-model_name = sys.argv[2]
-num_samples = int(sys.argv[3])
+
+parser = argparse.ArgumentParser(description="Testing faithfulness of LLMs")
+# Add arguments
+parser.add_argument(
+    "c_task",
+    type=str,
+    help="The task to perform."
+)
+parser.add_argument(
+    "model_name",
+    type=str,
+    help="The name of the model to use."
+)
+parser.add_argument(
+    "number_of_samples",
+    type=int,
+    help="The number of samples to process."
+)
+parser.add_argument(
+    "explainer_type",
+    type=str,
+    help="The type of explainer to use (default: auto)."
+)
+
+# Parse the arguments
+args = parser.parse_args()
+
+# Access the arguments
+c_task = args.c_task
+model_name = args.model_name
+num_samples = args.number_of_samples
+explainer_type = args.explainer_type
+
 visualize = False
 
 TESTS = [
@@ -68,35 +99,34 @@ model_pipeline = pipeline.Pipeline.from_pretrained(
     TESTS
 )
 
-# prompt = "When do I enjoy walking with my cute dog? On (A): a rainy day, or (B): a sunny day. The answer is: ("
+if explainer_type == "auto":
+    explainer = shap.Explainer(
+        model_pipeline.model,
+        model_pipeline.tokenizer,
+        algorithm="auto",
+        silent=True
+    )
+elif explainer_type == "permutation":
+    explainer = shap.PermutationExplainer(
+        model_pipeline.model,
+        model_pipeline.tokenizer,
+    )
+elif explainer_type == "partition":
+    explainer = shap.PartitionExplainer(
+        model_pipeline.model_name,
+        model_pipeline.tokenizer,
+        silent=True
+    )
+elif explainer_type == "kernel":
+    explainer = shap.KernelExplainer(
+        model_pipeline.model,
+        model_pipeline.tokenizer,
+        silent=True
+    )
+else:
+    raise ValueError(f"Unknown explainer type {explainer_type}")
 
-# labels = ["A", "B"]
-# answer = model_pipeline.lm_classify(prompt, padding=False, labels=labels)
-# logger_question.info(prompt)
-# logger_answer.info(answer)
-
-explainer = shap.Explainer(
-    model_pipeline.model,
-    model_pipeline.tokenizer,
-    algorithm="auto",
-    silent=True
-)
-
-# explain_prediction = model_pipeline.explain_lm(
-#     prompt,
-#     explainer,
-#     max_new_tokens=20,
-#     plot=None,
-# )
-
-# logger_answer.info(f"Time to compute {explain_prediction.compute_time} seconds")
-# logger_answer.info(f"op_history {explain_prediction.op_history}")
-# logger_answer.info(f"feature_names {explain_prediction.feature_names}")
-# logger_answer.info(f"output_dims {explain_prediction.output_dims}")
-# logger_answer.info(f"output_indexes {explain_prediction.output_indexes}")
-# logger_answer.info(f"output_names {explain_prediction.output_names}")
-# logger_answer.info(f"shape {explain_prediction.shape}")
-# logger_answer.info(f"data {explain_prediction.data}")
+logger.info(f"Using the {str(explainer)} explainer")
 
 ############################# 
 ############################# run experiments on data
