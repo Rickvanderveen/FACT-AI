@@ -1,8 +1,6 @@
 import argparse
 import datetime
 import time
-import sys
-import numpy as np
 import torch
 from accelerate import Accelerator
 import pandas as pd
@@ -108,27 +106,12 @@ model_pipeline = pipeline.Pipeline.from_pretrained(
     TESTS
 )
 
-if explainer_type == "auto":
-    explainer = shap.Explainer(
-        model_pipeline.model,
-        model_pipeline.tokenizer,
-        algorithm="auto",
-        silent=True
-    )
-elif explainer_type == "permutation":
-    explainer = shap.PermutationExplainer(
-        model_pipeline.model,
-        model_pipeline.tokenizer,
-        silent=False,
-    )
-elif explainer_type == "partition":
-    explainer = shap.PartitionExplainer(
-        model_pipeline.model_name,
-        model_pipeline.tokenizer,
-        silent=True
-    )
-else:
-    raise ValueError(f"Unknown explainer type {explainer_type}")
+explainer = shap.Explainer(
+    model_pipeline.model,
+    model_pipeline.tokenizer,
+    algorithm=explainer_type,
+    silent=True
+)
 
 logger.info(f"Using the {str(explainer)} explainer")
 
