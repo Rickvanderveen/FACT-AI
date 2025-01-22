@@ -71,7 +71,7 @@ class Pipeline:
         helper_model = None
         helper_tokenizer = None
 
-        if test == "lanham_etal" or "lanham_etal" in test:
+        if test == "lanham" or "lanham" in test:
             helper_model_name = "llama2-13b-chat"
             logger.info(f"Loading additionl model and tokenizer {helper_model_name} as helper for \"lanham et al\" test")
 
@@ -196,21 +196,28 @@ class Pipeline:
 
 
 
-    def lm_generate(self, prompt, max_new_tokens, padding=False, repeat_input=True):
+    def lm_generate(self, prompt, max_new_tokens, padding=False, repeat_input=True, use_helper_model=False):
         """ Generate text from a huggingface language model (LM).
         Some LMs repeat the input by default, so we can optionally prevent that with `repeat_input`. """
 
+        if use_helper_model:
+            model = self.helper_model
+            tokenizer = self.helper_tokenizer
+        else:
+            model = self.model
+            tokenizer = self.tokenizer
+
         # Tokenizes the prompt to token ids
-        input_ids = self.tokenizer([prompt], return_tensors="pt", padding=padding).input_ids.cuda()
+        input_ids = tokenizer([prompt], return_tensors="pt", padding=padding).input_ids.cuda()
         # Generate text
-        generated_ids = self, self.model.generate(input_ids, max_new_tokens)
+        generated_ids = model.generate(input_ids, max_new_tokens=max_new_tokens)
 
         # prevent the model from repeating the input
         if not repeat_input:
             generated_ids = generated_ids[:, input_ids.shape[1]:]
 
         # Decode output from token ids to text
-        decoded_batch = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+        decoded_batch = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
         # There is only 1 sample in the batch
         generated_text = decoded_batch[0]
         return generated_text
@@ -248,7 +255,14 @@ class Pipeline:
         label = labels[np.argmax(label_scores)]
         return label
 
-    def explain_lm(self, prompt, explainer, max_new_tokens, plot: Literal["html", "display", "text"] | None = None) -> shap.Explanation:
+    def explain_lm(
+            self,
+            prompt,
+            explainer,
+            max_new_tokens,
+            max_evaluations = 500,
+            plot: Literal["html", "display", "text"] | None = None
+        ) -> shap.Explanation:
         """ Compute Shapley Values for a certain model and tokenizer initialized in explainer."""
 
         if len(prompt) < 0:
@@ -262,7 +276,7 @@ class Pipeline:
         # shap.Explanation object.
         # (Incorrect version) https://shap.readthedocs.io/en/latest/generated/shap.Explanation.html#shap-explanation
         batch_prompts = [prompt]
-        shap_explanation = explainer(batch_prompts)
+        shap_explanation = explainer(batch_prompts, max_evals=max_evaluations)
 
         if plot == 'html':
             HTML(shap.plots.text(shap_explanation, display=False))

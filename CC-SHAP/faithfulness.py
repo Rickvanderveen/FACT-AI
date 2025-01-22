@@ -1,5 +1,6 @@
 import argparse
 import datetime
+from pathlib import Path
 import time
 import torch
 from accelerate import Accelerator
@@ -9,15 +10,16 @@ import pipeline
 import shap
 
 import random
-import os
 import spacy
 from transformers.utils import logging as hf_logging
 import logging
 
 import cc_shap_logger as cc_log
 import cc_shap
+from tests import faithfulness_test_atanasova_etal_input_from_expl, faithfulness_test_atanasova_etal_counterfact, faithfulness_test_lanham_etal, faithfulness_test_turpin_etal
 
-cc_log.setup_logger()
+default_log_level = logging.INFO
+cc_log.setup_logger(default_log_level)
 
 logger = logging.getLogger("shap")
 logger_question = logging.getLogger("shap.prediction")
@@ -61,6 +63,11 @@ parser.add_argument(
     help="The type of explainer to use (default: auto)."
 )
 parser.add_argument(
+    "max_evaluations",
+    type=int,
+    help="The maximum number of iterations for the explainer to compute the shap values"
+)
+parser.add_argument(
     "--classify_pred",
     action="store_true",
     help="To use a seperate classify to predict the label or use them from the explanation"
@@ -76,6 +83,7 @@ c_task = args.c_task
 model_name = args.model_name
 num_samples = args.number_of_samples
 explainer_type = args.explainer_type
+explainer_max_evaluations = args.max_evaluations
 use_separate_classify_prediction = args.classify_pred
 
 visualize = False
@@ -85,7 +93,7 @@ TESTS = [
     # 'atanasova_input_from_expl',
     'cc_shap-posthoc',
     # 'turpin',
-    # 'lanham',
+    # 'lanham', # Needs a helper model
     # 'cc_shap-cot',
 ]
 
@@ -119,6 +127,9 @@ elif explainer_type == "random":
         model_pipeline.model,
         model_pipeline.tokenizer
     )
+else:
+    logger.error(f"Explainer type `{explainer_type}` is not used")
+    quit()
 
 logger.info(f"Using the {str(explainer)} explainer")
 
@@ -127,7 +138,7 @@ logger.info(f"Using the {str(explainer)} explainer")
 ############################# 
 res_dict = {}
 formatted_inputs, correct_answers, wrong_answers = [], [], []
-accuracy, accuracy_cot = 0, 0
+correct_predictions, correct_predictions_cot = 0, 0
 atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum = 0, 0, 0, 0, 0, 0
 lanham_early_count, lanham_mistake_count, lanham_paraphrase_count, lanham_filler_count = 0, 0, 0, 0
 
@@ -206,25 +217,44 @@ start_test = time.time()
 for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_inputs)), formatted_inputs, correct_answers, wrong_answers):
     logger.info(f"Example {k}")
     # compute model accuracy
-    # ask_input = get_prompt_answer_ata(formatted_input)
-    # prediction = lm_classify(ask_input, model, tokenizer, labels=LABELS[c_task])
-    # accuracy += 1 if prediction == correct_answer else 0
+    ask_input = model_pipeline.get_prompt_answer_ata(formatted_input, c_task)
+    prediction = model_pipeline.lm_classify(ask_input, LABELS[c_task])
+    correct_predictions += 1 if prediction == correct_answer else 0
 
     # for accuracy with CoT: first let the model generate the cot, then the answer.
-    # cot_prompt = get_cot_prompt(formatted_input)
-    # generated_cot = lm_generate(cot_prompt, model, tokenizer, max_new_tokens=max_new_tokens, repeat_input=True)
-    # ask_for_final_answer = get_final_answer(generated_cot)
-    # prediction_cot = lm_classify(ask_for_final_answer, model, tokenizer, labels=LABELS[c_task])
-    # accuracy_cot += 1 if prediction_cot == correct_answer else 0
+    cot_prompt = model_pipeline.get_cot_prompt(formatted_input)
+    generated_cot = model_pipeline.lm_generate(
+        cot_prompt,
+        max_new_tokens,
+        repeat_input=True
+    )
+    ask_for_final_answer = model_pipeline.get_final_answer(generated_cot, c_task)
+    prediction_cot = model_pipeline.lm_classify(ask_for_final_answer,LABELS[c_task])
+    correct_predictions_cot += 1 if prediction_cot == correct_answer else 0
 
     # # post-hoc tests
     if 'atanasova_counterfactual' in TESTS:
-        atanasova_counterfact = faithfulness_test_atanasova_etal_counterfact(formatted_input, prediction, LABELS[c_task])
+        atanasova_counterfact = faithfulness_test_atanasova_etal_counterfact(
+            model_pipeline,
+            formatted_input,
+            prediction,
+            LABELS[c_task],
+            c_task,
+        )
     else:
         atanasova_counterfact = 0
 
     if 'atanasova_input_from_expl' in TESTS and c_task == 'comve':
-        atanasova_input_from_expl = faithfulness_test_atanasova_etal_input_from_expl(sent0, sent1, prediction, correct_answer, LABELS[c_task])
+        atanasova_input_from_expl = faithfulness_test_atanasova_etal_input_from_expl(
+            model_pipeline,
+            sent0,
+            sent1,
+            prediction,
+            correct_answer,
+            LABELS[c_task],
+            c_task,
+            max_new_tokens,
+        )
     else:
         atanasova_input_from_expl = 0
 
@@ -237,6 +267,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             model_pipeline,
             explainer,
             max_new_tokens,
+            max_evaluations = explainer_max_evaluations,
             use_separate_classify_prediction = use_separate_classify_prediction
         )
         score_post_hoc, dist_correl_ph, mse_ph, var_ph, kl_div_ph, js_div_ph, shap_plot_info_ph = cc_shap_measures
@@ -245,12 +276,29 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
 
     # # CoT tests
     if 'turpin' in TESTS:
-        turpin = faithfulness_test_turpin_etal(formatted_input, prediction_cot, correct_answer, wrong_answer, LABELS[c_task])
+        turpin = faithfulness_test_turpin_etal(
+            model_pipeline,
+            formatted_input,
+            prediction_cot,
+            correct_answer,
+            wrong_answer,
+            LABELS[c_task],
+            max_new_tokens,
+            c_task,
+        )
     else:
         turpin = 0
 
     if 'lanham' in TESTS:
-        lanham_early, lanham_mistake, lanham_paraphrase, lanham_filler = faithfulness_test_lanham_etal(prediction_cot, generated_cot, cot_prompt, LABELS[c_task])
+        lanham_early, lanham_mistake, lanham_paraphrase, lanham_filler = faithfulness_test_lanham_etal(
+            model_pipeline,
+            prediction_cot,
+            generated_cot,
+            cot_prompt,
+            LABELS[c_task],
+            c_task,
+            max_new_tokens,
+        )
     else:
         lanham_early, lanham_mistake, lanham_paraphrase, lanham_filler = 0, 0, 0, 0
 
@@ -263,6 +311,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             model_pipeline,
             explainer,
             max_new_tokens,
+            max_evaluations = explainer_max_evaluations,
         )
         score_cot, dist_correl_cot, mse_cot, var_cot, kl_div_cot, js_div_cot, shap_plot_info_cot = cc_shap_measures
     else:
@@ -282,12 +331,12 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
     res_dict[f"{c_task}_{model_name}_{k}"] = {
         "input": formatted_input,
         "correct_answer": correct_answer,
-        # "model_input": ask_input,
-        # "model_prediction": prediction,
-        # "model_input_cot": ask_for_final_answer,
-        # "model_prediction_cot": prediction_cot,
-        "accuracy": accuracy,
-        "accuracy_cot": accuracy_cot,
+        "model_input": ask_input,
+        "model_prediction": prediction,
+        "model_input_cot": ask_for_final_answer,
+        "model_prediction_cot": prediction_cot,
+        "accuracy": correct_predictions,
+        "accuracy_cot": correct_predictions_cot,
         "atanasova_counterfact": atanasova_counterfact,
         "atanasova_input_from_expl": atanasova_input_from_expl_test_count,
         "cc_shap-posthoc": f"{score_post_hoc:.2f}",
@@ -315,19 +364,42 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         "shap_plot_info_cot": shap_plot_info_cot,
     }
 
+results_json = {
+    "args": str(args),
+    "model": {
+        "full_model_name": full_model_name,
+        "dtype": str(dtype),
+    },
+    "explainer": {
+        "type": str(explainer),
+        "max_evaluations": explainer_max_evaluations,
+    },
+    "tests": TESTS,
+    "prediction_accuracy": {
+        "accuracy": correct_predictions / num_samples,
+        "accuracy_cot": correct_predictions_cot / num_samples,
+    },
+    "samples": res_dict
+}
+
 # save results to a json file, make results_json directory if it does not exist
-if not os.path.exists('results_json'):
-    os.makedirs('results_json')
-with open(f"results_json/{c_task}_{model_name}_{count}.json", 'w') as file:
-    json.dump(res_dict, file)
+results_dir = Path("results_json")
+if not results_dir.exists():
+    results_dir.mkdir()
+
+results_file_name = f"{c_task}_{model_name}_{count}_{explainer_type}.json"
+results_file_path = results_dir.joinpath(results_file_name)
+
+with results_file_path.open('w') as file:
+    json.dump(results_json, file)
 
 
 print(f"Ran {TESTS} on {c_task} data with model {model_name}. Reporting accuracy and faithfulness percentage.\n")
-print(f"Accuracy %                  : {accuracy*100/count:.2f}  ")
+print(f"Accuracy %                  : {correct_predictions*100/count:.2f}  ")
 print(f"Atanasova Counterfact %     : {atanasova_counterfact_count*100/count:.2f}  ")
 print(f"Atanasova Input from Expl % : {atanasova_input_from_expl_test_count*100/count:.2f}  ")
 print(f"CC-SHAP post-hoc mean score : {cc_shap_post_hoc_sum/count:.2f}  ")
-print(f"Accuracy CoT %              : {accuracy_cot*100/count:.2f}  ")
+print(f"Accuracy CoT %              : {correct_predictions_cot*100/count:.2f}  ")
 print(f"Turpin %                    : {turpin_test_count*100/count:.2f}  ")
 print(f"Lanham Early Answering %    : {lanham_early_count*100/count:.2f}  ")
 print(f"Lanham Filler %             : {lanham_filler_count*100/count:.2f}  ")

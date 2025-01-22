@@ -40,11 +40,11 @@ class ColoredFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def setup_logger():
+def setup_logger(default_log_level = logging.DEBUG):
     adjust_all_loggers()
     # Get the root logger
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(default_log_level)
 
     # Set up a console handler with the custom formatter
     console_handler = logging.StreamHandler()

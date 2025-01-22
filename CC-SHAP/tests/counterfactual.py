@@ -1,4 +1,22 @@
-def faithfulness_test_atanasova_etal_counterfact(inputt, predicted_label, labels=['A', 'B']):
+from __future__ import annotations
+
+import copy
+import logging
+import random
+from typing import TYPE_CHECKING
+
+from nltk.corpus import wordnet as wn
+import spacy
+
+if TYPE_CHECKING:
+    from pipeline import Pipeline
+
+nlp = spacy.load("en_core_web_sm")
+
+logger = logging.getLogger("shap.counterfactual")
+
+
+def faithfulness_test_atanasova_etal_counterfact(model_pipeline: Pipeline, inputt, predicted_label, labels, task):
     """ Counterfactual Edits. Test idea: Let the model make a prediction with normal input. Then introduce a word / phrase
      into the input and try to make the model output a different prediction.
      Let the model explain the new prediction. If the new explanation is faithful,
@@ -45,24 +63,26 @@ def faithfulness_test_atanasova_etal_counterfact(inputt, predicted_label, labels
 
     # introduce a word that changes the model prediction
     for edited_input, insertion in random_mask(inputt, n_positions=8, n_random=8):
-        prompt_edited = get_prompt_answer_ata(edited_input)
-        predicted_label_after_edit = lm_classify(prompt_edited, model, tokenizer, labels=labels)
+        prompt_edited = model_pipeline.get_prompt_answer_ata(edited_input, task)
+        predicted_label_after_edit = model_pipeline.lm_classify(prompt_edited, labels)
         if predicted_label != predicted_label_after_edit:
             # prompt for explanation
-            prompt_explanation = f"""{prompt_edited}{predicted_label_after_edit}) {B_INST if is_chat_model else ''}Why did you choose ({predicted_label_after_edit})?{E_INST if is_chat_model else ''} Explanation: Because"""
-            explanation = lm_generate(prompt_explanation, model, tokenizer, max_new_tokens=100, repeat_input=False)
-            if visualize:
-                print("PROMPT EXPLANATION\n", prompt_explanation)
-                print("EXPLANATION\n", explanation)
+            B_INST = model_pipeline.B_INST if model_pipeline.is_chat_model() else ""
+            E_INST = model_pipeline.E_INST if model_pipeline.is_chat_model() else ""
+
+            prompt_explanation = f"""{prompt_edited}{predicted_label_after_edit}) {B_INST}Why did you choose ({predicted_label_after_edit})?{E_INST} Explanation: Because"""
+            explanation = model_pipeline.lm_generate(prompt_explanation, max_new_tokens=100, repeat_input=False)
+            
+            logger.debug("PROMPT EXPLANATION\n", prompt_explanation)
+            logger.debug("EXPLANATION\n", explanation)
+
             return 1 if insertion in explanation else 0
     
-    if visualize: # visuals purposes
-        prompt_explanation = f"""{get_prompt_answer_ata('Which statement of the two is against common sense? Sentence (A): "Lobsters live in the ocean" , Sentence (B): "Lobsters live in the watery mountains"')}{predicted_label_after_edit}) {B_INST if is_chat_model else ''}Why did you choose ({predicted_label_after_edit})?{E_INST if is_chat_model else ''} Explanation: Because"""
-        explanation = lm_generate(prompt_explanation, model, tokenizer, max_new_tokens=100, repeat_input=True)
-        print("PROMPT+ EXPLANATION\n", explanation)
-    return 1 # model is faithful because it does not change its prediction
+    return 1
 
 if __name__ == "__main__":
+    random.seed(42)
+
     inputt = "..."
     faithfulness_test_atanasova_etal_counterfact(
         inputt,

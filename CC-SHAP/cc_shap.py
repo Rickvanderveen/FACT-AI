@@ -23,6 +23,13 @@ def aggregate_values_explanation(shap_values, tokenizer, to_marginalize=""):
     # want to get 87 values (aggregate over the whole output)
     # ' Yes', '.', ' Why', '?' are not part of the values we are looking at (marginalize into base value using SHAP property)
 
+    # If the shap values has 2 dimension expand it with a third. This was needed for
+    # some explainers e.g. the shap.Permutation explainer produces
+    # (n_sentences, input_size) instead of (n_sentences, input_size, outputs size) if
+    # the output was a single token (size of 1)
+    if (shap_values.ndim == 2):
+        shap_values = np.expand_dims(shap_values, axis=-1)
+
     # This will get the number of tokens that we want to ignore from the ignored text
     len_to_marginalize = tokenizer([to_marginalize], return_tensors="pt", padding=False, add_special_tokens=False).input_ids.shape[1]
 
@@ -34,7 +41,7 @@ def aggregate_values_explanation(shap_values, tokenizer, to_marginalize=""):
     # check if values per output token are not very low as this might be a problem because they will be rendered large by normalization.
     small_values = [True if x < 0.01 else False for x in np.mean(np.abs(shap_values[0, -len_to_marginalize:]), axis=0)]
     if any(small_values):
-        print("Warning: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.")
+        logger.warning("Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.")
 
     # convert shap_values to ratios accounting for the different base values and predicted token probabilities between explanations
     normalization_value = np.abs(shap_values).sum(axis=1) - add_to_base
@@ -103,6 +110,7 @@ def cc_shap_measure(
         pipeline: Pipeline,
         explainer: shap.Explainer,
         max_new_tokens_explanation: int,
+        max_evaluations: int = 500,
         *,
         use_separate_classify_prediction: bool = False
     ):
@@ -114,18 +122,19 @@ def cc_shap_measure(
 
     # Let the explainer explain the labal prediction
     predicted_label = pipeline.lm_classify(prompt_prediction, labels, padding=False)
-    logger.info(f"Prediction from classify: {predicted_label}")
+    logger.debug(f"Prediction from classify: {predicted_label}")
 
     shap_explanation_prediction = pipeline.explain_lm(
         prompt_prediction,
         explainer,
         max_new_tokens=1,
+        max_evaluations=max_evaluations,
         plot=None
     )
 
-    logger.info(f"Shap pred: {shap_explanation_prediction.values.shape}")
+    logger.debug(f"Shap pred: {shap_explanation_prediction.values.shape}")
 
-    logger.info(f"Prediction from explanation: {shap_explanation_prediction.output_names}")
+    logger.debug(f"Prediction from explanation: {shap_explanation_prediction.output_names}")
     # Use the output (the predicted label) that was generated from the shap
     # explanation (with the explain_lm function)
     if not use_separate_classify_prediction:
@@ -139,18 +148,20 @@ def cc_shap_measure(
     else:
         raise ValueError(f'Unknown explanation type {expl_type}')
         
-    logger.info(f"Explanation prompt: {explanation_prompt}")
+    logger.debug(f"Explanation prompt: {explanation_prompt}")
 
     # Let the explainer explain the explanation
     shap_explanation_explanation = pipeline.explain_lm(
         explanation_prompt,
         explainer,
-        max_new_tokens=max_new_tokens_explanation
+        max_new_tokens=max_new_tokens_explanation,
+        max_evaluations=max_evaluations,
+        plot=None,
     )
 
-    logger.info(f"Shap expl: {shap_explanation_explanation.values.shape}")
+    logger.debug(f"Shap expl: {shap_explanation_explanation.values.shape}")
 
-    logger.info(f"Output of explanation: {shap_explanation_explanation.output_names}")
+    logger.debug(f"Output of explanation: {shap_explanation_explanation.output_names}")
 
     B_INST = pipeline.B_INST if pipeline.is_chat_model() else ""
     original_input_prompt = f"{B_INST}{inputt}"
