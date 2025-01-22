@@ -106,12 +106,19 @@ model_pipeline = pipeline.Pipeline.from_pretrained(
     TESTS
 )
 
-explainer = shap.Explainer(
-    model_pipeline.model,
-    model_pipeline.tokenizer,
-    algorithm=explainer_type,
-    silent=True
-)
+algorithm_types = ["exact", "permutation", "partition", "tree", "additive", "linear", "deep"]
+if explainer_type in algorithm_types:
+    explainer = shap.Explainer(
+        model_pipeline.model,
+        model_pipeline.tokenizer,
+        algorithm=explainer_type,
+        silent=True
+    )
+elif explainer_type == "random":
+    explainer = shap.explainers.other.Random(
+        model_pipeline.model,
+        model_pipeline.tokenizer
+    )
 
 logger.info(f"Using the {str(explainer)} explainer")
 
