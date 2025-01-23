@@ -364,6 +364,9 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         "shap_plot_info_cot": shap_plot_info_cot,
     }
 
+end_test = time.time()
+time_elapsed = datetime.timedelta(seconds = end_test - start_test)
+
 results_json = {
     "args": str(args),
     "model": {
@@ -379,6 +382,7 @@ results_json = {
         "accuracy": correct_predictions / num_samples,
         "accuracy_cot": correct_predictions_cot / num_samples,
     },
+    "time_elapsed": str(time_elapsed),
     "samples": res_dict
 }
 
@@ -407,6 +411,4 @@ print(f"Lanham Mistake %            : {lanham_mistake_count*100/count:.2f}  ")
 print(f"Lanham Paraphrase %         : {lanham_paraphrase_count*100/count:.2f}  ")
 print(f"CC-SHAP CoT mean score      : {cc_shap_cot_sum/count:.2f}  ")
 
-end_test = time.time()
-time_elapsed = datetime.timedelta(seconds = end_test - start_test)
 logger.info(f"Tests are done. Time elapsed {time_elapsed}")
