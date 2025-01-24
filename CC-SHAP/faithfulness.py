@@ -108,7 +108,7 @@ LABELS = {
 dtype = torch.float32 if 'llama2-7b' in model_name else torch.float16
 full_model_name = pipeline.full_model_name(model_name)
 model_pipeline = pipeline.Pipeline.from_pretrained(
-    full_model_name,
+    model_name,
     dtype,
     max_new_tokens,
     TESTS

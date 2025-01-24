@@ -47,16 +47,17 @@ class Pipeline:
     @classmethod
     def from_pretrained(cls, model_name, dtype, max_new_tokens, test):
         start_loading_time = time.time()
+        model_name_full = full_model_name(model_name)
 
         with torch.no_grad():
             model = AutoModelForCausalLM.from_pretrained(
-                model_name,
+                model_name_full,
                 torch_dtype=dtype,
                 device_map="auto",
                 token=True
             )
         tokenizer = AutoTokenizer.from_pretrained(
-            model_name,
+            model_name_full,
             use_fast=False,
             padding_side='left'
         )
