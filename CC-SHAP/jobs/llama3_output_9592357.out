@@ -1,0 +1,55 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+03:40:07 [shap] [92mINFO    [0m: Cuda is available: True
+03:40:08 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='llama3-8B-chat', number_of_samples=1, explainer_type='partition', max_evaluations=500, classify_pred=False)
+Downloading config.json:   0%|          | 0.00/855 [00:00<?, ?B/s]Downloading config.json: 100%|██████████| 855/855 [00:00<00:00, 7.06MB/s]
+Traceback (most recent call last):
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/faithfulness.py", line 110, in <module>
+    model_pipeline = pipeline.Pipeline.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/pipeline.py", line 52, in from_pretrained
+    model = AutoModelForCausalLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 526, in from_pretrained
+    config, kwargs = AutoConfig.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1065, in from_pretrained
+    return config_class.from_dict(config_dict, **unused_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/configuration_utils.py", line 749, in from_dict
+    config = cls(**config_dict)
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/models/llama/configuration_llama.py", line 157, in __init__
+    self._rope_scaling_validation()
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/models/llama/configuration_llama.py", line 176, in _rope_scaling_validation
+    raise ValueError(
+ValueError: `rope_scaling` must be a dictionary with with two fields, `type` and `factor`, got {'factor': 8.0, 'low_freq_factor': 1.0, 'high_freq_factor': 4.0, 'original_max_position_embeddings': 8192, 'rope_type': 'llama3'}
+srun: error: gcn25: task 0: Exited with exit code 1
+srun: Terminating StepId=9592357.0
+
+JOB STATISTICS
+==============
+Job ID: 9592357
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:07
+CPU Efficiency: 1.94% of 00:06:00 core-walltime
+Job Wall-clock time: 00:00:20
+Memory Utilized: 2.15 MB
+Memory Efficiency: 0.00% of 120.00 GB

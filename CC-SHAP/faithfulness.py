@@ -89,12 +89,12 @@ use_separate_classify_prediction = args.classify_pred
 visualize = False
 
 TESTS = [
-    # 'atanasova_counterfactual',
-    # 'atanasova_input_from_expl',
+    'atanasova_counterfactual',
+    'atanasova_input_from_expl',
     'cc_shap-posthoc',
-    # 'turpin',
+    'turpin',
     # 'lanham', # Needs a helper model
-    # 'cc_shap-cot',
+    'cc_shap-cot',
 ]
 
 LABELS = {

@@ -1,0 +1,66 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+03:50:14 [shap] [92mINFO    [0m: Cuda is available: True
+03:50:14 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='llama2-7b-chat', number_of_samples=1, explainer_type='partition', max_evaluations=500, classify_pred=False)
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.82s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.00s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.27s/it]
+The `use_auth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+03:50:22 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:07.616819
+03:50:22 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+03:50:22 [shap] [92mINFO    [0m: Preparing data...
+03:50:22 [shap] [92mINFO    [0m: Done preparing data. Running test...
+03:50:22 [shap] [92mINFO    [0m: Example 0
+`do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+`do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+Traceback (most recent call last):
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/faithfulness.py", line 263, in <module>
+    cc_shap_measures = cc_shap.cc_shap_measure(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/cc_shap.py", line 175, in cc_shap_measure
+    scores = compute_cc_shap(
+             ^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/cc_shap.py", line 81, in compute_cc_shap
+    cosine, dist_correl, mse, var, kl_div, js_div = cc_shap_score(ratios_prediction, ratios_explanation)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/cc_shap.py", line 56, in cc_shap_score
+    mse = metrics.mean_squared_error(ratios_prediction, ratios_explanation)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/sklearn/metrics/_regression.py", line 442, in mean_squared_error
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(
+                                          ^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/sklearn/metrics/_regression.py", line 101, in _check_reg_targets
+    y_true = check_array(y_true, ensure_2d=False, dtype=dtype)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/sklearn/utils/validation.py", line 921, in check_array
+    _assert_all_finite(
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/sklearn/utils/validation.py", line 161, in _assert_all_finite
+    raise ValueError(msg_err)
+ValueError: Input contains NaN.
+srun: error: gcn25: task 0: Exited with exit code 1
+srun: Terminating StepId=9592400.0
+
+JOB STATISTICS
+==============
+Job ID: 9592400
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:50
+CPU Efficiency: 4.63% of 00:18:00 core-walltime
+Job Wall-clock time: 00:01:00
+Memory Utilized: 1.25 GB
+Memory Efficiency: 1.04% of 120.00 GB
