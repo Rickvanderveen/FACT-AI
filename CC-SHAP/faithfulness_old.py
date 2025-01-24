@@ -36,10 +36,10 @@ model_name = sys.argv[2]
 num_samples = int(sys.argv[3])
 visualize = False
 TESTS = [
-        #  'atanasova_counterfactual',
-        #  'atanasova_input_from_expl',
-        #  'cc_shap-posthoc',
-        #  'turpin',
+          'atanasova_counterfactual',
+          'atanasova_input_from_expl',
+          'cc_shap-posthoc',
+          'turpin',
         #  'lanham',
          'cc_shap-cot',
          ]
