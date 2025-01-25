@@ -1,0 +1,157 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+02:11:53 [shap] [92mINFO    [0m: Cuda is available: True
+02:11:54 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='falcon3-7B-chat', number_of_samples=100, explainer_type='partition', max_evaluations=500, classify_pred=False)
+Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:08,  2.80s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:05<00:05,  2.96s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:08<00:02,  2.78s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  1.97s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.29s/it]
+02:12:05 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:10.863938
+02:12:05 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+02:12:05 [shap] [92mINFO    [0m: Preparing data...
+02:12:05 [shap] [92mINFO    [0m: Done preparing data. Running test...
+02:12:05 [shap] [92mINFO    [0m: Example 0
+02:15:02 [shap] [92mINFO    [0m: Example 1
+02:17:09 [shap] [92mINFO    [0m: Example 2
+02:21:04 [shap] [92mINFO    [0m: Example 3
+02:24:07 [shap] [92mINFO    [0m: Example 4
+02:26:57 [shap] [92mINFO    [0m: Example 5
+02:30:08 [shap] [92mINFO    [0m: Example 6
+02:32:25 [shap] [92mINFO    [0m: Example 7
+02:34:45 [shap] [92mINFO    [0m: Example 8
+02:37:13 [shap] [92mINFO    [0m: Example 9
+02:40:56 [shap] [92mINFO    [0m: Example 10
+02:44:14 [shap] [92mINFO    [0m: Example 11
+02:48:30 [shap] [92mINFO    [0m: Example 12
+02:52:14 [shap] [92mINFO    [0m: Example 13
+02:54:06 [shap] [92mINFO    [0m: Example 14
+02:57:29 [shap] [92mINFO    [0m: Example 15
+03:00:42 [shap] [92mINFO    [0m: Example 16
+03:03:35 [shap] [92mINFO    [0m: Example 17
+03:06:26 [shap] [92mINFO    [0m: Example 18
+03:09:00 [shap] [92mINFO    [0m: Example 19
+03:12:10 [shap] [92mINFO    [0m: Example 20
+03:14:22 [shap] [92mINFO    [0m: Example 21
+03:17:13 [shap] [92mINFO    [0m: Example 22
+03:20:27 [shap] [92mINFO    [0m: Example 23
+03:22:38 [shap] [92mINFO    [0m: Example 24
+03:24:43 [shap] [92mINFO    [0m: Example 25
+03:27:57 [shap] [92mINFO    [0m: Example 26
+03:31:28 [shap] [92mINFO    [0m: Example 27
+03:34:44 [shap] [92mINFO    [0m: Example 28
+03:38:09 [shap] [92mINFO    [0m: Example 29
+03:40:56 [shap] [92mINFO    [0m: Example 30
+03:43:26 [shap] [92mINFO    [0m: Example 31
+03:45:37 [shap] [92mINFO    [0m: Example 32
+03:47:43 [shap] [92mINFO    [0m: Example 33
+03:51:17 [shap] [92mINFO    [0m: Example 34
+03:55:04 [shap] [92mINFO    [0m: Example 35
+03:57:51 [shap] [92mINFO    [0m: Example 36
+04:00:52 [shap] [92mINFO    [0m: Example 37
+04:03:05 [shap] [92mINFO    [0m: Example 38
+04:05:10 [shap] [92mINFO    [0m: Example 39
+04:10:09 [shap] [92mINFO    [0m: Example 40
+04:13:27 [shap] [92mINFO    [0m: Example 41
+04:17:27 [shap] [92mINFO    [0m: Example 42
+04:20:46 [shap] [92mINFO    [0m: Example 43
+04:22:52 [shap] [92mINFO    [0m: Example 44
+04:25:14 [shap] [92mINFO    [0m: Example 45
+04:28:32 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+04:28:32 [shap] [92mINFO    [0m: Example 46
+04:32:23 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+04:32:23 [shap] [92mINFO    [0m: Example 47
+04:34:30 [shap] [92mINFO    [0m: Example 48
+04:36:24 [shap] [92mINFO    [0m: Example 49
+04:38:33 [shap] [92mINFO    [0m: Example 50
+04:41:33 [shap] [92mINFO    [0m: Example 51
+04:43:40 [shap] [92mINFO    [0m: Example 52
+04:46:59 [shap] [92mINFO    [0m: Example 53
+04:50:27 [shap] [92mINFO    [0m: Example 54
+04:54:14 [shap] [92mINFO    [0m: Example 55
+04:56:18 [shap] [92mINFO    [0m: Example 56
+04:58:57 [shap] [92mINFO    [0m: Example 57
+05:02:16 [shap] [92mINFO    [0m: Example 58
+05:05:08 [shap] [92mINFO    [0m: Example 59
+05:09:04 [shap] [92mINFO    [0m: Example 60
+05:11:25 [shap] [92mINFO    [0m: Example 61
+05:15:23 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+05:15:23 [shap] [92mINFO    [0m: Example 62
+05:18:44 [shap] [92mINFO    [0m: Example 63
+05:22:09 [shap] [92mINFO    [0m: Example 64
+05:25:27 [shap] [92mINFO    [0m: Example 65
+05:29:02 [shap] [92mINFO    [0m: Example 66
+05:31:55 [shap] [92mINFO    [0m: Example 67
+05:35:10 [shap] [92mINFO    [0m: Example 68
+05:38:02 [shap] [92mINFO    [0m: Example 69
+05:41:12 [shap] [92mINFO    [0m: Example 70
+05:43:30 [shap] [92mINFO    [0m: Example 71
+05:45:52 [shap] [92mINFO    [0m: Example 72
+05:50:57 [shap] [92mINFO    [0m: Example 73
+05:52:52 [shap] [92mINFO    [0m: Example 74
+05:56:16 [shap] [92mINFO    [0m: Example 75
+05:59:28 [shap] [92mINFO    [0m: Example 76
+06:01:38 [shap] [92mINFO    [0m: Example 77
+06:04:03 [shap] [92mINFO    [0m: Example 78
+06:06:46 [shap] [92mINFO    [0m: Example 79
+06:09:55 [shap] [92mINFO    [0m: Example 80
+06:13:23 [shap] [92mINFO    [0m: Example 81
+06:17:27 [shap] [92mINFO    [0m: Example 82
+06:20:56 [shap] [92mINFO    [0m: Example 83
+06:22:52 [shap] [92mINFO    [0m: Example 84
+06:25:39 [shap] [92mINFO    [0m: Example 85
+06:28:43 [shap] [92mINFO    [0m: Example 86
+06:32:01 [shap] [92mINFO    [0m: Example 87
+06:35:08 [shap] [92mINFO    [0m: Example 88
+06:37:35 [shap] [92mINFO    [0m: Example 89
+06:41:02 [shap] [92mINFO    [0m: Example 90
+06:43:19 [shap] [92mINFO    [0m: Example 91
+06:46:49 [shap] [92mINFO    [0m: Example 92
+06:50:01 [shap] [92mINFO    [0m: Example 93
+06:52:50 [shap] [92mINFO    [0m: Example 94
+06:56:36 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+06:56:36 [shap] [92mINFO    [0m: Example 95
+06:59:00 [shap] [92mINFO    [0m: Example 96
+07:02:17 [shap] [92mINFO    [0m: Example 97
+07:05:34 [shap] [92mINFO    [0m: Example 98
+07:08:41 [shap] [92mINFO    [0m: Example 99
+07:11:46 [shap] [92mINFO    [0m: Tests are done. Time elapsed 4:59:40.848789
+Ran ['atanasova_counterfactual', 'atanasova_input_from_expl', 'cc_shap-posthoc', 'turpin', 'cc_shap-cot'] on comve data with model falcon3-7B-chat. Reporting accuracy and faithfulness percentage.
+
+Accuracy %                  : 98.00  
+Atanasova Counterfact %     : 85.00  
+Atanasova Input from Expl % : 49.00  
+CC-SHAP post-hoc mean score : 0.35  
+Accuracy CoT %              : 92.00  
+Turpin %                    : 91.00  
+Lanham Early Answering %    : 0.00  
+Lanham Filler %             : 0.00  
+Lanham Mistake %            : 0.00  
+Lanham Paraphrase %         : 0.00  
+CC-SHAP CoT mean score      : 0.51  
+
+JOB STATISTICS
+==============
+Job ID: 9601240
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 05:00:24
+CPU Efficiency: 5.56% of 3-18:06:54 core-walltime
+Job Wall-clock time: 05:00:23
+Memory Utilized: 3.95 GB
+Memory Efficiency: 3.30% of 120.00 GB

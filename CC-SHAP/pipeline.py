@@ -26,6 +26,8 @@ MODELS = {
     'falcon-40b': 'tiiuae/falcon-40b',
     'falcon-40b-chat': 'tiiuae/falcon-40b-instruct',
     'llama3-8B-chat': 'meta-llama/Llama-3.1-8B-Instruct',
+    'falcon3-7B-chat': 'tiiuae/Falcon3-7B-Instruct',
+    'mistral-nemo': 'mistralai/Mistral-Nemo-Instruct-2407', # 12.2B params
 }
 
 logger = logging.getLogger("shap")

@@ -1,0 +1,78 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+21:05:58 [shap] [92mINFO    [0m: Cuda is available: True
+21:05:58 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='llama3-8B-chat', number_of_samples=1, explainer_type='partition', max_evaluations=500, classify_pred=False)
+Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:09,  3.25s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:06<00:06,  3.35s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:10<00:03,  3.37s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:10<00:00,  2.37s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:10<00:00,  2.73s/it]
+21:06:11 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:12.331493
+21:06:11 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+21:06:11 [shap] [92mINFO    [0m: Preparing data...
+21:06:11 [shap] [92mINFO    [0m: Done preparing data. Running test...
+21:06:11 [shap] [92mINFO    [0m: Example 0
+`do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+`do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+21:10:18 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+invalid value encountered in divide
+21:10:18 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+Traceback (most recent call last):
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/faithfulness.py", line 262, in <module>
+    cc_shap_measures = cc_shap.cc_shap_measure(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/cc_shap.py", line 175, in cc_shap_measure
+    scores = compute_cc_shap(
+             ^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/cc_shap.py", line 81, in compute_cc_shap
+    cosine, dist_correl, mse, var, kl_div, js_div = cc_shap_score(ratios_prediction, ratios_explanation)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/cc_shap.py", line 56, in cc_shap_score
+    mse = metrics.mean_squared_error(ratios_prediction, ratios_explanation)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/sklearn/utils/_param_validation.py", line 216, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/sklearn/metrics/_regression.py", line 565, in mean_squared_error
+    _check_reg_targets_with_floating_dtype(
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/sklearn/metrics/_regression.py", line 198, in _check_reg_targets_with_floating_dtype
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(
+                                          ^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/sklearn/metrics/_regression.py", line 105, in _check_reg_targets
+    y_true = check_array(y_true, ensure_2d=False, dtype=dtype)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/sklearn/utils/validation.py", line 1107, in check_array
+    _assert_all_finite(
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/sklearn/utils/validation.py", line 120, in _assert_all_finite
+    _assert_all_finite_element_wise(
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/sklearn/utils/validation.py", line 169, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input contains NaN.
+srun: error: gcn36: task 0: Exited with exit code 1
+srun: Terminating StepId=9600192.0
+
+JOB STATISTICS
+==============
+Job ID: 9600192
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:05:05
+CPU Efficiency: 5.92% of 01:25:48 core-walltime
+Job Wall-clock time: 00:04:46
+Memory Utilized: 3.59 GB
+Memory Efficiency: 2.99% of 120.00 GB

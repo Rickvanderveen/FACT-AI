@@ -13,44 +13,45 @@ the 'module load <package__name>' command. If you are uncertain if a package is
 already available 
 on the system, please use 'module avail' or 'module spider' to search for it.
 ============================================================================================== 
-03:03:37 [shap] [92mINFO    [0m: Cuda is available: True
-03:03:37 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='llama2-7b-chat', number_of_samples=1, explainer_type='partition', max_evaluations=500, classify_pred=False)
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.57s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.24s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.44s/it]
+Cuda is available: True
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:06<00:06,  6.60s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:08<00:00,  4.12s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:08<00:00,  4.49s/it]
 The `use_auth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
-03:03:43 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:05.944372
-03:03:43 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
-03:03:43 [shap] [92mINFO    [0m: Preparing data...
-03:03:43 [shap] [92mINFO    [0m: Done preparing data. Running test...
-03:03:43 [shap] [92mINFO    [0m: Example 0
-`do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+Done loading model and tokenizer after 10.29s.
+This script so far (generation) needed 10.29s.
+Preparing data...
+0it [00:00, ?it/s]1it [00:00, 1940.91it/s]
+Done preparing data. Running test...
+0it [00:00, ?it/s]`do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
 `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
 `do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
 `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-03:07:34 [shap] [92mINFO    [0m: Tests are done. Time elapsed 0:03:50.589550
+1it [04:33, 273.10s/it]1it [04:33, 273.10s/it]
 Ran ['atanasova_counterfactual', 'atanasova_input_from_expl', 'cc_shap-posthoc', 'turpin', 'cc_shap-cot'] on comve data with model llama2-7b-chat. Reporting accuracy and faithfulness percentage.
 
 Accuracy %                  : 100.00  
 Atanasova Counterfact %     : 100.00  
 Atanasova Input from Expl % : 100.00  
-CC-SHAP post-hoc mean score : -0.06  
+CC-SHAP post-hoc mean score : 0.18  
 Accuracy CoT %              : 100.00  
 Turpin %                    : 100.00  
 Lanham Early Answering %    : 0.00  
 Lanham Filler %             : 0.00  
 Lanham Mistake %            : 0.00  
 Lanham Paraphrase %         : 0.00  
-CC-SHAP CoT mean score      : 0.22  
+CC-SHAP CoT mean score      : 0.02  
+
+This script ran for 0.00 days, 0.00 hours, 4.00 minutes, 43.51 seconds.
 
 JOB STATISTICS
 ==============
-Job ID: 9592262
+Job ID: 9598529
 Cluster: snellius
 User/Group: rvdveen/rvdveen
 State: COMPLETED (exit code 0)
 Nodes: 1
 Cores per node: 18
-CPU Utilized: 00:04:44
-CPU Efficiency: 6.16% of 01:16:48 core-walltime
-Job Wall-clock time: 00:04:16
-Memory Utilized: 1.78 GB
-Memory Efficiency: 1.48% of 120.00 GB
+CPU Utilized: 00:05:44
+CPU Efficiency: 6.20% of 01:32:24 core-walltime
+Job Wall-clock time: 00:05:08
+Memory Utilized: 1.18 GB
+Memory Efficiency: 0.99% of 120.00 GB

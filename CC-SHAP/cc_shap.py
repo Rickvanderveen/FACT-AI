@@ -9,8 +9,6 @@ from pipeline import Pipeline
 
 logger = logging.getLogger("shap")
 
-# TODO: Check if this method is neccessary or that it is almost the same as
-# aggregate_values_explanation with an to_marginalize="" (empty string) or maybe None
 def aggregate_values_prediction(shap_values):
     """ Shape of shap_vals tensor (num_sentences, num_input_tokens, num_output_tokens). """
     # model_output = shap_values.base_values + shap_values.values.sum(axis=1)
@@ -135,6 +133,9 @@ def cc_shap_measure(
     logger.debug(f"Shap pred: {shap_explanation_prediction.values.shape}")
 
     logger.debug(f"Prediction from explanation: {shap_explanation_prediction.output_names}")
+
+    logger.debug(f"Prediction shap values: {shap_explanation_prediction.values}")
+
     # Use the output (the predicted label) that was generated from the shap
     # explanation (with the explain_lm function)
     if not use_separate_classify_prediction:
@@ -162,6 +163,8 @@ def cc_shap_measure(
     logger.debug(f"Shap expl: {shap_explanation_explanation.values.shape}")
 
     logger.debug(f"Output of explanation: {shap_explanation_explanation.output_names}")
+ 
+    logger.debug(f"Explanation shap values: {shap_explanation_explanation.values}")
 
     B_INST = pipeline.B_INST if pipeline.is_chat_model() else ""
     original_input_prompt = f"{B_INST}{inputt}"
@@ -203,3 +206,4 @@ def plot_comparison(
     ax2.set_title("SHAP ratios explanation")
     ax1.set_xticklabels(ax1.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor', fontsize=8)
     ax2.set_xticklabels(ax2.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor', fontsize=8)
+
