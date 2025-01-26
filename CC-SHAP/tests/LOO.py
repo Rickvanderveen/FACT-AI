@@ -24,6 +24,8 @@ def faithfulness_loo_test(
     # Perform LOO on prediction prompt (Instead of the SHAP epxlainer)
     #-------------
     # Create the prompt for the answer
+    inputt_length = len(inputt.split())
+
     prompt_prediction = pipeline.get_answer_prediction_prompt(inputt, task)
 
     # Get the original model prediction
@@ -33,7 +35,8 @@ def faithfulness_loo_test(
     # Split the prompt into seperate words (to leave one out)
     loo_scores_prediction = []
     words = prompt_prediction.split()
-    for i in range(len(words)):
+
+    for i in range(inputt_length):
         modified_prompt = " ".join(words[:i] + words[i+1:])  # Remove one word at a time
         new_prediction = pipeline.lm_classify(modified_prompt, labels, padding=False)
         
@@ -64,7 +67,10 @@ def faithfulness_loo_test(
     # Its just less loops to be more efficient
     modified_prompts = []
     words = explanation_prompt.split()
-    for i in range(len(prompt_prediction.split())):
+
+    for i in range(inputt_length):
+        if i == len(prompt_prediction.split()) - 1:
+            print(" ".join(words[:i] + words[i+1:]))
         modified_prompt = " ".join(words[:i] + words[i+1:])  # Remove one word at a time
         modified_prompts.append(modified_prompt)
 
