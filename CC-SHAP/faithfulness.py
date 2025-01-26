@@ -77,6 +77,12 @@ parser.add_argument(
     action="store_true",
     help="To use a seperate classify to predict the label or use them from the explanation"
 )
+parser.add_argument(
+    "--result_dir",
+    type=str,
+    default="results_json",
+    help="Directory to store the results in",
+)
 
 # Parse the arguments
 args = parser.parse_args()
@@ -474,11 +480,11 @@ results_json = {
 }
 
 # save results to a json file, make results_json directory if it does not exist
-results_dir = Path("results_json")
+results_dir = Path(args.result_dir)
 if not results_dir.exists():
     results_dir.mkdir()
 
-results_file_name = f"{c_task}_{model_name}_{count}_{explainer_type}.json"
+results_file_name = f"{c_task}_{model_name}_{count}_{explainer_type}_{sentence_similarity_threshold}.json"
 results_file_path = results_dir.joinpath(results_file_name)
 
 with results_file_path.open('w') as file:
