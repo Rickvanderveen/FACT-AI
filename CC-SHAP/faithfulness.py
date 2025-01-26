@@ -68,6 +68,11 @@ parser.add_argument(
     help="The maximum number of iterations for the explainer to compute the shap values"
 )
 parser.add_argument(
+    "sen_sim_thres",
+    type=float,
+    help="The sentence similarity threshold for the LOO measures"
+)
+parser.add_argument(
     "--classify_pred",
     action="store_true",
     help="To use a seperate classify to predict the label or use them from the explanation"
@@ -85,6 +90,7 @@ num_samples = args.number_of_samples
 explainer_type = args.explainer_type
 explainer_max_evaluations = args.max_evaluations
 use_separate_classify_prediction = args.classify_pred
+sentence_similarity_threshold = args.sen_sim_thres
 
 visualize = False
 
@@ -311,7 +317,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             c_task,
             model_pipeline,
             max_new_tokens,
-            0.5 # The threshold, perhaps make this a command argument
+            sentence_similarity_threshold,
         )
         loo_post, loo_post_mse = loo_measures
     else:
@@ -370,7 +376,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             c_task,
             model_pipeline,
             max_new_tokens,
-            0.5 # The threshold, perhaps make this a command argument
+            sentence_similarity_threshold,
         )
         loo_cot, loo_cot_mse = loo_measures
     else:
@@ -463,7 +469,8 @@ results_json = {
         "accuracy_cot": correct_predictions_cot / num_samples,
     },
     "time_elapsed": str(time_elapsed),
-    "samples": res_dict
+    "samples": res_dict,
+    "sentence_similarity_threshold": sentence_similarity_threshold
 }
 
 # save results to a json file, make results_json directory if it does not exist
@@ -482,20 +489,20 @@ with results_file_path.open('w') as file:
 # Final output (in console)
 #-------------------
 print(f"Ran {TESTS} on {c_task} data with model {model_name}. Reporting accuracy and faithfulness percentage.\n")
-print(f"Accuracy %                  : {correct_predictions*100/count:.2f}  ")
-print(f"Atanasova Counterfact %     : {atanasova_counterfact_count*100/count:.2f}  ")
-print(f"Atanasova Input from Expl % : {atanasova_input_from_expl_test_count*100/count:.2f}  ")
-print(f"CC-SHAP post-hoc mean score : {cc_shap_post_hoc_sum/count:.2f}  ")
-print(f"Accuracy CoT %              : {correct_predictions_cot*100/count:.2f}  ")
-print(f"Turpin %                    : {turpin_test_count*100/count:.2f}  ")
-print(f"Lanham Early Answering %    : {lanham_early_count*100/count:.2f}  ")
-print(f"Lanham Filler %             : {lanham_filler_count*100/count:.2f}  ")
-print(f"Lanham Mistake %            : {lanham_mistake_count*100/count:.2f}  ")
-print(f"Lanham Paraphrase %         : {lanham_paraphrase_count*100/count:.2f}  ")
-print(f"CC-SHAP CoT mean score      : {cc_shap_cot_sum/count:.2f}  ")
-print(f"LOO Post-hoc MSE mean score      : {loo_post_mse_sum/count:.2f}  ")
-print(f"LOO Post-hoc Cosim mean score       : {loo_post_sum/count:.2f}  ")
-print(f"LOO CoT MSE mean score     : {loo_cot_mse_sum/count:.2f}  ")
-print(f"LOO CoT Cosim mean score       : {loo_cot_sum/count:.2f}  ")
+print(f"Accuracy %                    : {correct_predictions*100/count:.2f}  ")
+print(f"Atanasova Counterfact %       : {atanasova_counterfact_count*100/count:.2f}  ")
+print(f"Atanasova Input from Expl %   : {atanasova_input_from_expl_test_count*100/count:.2f}  ")
+print(f"CC-SHAP post-hoc mean score   : {cc_shap_post_hoc_sum/count:.2f}  ")
+print(f"Accuracy CoT %                : {correct_predictions_cot*100/count:.2f}  ")
+print(f"Turpin %                      : {turpin_test_count*100/count:.2f}  ")
+print(f"Lanham Early Answering %      : {lanham_early_count*100/count:.2f}  ")
+print(f"Lanham Filler %               : {lanham_filler_count*100/count:.2f}  ")
+print(f"Lanham Mistake %              : {lanham_mistake_count*100/count:.2f}  ")
+print(f"Lanham Paraphrase %           : {lanham_paraphrase_count*100/count:.2f}  ")
+print(f"CC-SHAP CoT mean score        : {cc_shap_cot_sum/count:.2f}  ")
+print(f"LOO Post-hoc MSE mean score   : {loo_post_mse_sum/count:.2f}  ")
+print(f"LOO Post-hoc Cosim mean score : {loo_post_sum/count:.2f}  ")
+print(f"LOO CoT MSE mean score        : {loo_cot_mse_sum/count:.2f}  ")
+print(f"LOO CoT Cosim mean score      : {loo_cot_sum/count:.2f}  ")
 
 logger.info(f"Tests are done. Time elapsed {time_elapsed}")
