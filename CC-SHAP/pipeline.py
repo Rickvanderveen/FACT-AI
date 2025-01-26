@@ -188,6 +188,7 @@ class Pipeline:
 
         return f"{question} {options}"
     
+    # Setup the sentence to get a LM prediction (this is the initial input)
     def get_prompt_answer_ata(self, inputt, task):
         system_prompt = self.system_prompt if self.is_chat_model() else ""
         B_INST = self.B_INST if self.is_chat_model() else ""
@@ -195,11 +196,12 @@ class Pipeline:
 
         comve_task_addition = " Sentence" if task == "comve" else ""
         ask_answer = f"The best answer is:{comve_task_addition} ("
-
         return f"{system_prompt}{B_INST}{inputt}{E_INST} {ask_answer}"
 
 
-
+    #----------
+    # This is used for the COT experiment, so it gets as prompt a prompt being in the sense of "Give a step by step answer..."
+    #----------
     def lm_generate(self, prompt, max_new_tokens, padding=False, repeat_input=True, use_helper_model=False):
         """ Generate text from a huggingface language model (LM).
         Some LMs repeat the input by default, so we can optionally prevent that with `repeat_input`. """
@@ -226,6 +228,9 @@ class Pipeline:
         generated_text = decoded_batch[0]
         return generated_text
 
+    #----------
+    # This is used to predict A or B given a prompt (2 sentences in many cases, to choose the rightful one)
+    #----------
     def lm_classify(self, prompt, labels: list[str], *, padding=False):
         """ Choose the token from a list of `labels` to which the LM asigns highest probability.
         https://discuss.huggingface.co/t/announcement-generation-get-probabilities-for-generated-output/30075/15"""

@@ -118,7 +118,7 @@ def cc_shap_measure(
     # Create the prompt for the answer
     prompt_prediction = pipeline.get_answer_prediction_prompt(inputt, task)
 
-    # Let the explainer explain the labal prediction
+    # Let the explainer explain the label prediction
     predicted_label = pipeline.lm_classify(prompt_prediction, labels, padding=False)
     logger.debug(f"Prediction from classify: {predicted_label}")
 
@@ -143,8 +143,10 @@ def cc_shap_measure(
 
     # Create the prompt for the explanation
     if expl_type == "post_hoc":
+        # Explanation in the sense of "Why did i choose this answer"
         explanation_prompt = pipeline.get_post_host_explanation_prompt(inputt, task, predicted_label)
     elif expl_type == "cot":
+        # Step by step explanation
         explanation_prompt = pipeline.get_cot_explanation_prompt(inputt)
     else:
         raise ValueError(f'Unknown explanation type {expl_type}')

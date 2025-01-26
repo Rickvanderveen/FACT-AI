@@ -16,7 +16,7 @@ import logging
 
 import cc_shap_logger as cc_log
 import cc_shap
-from tests import faithfulness_test_atanasova_etal_input_from_expl, faithfulness_test_atanasova_etal_counterfact, faithfulness_test_lanham_etal, faithfulness_test_turpin_etal
+from tests import faithfulness_test_atanasova_etal_input_from_expl, faithfulness_test_atanasova_etal_counterfact, faithfulness_test_lanham_etal, faithfulness_test_turpin_etal, faithfulness_loo_test
 
 default_log_level = logging.INFO
 cc_log.setup_logger(default_log_level)
@@ -89,12 +89,14 @@ use_separate_classify_prediction = args.classify_pred
 visualize = False
 
 TESTS = [
-    'atanasova_counterfactual',
-    'atanasova_input_from_expl',
-    'cc_shap-posthoc',
-    'turpin',
+    # 'atanasova_counterfactual',
+    # 'atanasova_input_from_expl',
+    # 'cc_shap-posthoc',
+    # 'turpin',
     # 'lanham', # Needs a helper model
-    'cc_shap-cot',
+    # 'cc_shap-cot',
+    'loo-posthoc',
+    # 'loo-cot',
 ]
 
 LABELS = {
@@ -139,10 +141,13 @@ logger.info(f"Using the {str(explainer)} explainer")
 res_dict = {}
 formatted_inputs, correct_answers, wrong_answers = [], [], []
 correct_predictions, correct_predictions_cot = 0, 0
-atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum = 0, 0, 0, 0, 0, 0
+atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum, loo_post_sum, loo_post_mse_sum,loo_cot_sum, loo_cot_mse_sum  = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 lanham_early_count, lanham_mistake_count, lanham_paraphrase_count, lanham_filler_count = 0, 0, 0, 0
 
 logger.info("Preparing data...")
+#-----------------------------------------------------------
+# Setting up the questions (A, B scenarios)
+#-----------------------------------------------------------
 ###### ComVE tests
 if c_task == 'comve':
     # read in the ComVE data from the csv file
@@ -151,15 +156,20 @@ if c_task == 'comve':
     # read in the ComVE annotations from the csv file
     gold_answers = pd.read_csv('SemEval2020-Task4-Commonsense-Validation-and-Explanation/ALL data/Test Data/subtaskA_gold_answers.csv', header=None, names=['id', 'answer'])
 
+    # This will create X amount of samples to go  through
     for idx, sent0, sent1 in zip(data['id'], data['sent0'], data['sent1']):
         if count + 1 > num_samples:
             break
         
+        # Create the sentence and set it up properly
         formatted_input = model_pipeline.format_example_comve(sent0, sent1)
+        
+        # Convert answer from 0-1 to A-B format, from this specific sentence
         gold_answer = gold_answers[gold_answers['id'] == idx]['answer'].values[0]
         correct_answer = 'A' if gold_answer == 0 else 'B'
         wrong_answer = 'A' if gold_answer == 1 else 'B'
 
+        # add the sentence
         formatted_inputs.append(formatted_input)
         correct_answers.append(correct_answer)
         wrong_answers.append(wrong_answer)
@@ -213,26 +223,45 @@ elif c_task == 'esnli':
         count += 1
 
 logger.info("Done preparing data. Running test...")
+#-----------------------------------------------------------
+# Actual tests
+#-----------------------------------------------------------
 start_test = time.time()
+
+# For every example we do the following
 for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_inputs)), formatted_inputs, correct_answers, wrong_answers):
     logger.info(f"Example {k}")
+
+    #--------------------
+    # Prompt setup for the tests, with this example
+    #--------------------
     # compute model accuracy
+    # Setup the sentence such as:
+    # Which statement of the two is against common sense? Sentence (A): "Pens are for writing" , Sentence (B): "Pens are for painting" ., ask_answer=The best answer is: Sentence (
     ask_input = model_pipeline.get_prompt_answer_ata(formatted_input, c_task)
+    # Do a prediction using the LM (A/B) will come out
     prediction = model_pipeline.lm_classify(ask_input, LABELS[c_task])
+
+    # If it matches the right answer, it was a rightful prediction
     correct_predictions += 1 if prediction == correct_answer else 0
 
     # for accuracy with CoT: first let the model generate the cot, then the answer.
-    cot_prompt = model_pipeline.get_cot_prompt(formatted_input)
+    cot_prompt = model_pipeline.get_cot_prompt(formatted_input) # This is a prompt in the sense of "Explain step by step how u derived your answer"
+    
+    # The explanation from the model, so it explains its COT (step by step reasoning)
     generated_cot = model_pipeline.lm_generate(
         cot_prompt,
         max_new_tokens,
         repeat_input=True
     )
+    # Add "The best answer is: sentence(" to throw it into lm_classify to get a prediction of a/b
     ask_for_final_answer = model_pipeline.get_final_answer(generated_cot, c_task)
     prediction_cot = model_pipeline.lm_classify(ask_for_final_answer,LABELS[c_task])
     correct_predictions_cot += 1 if prediction_cot == correct_answer else 0
 
+    #-----------------------
     # # post-hoc tests
+    #-----------------------
     if 'atanasova_counterfactual' in TESTS:
         atanasova_counterfact = faithfulness_test_atanasova_etal_counterfact(
             model_pipeline,
@@ -273,8 +302,24 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         score_post_hoc, dist_correl_ph, mse_ph, var_ph, kl_div_ph, js_div_ph, shap_plot_info_ph = cc_shap_measures
     else:
         score_post_hoc, dist_correl_ph, mse_ph, var_ph, kl_div_ph, js_div_ph, shap_plot_info_ph = 0, 0, 0, 0, 0, 0, 0
+    
+    if 'loo-posthoc' in TESTS:
+        loo_measures = faithfulness_loo_test(
+            formatted_input,
+            LABELS[c_task],
+            'post_hoc',
+            c_task,
+            model_pipeline,
+            max_new_tokens,
+            0.5 # The threshold, perhaps make this a command argument
+        )
+        loo_post, loo_post_mse = loo_measures
+    else:
+        loo_post, loo_post_mse = 0, 0
 
-    # # CoT tests
+    #-----------------------
+    # # COT tests
+    #-----------------------
     if 'turpin' in TESTS:
         turpin = faithfulness_test_turpin_etal(
             model_pipeline,
@@ -316,8 +361,25 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         score_cot, dist_correl_cot, mse_cot, var_cot, kl_div_cot, js_div_cot, shap_plot_info_cot = cc_shap_measures
     else:
         score_cot, dist_correl_cot, mse_cot, var_cot, kl_div_cot, js_div_cot, shap_plot_info_cot = 0, 0, 0, 0, 0, 0, 0
-
-    # aggregate results
+    
+    if 'loo-cot' in TESTS:
+        loo_measures = faithfulness_loo_test(
+            formatted_input,
+            LABELS[c_task],
+            'cot',
+            c_task,
+            model_pipeline,
+            max_new_tokens,
+            0.5 # The threshold, perhaps make this a command argument
+        )
+        loo_cot, loo_cot_mse = loo_measures
+    else:
+        loo_cot, loo_cot_mse = 0, 0
+    
+    #-----------
+    # Finalize/Save the results
+    #-----------
+    # aggregate results (Add all results together, so the average can be taken in the very end)
     atanasova_counterfact_count += atanasova_counterfact
     atanasova_input_from_expl_test_count += atanasova_input_from_expl
     cc_shap_post_hoc_sum += score_post_hoc
@@ -327,7 +389,13 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
     lanham_paraphrase_count += lanham_paraphrase
     lanham_filler_count += lanham_filler
     cc_shap_cot_sum += score_cot
+    #loo
+    loo_post_sum += loo_post
+    loo_post_mse_sum += loo_post_mse
+    loo_cot_sum += loo_cot
+    loo_cot_mse_sum += loo_cot_mse
 
+    # Save this example, this gets pushed to the json in the end
     res_dict[f"{c_task}_{model_name}_{k}"] = {
         "input": formatted_input,
         "correct_answer": correct_answer,
@@ -351,21 +419,33 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             "mse": f"{mse_ph:.2f}",
             "var": f"{var_ph:.2f}",
             "kl_div": f"{kl_div_ph:.2f}",
-            "js_div": f"{js_div_ph:.2f}"
+            "js_div": f"{js_div_ph:.2f}",
+            "loo_mse": f"{loo_post_mse:.2f}",
+            "loo_cosim": f"{loo_post:.2f}",
         },
         "other_measures_cot": {
             "dist_correl": f"{dist_correl_cot:.2f}",
             "mse": f"{mse_cot:.2f}",
             "var": f"{var_cot:.2f}",
             "kl_div": f"{kl_div_cot:.2f}",
-            "js_div": f"{js_div_cot:.2f}"
+            "js_div": f"{js_div_cot:.2f}",
+            "loo_mse": f"{loo_cot_mse:.2f}",
+            "loo_cosim": f"{loo_cot:.2f}",
         },
         "shap_plot_info_post_hoc": shap_plot_info_ph,
         "shap_plot_info_cot": shap_plot_info_cot,
     }
 
+#-------------------
+# Ending
+#-------------------
+
 end_test = time.time()
 time_elapsed = datetime.timedelta(seconds = end_test - start_test)
+
+#-------------------
+# Json saving
+#-------------------
 
 results_json = {
     "args": str(args),
@@ -398,6 +478,9 @@ with results_file_path.open('w') as file:
     json.dump(results_json, file)
 
 
+#-------------------
+# Final output (in console)
+#-------------------
 print(f"Ran {TESTS} on {c_task} data with model {model_name}. Reporting accuracy and faithfulness percentage.\n")
 print(f"Accuracy %                  : {correct_predictions*100/count:.2f}  ")
 print(f"Atanasova Counterfact %     : {atanasova_counterfact_count*100/count:.2f}  ")
@@ -410,5 +493,9 @@ print(f"Lanham Filler %             : {lanham_filler_count*100/count:.2f}  ")
 print(f"Lanham Mistake %            : {lanham_mistake_count*100/count:.2f}  ")
 print(f"Lanham Paraphrase %         : {lanham_paraphrase_count*100/count:.2f}  ")
 print(f"CC-SHAP CoT mean score      : {cc_shap_cot_sum/count:.2f}  ")
+print(f"LOO Post-hoc MSE mean score      : {loo_post_mse_sum/count:.2f}  ")
+print(f"LOO Post-hoc Cosim mean score       : {loo_post_sum/count:.2f}  ")
+print(f"LOO CoT MSE mean score     : {loo_cot_mse_sum/count:.2f}  ")
+print(f"LOO CoT Cosim mean score       : {loo_cot_sum/count:.2f}  ")
 
 logger.info(f"Tests are done. Time elapsed {time_elapsed}")
