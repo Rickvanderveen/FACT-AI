@@ -214,7 +214,10 @@ class Pipeline:
             tokenizer = self.tokenizer
 
         # Tokenizes the prompt to token ids
-        input_ids = tokenizer([prompt], return_tensors="pt", padding=padding).input_ids.cuda()
+        if isinstance(prompt, list):
+            input_ids = tokenizer(prompt, return_tensors="pt", padding=padding).input_ids.cuda()
+        else:
+            input_ids = tokenizer([prompt], return_tensors="pt", padding=padding).input_ids.cuda()
         # Generate text
         generated_ids = model.generate(input_ids, max_new_tokens=max_new_tokens)
 
@@ -225,8 +228,9 @@ class Pipeline:
         # Decode output from token ids to text
         decoded_batch = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
         # There is only 1 sample in the batch
-        generated_text = decoded_batch[0]
-        return generated_text
+        if not isinstance(prompt, list):
+            return decoded_batch[0]
+        return decoded_batch
 
     #----------
     # This is used to predict A or B given a prompt (2 sentences in many cases, to choose the rightful one)

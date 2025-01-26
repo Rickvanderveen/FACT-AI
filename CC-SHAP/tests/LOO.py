@@ -57,23 +57,26 @@ def faithfulness_loo_test(
     
     logger.debug(f"Explanation prompt: {explanation_prompt}")
     
-    # Generate the explanation using the explanation prompt
+    # Generate and embed the explanation using the explanation prompt (this is the original with no words left out)
     generated_explanation = pipeline.lm_generate(explanation_prompt, max_new_tokens_explanation, repeat_input=False)
     generated_explanation_embedding = encoder.encode([generated_explanation]) # used to check similarity
-
-    # Perform LOO on explanation prompt
-    loo_scores_explanation = []
-    words = explanation_prompt.split()
     # Only loop the same length as the prediction, since we compare it to that part of the prompt (it will still use the entire prompt, in lm_generate)
     # Its just less loops to be more efficient
+    modified_prompts = []
+    words = explanation_prompt.split()
     for i in range(len(prompt_prediction.split())):
         modified_prompt = " ".join(words[:i] + words[i+1:])  # Remove one word at a time
-        new_generated_explanation = pipeline.lm_generate(modified_prompt, max_new_tokens_explanation, repeat_input=False)
-        new_generated_explanation_embedding = encoder.encode([new_generated_explanation]) # used to check similarity
+        modified_prompts.append(modified_prompt)
+
+    # Generate all explanations at once (for better speed), so keep in mind this is all explanations at once
+    new_generated_explanation = pipeline.lm_generate(modified_prompts, max_new_tokens_explanation, repeat_input=False, padding=True)
+    # generate all embeddings at once (for every possible LOO explanation)
+    new_generated_explanation_embeddings = encoder.encode(new_generated_explanation) # used to check similarity
         
-        # Measure if the explanation changed
-        similarity = cosine_similarity(generated_explanation_embedding, new_generated_explanation_embedding)[0][0]
-        
+    # Measure if the explanation changed
+    loo_scores_explanation = []
+    similarities = cosine_similarity(generated_explanation_embedding, new_generated_explanation_embeddings)[0]
+    for similarity in similarities:
         # similarity is a 0-1 value, if its 1.0 its similar, so it had little impact removing it
         # Therefore if the similarity is <= the threshold, it had impact
         impact = 1 if similarity <= threshold else 0
