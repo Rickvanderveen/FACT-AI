@@ -69,8 +69,6 @@ def faithfulness_loo_test(
     words = explanation_prompt.split()
 
     for i in range(inputt_length):
-        if i == len(prompt_prediction.split()) - 1:
-            print(" ".join(words[:i] + words[i+1:]))
         modified_prompt = " ".join(words[:i] + words[i+1:])  # Remove one word at a time
         modified_prompts.append(modified_prompt)
 
