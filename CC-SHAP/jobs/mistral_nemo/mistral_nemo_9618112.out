@@ -1,0 +1,45 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+22:58:03 [shap] [92mINFO    [0m: Cuda is available: True
+22:58:04 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='mistral-nemo-chat', number_of_samples=1, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.5, classify_pred=False, result_dir='results_json')
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:03<00:12,  3.13s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:06<00:10,  3.38s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:10<00:06,  3.45s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:13<00:03,  3.19s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:15<00:00,  2.87s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:15<00:00,  3.06s/it]
+22:58:20 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:16.363351
+22:58:20 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+22:58:20 [shap] [92mINFO    [0m: Preparing data...
+22:58:20 [shap] [92mINFO    [0m: Done preparing data. Running test...
+22:58:20 [shap] [92mINFO    [0m: Example 0
+23:13:01 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+23:13:01 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 9618112 ON gcn10 CANCELLED AT 2025-01-26T23:13:27 ***
+slurmstepd: error: *** STEP 9618112.0 ON gcn10 CANCELLED AT 2025-01-26T23:13:27 ***
+
+JOB STATISTICS
+==============
+Job ID: 9618112
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:16:48
+CPU Efficiency: 5.86% of 04:46:48 core-walltime
+Job Wall-clock time: 00:15:56
+Memory Utilized: 15.51 GB
+Memory Efficiency: 12.92% of 120.00 GB

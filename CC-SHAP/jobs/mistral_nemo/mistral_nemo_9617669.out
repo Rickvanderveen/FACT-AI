@@ -1,0 +1,80 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+22:38:49 [shap] [92mINFO    [0m: Cuda is available: True
+22:38:50 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='mistral-nemo-chat', number_of_samples=1, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.5, classify_pred=False, result_dir='results_json')
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:05<00:21,  5.43s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:11<00:16,  5.54s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:16<00:11,  5.59s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:22<00:05,  5.57s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:27<00:00,  5.56s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:27<00:00,  5.56s/it]
+22:39:19 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:28.839920
+22:39:19 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+22:39:19 [shap] [92mINFO    [0m: Preparing data...
+22:39:19 [shap] [92mINFO    [0m: Done preparing data. Running test...
+22:39:19 [shap] [92mINFO    [0m: Example 0
+Traceback (most recent call last):
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/faithfulness.py", line 307, in <module>
+    cc_shap_measures = cc_shap.cc_shap_measure(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/cc_shap.py", line 125, in cc_shap_measure
+    shap_explanation_prediction = pipeline.explain_lm(
+                                  ^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/pipeline.py", line 292, in explain_lm
+    shap_explanation = explainer(batch_prompts, max_evals=max_evaluations)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_partition.py", line 122, in __call__
+    return super().__call__(
+           ^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_partition.py", line 136, in __call__
+    return super().__call__(
+           ^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_explainer.py", line 266, in __call__
+    row_result = self.explain_row(
+                 ^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_partition.py", line 161, in explain_row
+    self._curr_base_value = fm(m00.reshape(1, -1), zero_index=0)[0] # the zero index param tells the masked model what the baseline is
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/utils/_masked_model.py", line 67, in __call__
+    return self._full_masking_call(masks, batch_size=batch_size)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/utils/_masked_model.py", line 144, in _full_masking_call
+    outputs = self.model(*joined_masked_inputs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/models/_teacher_forcing.py", line 113, in __call__
+    logits = self.get_teacher_forced_logits(X_batch, Y_batch)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/models/_teacher_forcing.py", line 366, in get_teacher_forced_logits
+    logits = self.model_inference(inputs, output_ids)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/models/_teacher_forcing.py", line 279, in model_inference
+    logits = outputs.logits.detach().cpu().numpy().astype('float64')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Got unsupported ScalarType BFloat16
+srun: error: gcn25: task 0: Exited with exit code 1
+srun: Terminating StepId=9617669.0
+
+JOB STATISTICS
+==============
+Job ID: 9617669
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:52
+CPU Efficiency: 3.85% of 00:22:30 core-walltime
+Job Wall-clock time: 00:01:15
+Memory Utilized: 1.42 GB
+Memory Efficiency: 1.18% of 120.00 GB

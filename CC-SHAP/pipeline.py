@@ -28,6 +28,10 @@ MODELS = {
     'llama3-8B-chat': 'meta-llama/Llama-3.1-8B-Instruct',
     'falcon3-7B-chat': 'tiiuae/Falcon3-7B-Instruct',
     'mistral-nemo-chat': 'mistralai/Mistral-Nemo-Instruct-2407', # 12.2B params
+    'qwen1.5-7b-chat': 'Qwen/Qwen1.5-7B-Chat',
+    'qwen2.5-7b-chat': 'Qwen/Qwen2.5-7B-Instruct',
+    'gemma-7b-chat': 'google/gemma-7b-it',
+    'gemma2-9b-chat': 'google/gemma-2-9b-it',
 }
 
 logger = logging.getLogger("shap")
@@ -256,7 +260,7 @@ class Pipeline:
         label_scores = np.zeros(len(labels))
 
         for i, label in enumerate(labels):
-            single_token_return_models = ["gpt", "bloom", "falcon"]
+            single_token_return_models = ["gpt", "bloom", "falcon", "qwen1.5", "qwen2.5", "gemma"]
             is_single_token_return_model = any(model in self.model_name for model in single_token_return_models)
 
             idx = 0 if is_single_token_return_model else 1 # the gpt2 model returns only one token

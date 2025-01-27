@@ -101,13 +101,13 @@ sentence_similarity_threshold = args.sen_sim_thres
 visualize = False
 
 TESTS = [
-    # 'atanasova_counterfactual',
-    # 'atanasova_input_from_expl',
-    # 'cc_shap-posthoc',
-    # 'turpin',
+    'atanasova_counterfactual',
+    'atanasova_input_from_expl',
+    'cc_shap-posthoc',
+    'turpin',
     # 'lanham', # Needs a helper model
-    # 'cc_shap-cot',
-    'loo-posthoc',
+    'cc_shap-cot',
+    # 'loo-posthoc',
     # 'loo-cot',
 ]
 
