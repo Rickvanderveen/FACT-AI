@@ -108,15 +108,24 @@ class Pipeline:
         return cls(model_name, model, tokenizer, helper_model, helper_tokenizer)
     
     def is_chat_model(self) -> bool:
-        return "chat" in self.model_name
+        chat_in_name = "chat" in self.model_name
+        chat_model = any(
+            name in self.model_name 
+            for name in [
+            "phi3",
+            "phi4"
+        ])
+        return chat_in_name or chat_model
     
     def set_special_tokens(self):
+        self.E_ASSISTANT = ""
+
         if "llama2" in self.model_name:
             self.B_INST = "[INST] "
             self.E_INST = " [/INST]"
-            self.B_SYS = "<<SYS>>\n"
-            self.E_SYS = "\n<</SYS>>\n\n"
-            self.system_prompt = f"{self.B_SYS}You are a helpful chat assistant and will answer the user's questions carefully.{self.E_SYS}"
+            B_SYS = "<<SYS>>\n"
+            E_SYS = "\n<</SYS>>\n\n"
+            self.system_prompt = f"{B_SYS}You are a helpful chat assistant and will answer the user's questions carefully.{E_SYS}"
 
         elif "mistral" in self.model_name:
             self.B_INST = "[INST] "
@@ -128,11 +137,25 @@ class Pipeline:
             self.E_INST = " Assistant:"
             self.system_prompt = ''
 
+        elif "phi3" in self.model_name:
+            self.B_INST = "<|user|>\n"
+            self.E_INST = "<|end|>\n<|assistant|>\n"
+            B_SYS = "<|system|>\n"
+            self.system_prompt = f"{B_SYS}You are a helpful assistant.<|end|>\n"
+            self.E_ASSISTANT = "<|end|>\n"
+        
+        elif "phi4" in self.model_name:
+            B_SYS = "<|im_start|>system<|im_sep|>\n"
+            self.system_prompt = f"{B_SYS}You are a helpful assistant.<|im_end|>\n"
+            self.B_INST = "<|im_start|>user<|im_sep|>\n"
+            self.E_INST = "<|im_end|>\n<|im_start|>assistant<|im_sep|>\n"
+            self.E_ASSISTANT = "<|im_end|>\n"
+
         else:
             self.B_INST = ""
             self.E_INST = ""
             self.system_prompt = ""
-    
+
     def get_answer_prediction_prompt(self, inputt, task):
         B_INST = self.B_INST if self.is_chat_model() else ""
         E_INST = self.E_INST if self.is_chat_model() else ""
@@ -151,7 +174,7 @@ class Pipeline:
         answer_prompt = answer_prompt[:-2]
 
         ask_explanation = "Why?"
-        return f"{answer_prompt} ({predicted_label}) {B_INST}{ask_explanation}{E_INST} Because"
+        return f"{answer_prompt} ({predicted_label}){self.E_ASSISTANT} {B_INST}{ask_explanation}{E_INST} Because"
     
     def get_cot_explanation_prompt(self, inputt):
         B_INST = self.B_INST if self.is_chat_model() else ""
