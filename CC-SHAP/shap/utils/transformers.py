@@ -48,6 +48,7 @@ MODELS_FOR_CAUSAL_LM = [
         "transformers.LlamaForCausalLM", # LP: add these to the list, otherwise the library doesn't work
         "transformers.FalconForCausalLM", # LP: add these to the list, otherwise the library doesn't work
         "transformers.MistralForCausalLM", # LP: add these to the list, otherwise the library doesn't work
+        "transformers.Phi3ForCausalLM",
     ]
 
 MODELS_FOR_MASKED_LM = [

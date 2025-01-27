@@ -32,6 +32,8 @@ MODELS = {
     'qwen2.5-7b-chat': 'Qwen/Qwen2.5-7B-Instruct',
     'gemma-7b-chat': 'google/gemma-7b-it',
     'gemma2-9b-chat': 'google/gemma-2-9b-it',
+    'phi3': 'microsoft/Phi-3-mini-4k-instruct',
+    'phi4': 'microsoft/phi-4',
 }
 
 logger = logging.getLogger("shap")
@@ -260,7 +262,15 @@ class Pipeline:
         label_scores = np.zeros(len(labels))
 
         for i, label in enumerate(labels):
-            single_token_return_models = ["gpt", "bloom", "falcon", "qwen1.5", "qwen2.5", "gemma"]
+            single_token_return_models = [
+                "gpt",
+                "bloom",
+                "falcon",
+                "qwen1.5",
+                "qwen2.5",
+                "gemma",
+                "phi",
+            ]
             is_single_token_return_model = any(model in self.model_name for model in single_token_return_models)
 
             idx = 0 if is_single_token_return_model else 1 # the gpt2 model returns only one token

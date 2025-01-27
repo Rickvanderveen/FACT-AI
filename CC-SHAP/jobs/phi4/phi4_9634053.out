@@ -1,0 +1,115 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+18:24:26 [shap] [92mINFO    [0m: Cuda is available: True
+18:24:27 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='phi4', number_of_samples=1, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.5, classify_pred=False, result_dir='results_json')
+Downloading shards:   0%|          | 0/6 [00:00<?, ?it/s]Downloading shards:  33%|███▎      | 2/6 [01:43<03:26, 51.65s/it]Downloading shards:  50%|█████     | 3/6 [03:39<03:55, 78.54s/it]Downloading shards:  67%|██████▋   | 4/6 [05:33<03:03, 91.72s/it]Downloading shards:  83%|████████▎ | 5/6 [07:26<01:39, 99.12s/it]Downloading shards: 100%|██████████| 6/6 [09:24<00:00, 105.43s/it]Downloading shards: 100%|██████████| 6/6 [09:24<00:00, 94.08s/it] 
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:02<00:13,  2.65s/it]Loading checkpoint shards:  33%|███▎      | 2/6 [00:05<00:10,  2.64s/it]Loading checkpoint shards:  50%|█████     | 3/6 [00:07<00:07,  2.61s/it]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:10<00:05,  2.60s/it]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:12<00:02,  2.57s/it]Loading checkpoint shards: 100%|██████████| 6/6 [00:15<00:00,  2.50s/it]Loading checkpoint shards: 100%|██████████| 6/6 [00:15<00:00,  2.55s/it]
+18:34:09 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:09:42.573276
+18:34:09 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+18:34:09 [shap] [92mINFO    [0m: Preparing data...
+18:34:09 [shap] [92mINFO    [0m: Done preparing data. Running test...
+18:34:09 [shap] [92mINFO    [0m: Example 0
+Encoded tokenizer: [32]
+Encoded tokenizer: [33]
+Encoded tokenizer: [32]
+Encoded tokenizer: [33]
+Encoded tokenizer: [32]
+Encoded tokenizer: [33]
+Encoded tokenizer: [32]
+Encoded tokenizer: [33]
+Encoded tokenizer: [32]
+Encoded tokenizer: [33]
+Traceback (most recent call last):
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/faithfulness.py", line 303, in <module>
+    cc_shap_measures = cc_shap.cc_shap_measure(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/cc_shap.py", line 125, in cc_shap_measure
+    shap_explanation_prediction = pipeline.explain_lm(
+                                  ^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/pipeline.py", line 307, in explain_lm
+    shap_explanation = explainer(batch_prompts, max_evals=max_evaluations)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_partition.py", line 122, in __call__
+    return super().__call__(
+           ^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_partition.py", line 136, in __call__
+    return super().__call__(
+           ^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_explainer.py", line 266, in __call__
+    row_result = self.explain_row(
+                 ^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_partition.py", line 161, in explain_row
+    self._curr_base_value = fm(m00.reshape(1, -1), zero_index=0)[0] # the zero index param tells the masked model what the baseline is
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/utils/_masked_model.py", line 67, in __call__
+    return self._full_masking_call(masks, batch_size=batch_size)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/utils/_masked_model.py", line 144, in _full_masking_call
+    outputs = self.model(*joined_masked_inputs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/models/_model.py", line 26, in __call__
+    out = self.inner_model(*args)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/transformers/models/phi3/modeling_phi3.py", line 899, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/transformers/models/phi3/modeling_phi3.py", line 584, in forward
+    inputs_embeds = self.embed_tokens(input_ids)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torch/nn/modules/sparse.py", line 190, in forward
+    return F.embedding(
+           ^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torch/nn/functional.py", line 2551, in embedding
+    return torch.embedding(weight, input, padding_idx, scale_grad_by_freq, sparse)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: embedding(): argument 'indices' (position 2) must be Tensor, not numpy.ndarray
+srun: error: gcn16: task 0: Exited with exit code 1
+srun: Terminating StepId=9634053.0
+
+JOB STATISTICS
+==============
+Job ID: 9634053
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:02:02
+CPU Efficiency: 1.09% of 03:05:42 core-walltime
+Job Wall-clock time: 00:10:19
+Memory Utilized: 1.57 GB
+Memory Efficiency: 1.31% of 120.00 GB

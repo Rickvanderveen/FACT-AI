@@ -16,22 +16,22 @@ on the system, please use 'module avail' or 'module spider' to search for it.
 Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
 The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
 The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
-01:06:38 [shap] [92mINFO    [0m: Cuda is available: True
-01:06:39 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='gemma2-9b-chat', number_of_samples=1, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.5, classify_pred=False, result_dir='results_json')
-Downloading shards:   0%|          | 0/4 [00:00<?, ?it/s]Downloading shards:  25%|██▌       | 1/4 [01:56<05:50, 116.99s/it]Downloading shards:  50%|█████     | 2/4 [03:55<03:55, 117.64s/it]Downloading shards:  75%|███████▌  | 3/4 [05:53<01:57, 117.98s/it]Downloading shards: 100%|██████████| 4/4 [07:20<00:00, 105.80s/it]Downloading shards: 100%|██████████| 4/4 [07:20<00:00, 110.15s/it]
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:09,  3.26s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:06<00:06,  3.46s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:09<00:03,  3.26s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:13<00:00,  3.31s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:13<00:00,  3.32s/it]
-01:14:21 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:07:41.924659
+21:07:26 [shap] [92mINFO    [0m: Cuda is available: True
+21:07:27 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='gemma2-9b-chat', number_of_samples=1, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.5, classify_pred=False, result_dir='results_json')
+Downloading shards:   0%|          | 0/4 [00:00<?, ?it/s]Downloading shards:  25%|██▌       | 1/4 [01:57<05:51, 117.28s/it]Downloading shards:  50%|█████     | 2/4 [03:55<03:55, 117.63s/it]Downloading shards:  75%|███████▌  | 3/4 [05:53<01:57, 117.91s/it]Downloading shards: 100%|██████████| 4/4 [07:20<00:00, 105.83s/it]Downloading shards: 100%|██████████| 4/4 [07:20<00:00, 110.18s/it]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:09,  3.21s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:06<00:06,  3.41s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:10<00:03,  3.40s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:12<00:00,  2.88s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:12<00:00,  3.05s/it]
+21:15:03 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:07:36.820765
 Traceback (most recent call last):
   File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/faithfulness.py", line 133, in <module>
     explainer = shap.Explainer(
                 ^^^^^^^^^^^^^^^
-  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_explainer.py", line 94, in __init__
-    self.masker = maskers.Text(masker)
-                  ^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/explainers/_explainer.py", line 92, in __init__
+    self.masker = maskers.Text(masker, mask_token="...", collapse_mask_token=True)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/maskers/_text.py", line 57, in __init__
     parsed_tokenizer_dict = parse_prefix_suffix_for_tokenizer(self.tokenizer)
                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/utils/transformers.py", line 115, in parse_prefix_suffix_for_tokenizer
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/shap/utils/transformers.py", line 117, in parse_prefix_suffix_for_tokenizer
     elif ('eos_token' in st_map) and (tokenizer.decode(null_token) == st_map['eos_token']) and \
                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/transformers/tokenization_utils_base.py", line 3851, in decode
@@ -40,19 +40,19 @@ Traceback (most recent call last):
   File "/home/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/transformers/models/gemma/tokenization_gemma.py", line 312, in _decode
     for ids in token_ids:
 TypeError: 'int' object is not iterable
-srun: error: gcn58: task 0: Exited with exit code 1
-srun: Terminating StepId=9619520.0
+srun: error: gcn10: task 0: Exited with exit code 1
+srun: Terminating StepId=9636671.0
 
 JOB STATISTICS
 ==============
-Job ID: 9619520
+Job ID: 9636671
 Cluster: snellius
 User/Group: rvdveen/rvdveen
 State: FAILED (exit code 1)
 Nodes: 1
 Cores per node: 18
-CPU Utilized: 00:01:40
-CPU Efficiency: 1.12% of 02:29:06 core-walltime
-Job Wall-clock time: 00:08:17
-Memory Utilized: 2.48 GB
-Memory Efficiency: 2.07% of 120.00 GB
+CPU Utilized: 00:01:34
+CPU Efficiency: 1.09% of 02:23:24 core-walltime
+Job Wall-clock time: 00:07:58
+Memory Utilized: 843.69 MB
+Memory Efficiency: 0.69% of 120.00 GB
