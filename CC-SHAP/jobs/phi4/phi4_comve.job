@@ -5,8 +5,8 @@
 #SBATCH --job-name=phi4_comve
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=9
-#SBATCH --time=08:00:00
-#SBATCH --output=phi4_comve_100_comve_%A.out
+#SBATCH --time=16:00:00
+#SBATCH --output=phi4_100_comve_%A.out
 
 module purge
 module load 2024
