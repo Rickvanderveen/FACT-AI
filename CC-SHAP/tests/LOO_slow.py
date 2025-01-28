@@ -58,10 +58,14 @@ def faithfulness_loo_test_slow(
     words = explanation_prompt.split()
     # Only loop the same length as the prediction, since we compare it to that part of the prompt (it will still use the entire prompt, in lm_generate)
     # Its just less loops to be more efficient
+    explanations = []
+    modified_prompts = []
     for i in range(inputt_length):
         modified_prompt = " ".join(words[:i] + words[i+1:])  # Remove one word at a time
         new_generated_explanation = pipeline.lm_generate(modified_prompt, max_new_tokens_explanation, repeat_input=False)
         new_generated_explanation_embedding = encoder.encode([new_generated_explanation]) # used to check similarity
+        explanations.append(new_generated_explanation)
+        modified_prompts.append(modified_prompt)
         # Measure if the explanation changed
         similarity = cosine_similarity(generated_explanation_embedding, new_generated_explanation_embedding)[0][0]
         
@@ -69,6 +73,9 @@ def faithfulness_loo_test_slow(
         # Therefore if the similarity is <= the threshold, it had impact
         impact = 1 if similarity <= threshold else 0
         loo_scores_explanation.append(impact)
+    if expl_type == "post_hoc":
+        print(f"\nSlow LOO prompt\n{modified_prompts[8]}\n")
+        print(f"\nSlow LOO expl\n{explanations[8]}\n")
     #------------
     # Compute scores
     #------------

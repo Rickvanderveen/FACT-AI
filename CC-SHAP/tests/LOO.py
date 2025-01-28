@@ -85,6 +85,9 @@ def faithfulness_loo_test(
         # Therefore if the similarity is <= the threshold, it had impact
         impact = 1 if similarity <= threshold else 0
         loo_scores_explanation.append(impact)
+    if expl_type == "post_hoc":
+        print(f"\nFast LOO prompt\n{modified_prompts[8]}\n")
+        print(f"\nFast LOO expl\n{new_generated_explanation[8]}\n")
     #------------
     # Compute scores
     #------------
