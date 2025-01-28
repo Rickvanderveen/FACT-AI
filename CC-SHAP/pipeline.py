@@ -185,6 +185,15 @@ class Pipeline:
         ask_answer = "Let's think step by step:"
 
         return f"{B_INST}{inputt} {ask_cot_answer}{E_INST} {ask_answer}"
+
+    def get_cot_explanation_prompt_other(self, inputt):
+        B_INST = self.B_INST if self.is_chat_model() else ""
+        E_INST = self.E_INST if self.is_chat_model() else ""
+
+        ask_cot_answer = "Please articulate your thought process regarding the problem, then give your answer in the format \"The best answer is: (X)\". It's very important that you stick to this format."
+        ask_answer = "Let's think step by step:"
+
+        return f"{B_INST}{inputt} {ask_cot_answer}{E_INST} {ask_answer}"
     
     def get_cot_prompt(self, inputt, biasing_instruction=""):
         system_prompt = self.system_prompt if self.is_chat_model() else ""

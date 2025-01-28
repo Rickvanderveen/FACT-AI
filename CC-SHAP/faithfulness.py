@@ -106,11 +106,12 @@ TESTS = [
     # 'cc_shap-posthoc',
     # 'turpin',
     # 'lanham', # Needs a helper model
-    # 'cc_shap-cot',
-    'loo-posthoc',
-    'loo-cot',
-    'loo-posthoc-slow',
-    'loo-cot-slow',
+    'cc_shap-cot',
+    # 'loo-posthoc',
+    # 'loo-cot',
+    # 'loo-posthoc-slow',
+    # 'loo-cot-slow',
+    'cc_shap-cot-other-input',
 ]
 
 LABELS = {
@@ -155,7 +156,7 @@ logger.info(f"Using the {str(explainer)} explainer")
 res_dict = {}
 formatted_inputs, correct_answers, wrong_answers = [], [], []
 correct_predictions, correct_predictions_cot = 0, 0
-atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum, loo_post_sum, loo_post_mse_sum, loo_cot_sum, loo_cot_mse_sum, loo_slow_cot_sum, loo_slow_cot_mse_sum, loo_slow_post_mse_sum, loo_slow_post_sum  = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum, loo_post_sum, loo_post_mse_sum, loo_cot_sum, loo_cot_mse_sum, loo_slow_cot_sum, loo_slow_cot_mse_sum, loo_slow_post_mse_sum, loo_slow_post_sum, cc_shap_cot_sum_alternative  = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 lanham_early_count, lanham_mistake_count, lanham_paraphrase_count, lanham_filler_count = 0, 0, 0, 0
 
 logger.info("Preparing data...")
@@ -390,6 +391,21 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
     else:
         score_cot, dist_correl_cot, mse_cot, var_cot, kl_div_cot, js_div_cot, shap_plot_info_cot = 0, 0, 0, 0, 0, 0, 0
     
+    if 'cc_shap-cot-other-input' in TESTS:
+        cc_shap_measures = cc_shap.cc_shap_measure(
+            formatted_input,
+            LABELS[c_task],
+            "cot-other",
+            c_task,
+            model_pipeline,
+            explainer,
+            max_new_tokens,
+            max_evaluations = explainer_max_evaluations,
+        )
+        score_cot_alternative, dist_correl_cot_alternative, mse_cot_alternative, var_cot_alternative, kl_div_cot_alternative, js_div_cot_alternative, shap_plot_info_cot_alternative = cc_shap_measures
+    else:
+        score_cot_alternative, dist_correl_cot_alternative, mse_cot_alternative, var_cot_alternative, kl_div_cot_alternative, js_div_cot_alternative, shap_plot_info_cot_alternative = 0, 0, 0, 0, 0, 0, 0
+    
     if 'loo-cot' in TESTS:
         loo_measures = faithfulness_loo_test(
             formatted_input,
@@ -431,6 +447,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
     lanham_paraphrase_count += lanham_paraphrase
     lanham_filler_count += lanham_filler
     cc_shap_cot_sum += score_cot
+    cc_shap_cot_sum_alternative += score_cot_alternative
     #loo
     loo_post_sum += loo_post
     loo_post_mse_sum += loo_post_mse
@@ -461,6 +478,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         "lanham_paraphrase": lanham_paraphrase,
         "lanham_filler": lanham_filler,
         "cc_shap-cot": f"{score_cot:.2f}",
+        "cc_shap-cot-alternative": f"{score_cot_alternative:.2f}",
         "loo_mse_posthoc": f"{loo_post_mse:.2f}",
         "loo_cosim_posthoc": f"{loo_post:.2f}",
         "loo_mse_cot": f"{loo_cot_mse:.2f}",
@@ -482,6 +500,13 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             "var": f"{var_cot:.2f}",
             "kl_div": f"{kl_div_cot:.2f}",
             "js_div": f"{js_div_cot:.2f}",
+        },
+        "other_measures_cot_alternative": {
+            "dist_correl": f"{dist_correl_cot_alternative:.2f}",
+            "mse": f"{mse_cot_alternative:.2f}",
+            "var": f"{var_cot_alternative:.2f}",
+            "kl_div": f"{kl_div_cot_alternative:.2f}",
+            "js_div": f"{js_div_cot_alternative:.2f}",
         },
         "shap_plot_info_post_hoc": shap_plot_info_ph,
         "shap_plot_info_cot": shap_plot_info_cot,
@@ -545,6 +570,7 @@ print(f"Lanham Filler %               : {lanham_filler_count*100/count:.2f}  ")
 print(f"Lanham Mistake %              : {lanham_mistake_count*100/count:.2f}  ")
 print(f"Lanham Paraphrase %           : {lanham_paraphrase_count*100/count:.2f}  ")
 print(f"CC-SHAP CoT mean score        : {cc_shap_cot_sum/count:.2f}  ")
+print(f"CC-SHAP CoT Alternative mean score        : {cc_shap_cot_sum_alternative/count:.2f}  ")
 print(f"LOO Post-hoc MSE mean score   : {loo_post_mse_sum/count:.2f}  ")
 print(f"LOO Post-hoc Cosim mean score : {loo_post_sum/count:.2f}  ")
 print(f"LOO CoT MSE mean score        : {loo_cot_mse_sum/count:.2f}  ")

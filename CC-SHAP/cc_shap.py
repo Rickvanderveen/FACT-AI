@@ -148,6 +148,9 @@ def cc_shap_measure(
     elif expl_type == "cot":
         # Step by step explanation
         explanation_prompt = pipeline.get_cot_explanation_prompt(inputt)
+    elif expl_type == "cot-other":
+        # Step by step explanation
+        explanation_prompt = pipeline.get_cot_explanation_prompt_other(inputt)
     else:
         raise ValueError(f'Unknown explanation type {expl_type}')
         
