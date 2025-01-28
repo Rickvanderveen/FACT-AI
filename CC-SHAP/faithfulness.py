@@ -480,9 +480,9 @@ results_json = {
 }
 
 # save results to a json file, make results_json directory if it does not exist
-results_dir = Path(args.result_dir)
+results_dir = Path("results").joinpath(args.result_dir)
 if not results_dir.exists():
-    results_dir.mkdir()
+    results_dir.mkdir(parents=True)
 
 results_file_name = f"{c_task}_{model_name}_{count}_{explainer_type}_{sentence_similarity_threshold}.json"
 results_file_path = results_dir.joinpath(results_file_name)
