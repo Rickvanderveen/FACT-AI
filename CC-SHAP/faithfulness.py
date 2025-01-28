@@ -16,7 +16,7 @@ import logging
 
 import cc_shap_logger as cc_log
 import cc_shap
-from tests import faithfulness_test_atanasova_etal_input_from_expl, faithfulness_test_atanasova_etal_counterfact, faithfulness_test_lanham_etal, faithfulness_test_turpin_etal, faithfulness_loo_test
+from tests import faithfulness_test_atanasova_etal_input_from_expl, faithfulness_test_atanasova_etal_counterfact, faithfulness_test_lanham_etal, faithfulness_test_turpin_etal, faithfulness_loo_test, faithfulness_loo_test_slow
 
 default_log_level = logging.INFO
 cc_log.setup_logger(default_log_level)
@@ -101,14 +101,16 @@ sentence_similarity_threshold = args.sen_sim_thres
 visualize = False
 
 TESTS = [
-    'atanasova_counterfactual',
-    'atanasova_input_from_expl',
-    'cc_shap-posthoc',
-    'turpin',
+    # 'atanasova_counterfactual',
+    # 'atanasova_input_from_expl',
+    # 'cc_shap-posthoc',
+    # 'turpin',
     # 'lanham', # Needs a helper model
-    'cc_shap-cot',
-    # 'loo-posthoc',
-    # 'loo-cot',
+    # 'cc_shap-cot',
+    'loo-posthoc',
+    'loo-cot',
+    'loo-posthoc-slow',
+    'loo-cot-slow',
 ]
 
 LABELS = {
@@ -153,7 +155,7 @@ logger.info(f"Using the {str(explainer)} explainer")
 res_dict = {}
 formatted_inputs, correct_answers, wrong_answers = [], [], []
 correct_predictions, correct_predictions_cot = 0, 0
-atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum, loo_post_sum, loo_post_mse_sum,loo_cot_sum, loo_cot_mse_sum  = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum, loo_post_sum, loo_post_mse_sum, loo_cot_sum, loo_cot_mse_sum, loo_slow_cot_sum, loo_slow_cot_mse_sum, loo_slow_post_mse_sum, loo_slow_post_sum  = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 lanham_early_count, lanham_mistake_count, lanham_paraphrase_count, lanham_filler_count = 0, 0, 0, 0
 
 logger.info("Preparing data...")
@@ -328,6 +330,20 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         loo_post, loo_post_mse = loo_measures
     else:
         loo_post, loo_post_mse = 0, 0
+    
+    if 'loo-posthoc-slow' in TESTS:
+        loo_measures = faithfulness_loo_test_slow(
+            formatted_input,
+            LABELS[c_task],
+            'post_hoc',
+            c_task,
+            model_pipeline,
+            max_new_tokens,
+            sentence_similarity_threshold,
+        )
+        loo_slow_post, loo_slow_post_mse = loo_measures
+    else:
+        loo_slow_post, loo_slow_post_mse = 0, 0
 
     #-----------------------
     # # COT tests
@@ -388,6 +404,20 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
     else:
         loo_cot, loo_cot_mse = 0, 0
     
+    if 'loo-cot-slow' in TESTS:
+        loo_measures = faithfulness_loo_test(
+            formatted_input,
+            LABELS[c_task],
+            'cot',
+            c_task,
+            model_pipeline,
+            max_new_tokens,
+            sentence_similarity_threshold,
+        )
+        loo_slow_cot, loo_slow_cot_mse = loo_measures
+    else:
+        loo_slow_cot, loo_slow_cot_mse = 0, 0
+    
     #-----------
     # Finalize/Save the results
     #-----------
@@ -406,6 +436,11 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
     loo_post_mse_sum += loo_post_mse
     loo_cot_sum += loo_cot
     loo_cot_mse_sum += loo_cot_mse
+    # loo slow
+    loo_slow_post_sum += loo_slow_post
+    loo_slow_post_mse_sum += loo_slow_post_mse
+    loo_slow_cot_sum += loo_slow_cot
+    loo_slow_cot_mse_sum += loo_slow_cot_mse
 
     # Save this example, this gets pushed to the json in the end
     res_dict[f"{c_task}_{model_name}_{k}"] = {
@@ -430,6 +465,10 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         "loo_cosim_posthoc": f"{loo_post:.2f}",
         "loo_mse_cot": f"{loo_cot_mse:.2f}",
         "loo_cosim_cot": f"{loo_cot:.2f}",
+        "loo_slow_mse_posthoc": f"{loo_slow_post_mse:.2f}",
+        "loo_slow_cosim_posthoc": f"{loo_slow_post:.2f}",
+        "loo_slow_mse_cot": f"{loo_slow_cot_mse:.2f}",
+        "loo_slow_cosim_cot": f"{loo_slow_cot:.2f}",
         "other_measures_post_hoc": {
             "dist_correl": f"{dist_correl_ph:.2f}",
             "mse": f"{mse_ph:.2f}",
@@ -510,5 +549,9 @@ print(f"LOO Post-hoc MSE mean score   : {loo_post_mse_sum/count:.2f}  ")
 print(f"LOO Post-hoc Cosim mean score : {loo_post_sum/count:.2f}  ")
 print(f"LOO CoT MSE mean score        : {loo_cot_mse_sum/count:.2f}  ")
 print(f"LOO CoT Cosim mean score      : {loo_cot_sum/count:.2f}  ")
+print(f"LOO slow Post-hoc MSE mean score   : {loo_slow_post_mse_sum/count:.2f}  ")
+print(f"LOO slow Post-hoc Cosim mean score : {loo_slow_post_sum/count:.2f}  ")
+print(f"LOO slow CoT MSE mean score        : {loo_slow_cot_mse_sum/count:.2f}  ")
+print(f"LOO slow CoT Cosim mean score      : {loo_slow_cot_sum/count:.2f}  ")
 
 logger.info(f"Tests are done. Time elapsed {time_elapsed}")
