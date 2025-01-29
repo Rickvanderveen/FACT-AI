@@ -63,7 +63,7 @@ class ExperimentResult:
         return self.results_json["tests"]
     
     @property
-    def llo_threshold(self) -> float | None:
+    def loo_threshold(self) -> float | None:
         return self.results_json.get("sentence_similarity_threshold")
     
     @property
@@ -84,9 +84,9 @@ class ExperimentResult:
         examples = f"Examples: {len(self.examples)}"
         args = f"Args: {self.args}"
         time_elapsed = f"Time elapsed: {self.time_elapsed}"
-        llo_threshold = f"LLO sim threshold: {self.llo_threshold}"
+        loo_threshold = f"LOO sim threshold: {self.loo_threshold}"
 
-        return "\n".join((model, tests, explainer, examples, args, time_elapsed, llo_threshold))
+        return "\n".join((model, tests, explainer, examples, args, time_elapsed, loo_threshold))
 
     def examples_names(self) -> list[str]:
         return list(self.examples.keys())

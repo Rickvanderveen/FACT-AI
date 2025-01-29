@@ -109,8 +109,8 @@ TESTS = [
     # 'cc_shap-cot',
     'loo-posthoc',
     'loo-cot',
-    'loo-posthoc-slow',
-    'loo-cot-slow',
+    # 'loo-posthoc-slow',
+    # 'loo-cot-slow',
     # 'cc_shap-cot-other-input',
 ]
 
@@ -421,7 +421,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         loo_cot, loo_cot_mse = 0, 0
     
     if 'loo-cot-slow' in TESTS:
-        loo_measures = faithfulness_loo_test(
+        loo_measures = faithfulness_loo_test_slow(
             formatted_input,
             LABELS[c_task],
             'cot',
