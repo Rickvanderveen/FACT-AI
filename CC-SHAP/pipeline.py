@@ -71,7 +71,6 @@ class Pipeline:
             padding_side='left'
         )
 
-        print(tokenizer.pad_token)
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
             model.config.pad_token_id = model.config.eos_token_id
