@@ -67,3 +67,95 @@ The `use_auth_token` argument is deprecated and will be removed in v5 of Transfo
 18:40:02 [shap] [92mINFO    [0m: Example 43
 18:42:12 [shap] [92mINFO    [0m: Example 44
 18:44:07 [shap] [92mINFO    [0m: Example 45
+18:46:02 [shap] [92mINFO    [0m: Example 46
+18:48:15 [shap] [92mINFO    [0m: Example 47
+18:50:05 [shap] [92mINFO    [0m: Example 48
+18:51:22 [shap] [92mINFO    [0m: Example 49
+18:53:18 [shap] [92mINFO    [0m: Example 50
+18:55:15 [shap] [92mINFO    [0m: Example 51
+18:56:56 [shap] [92mINFO    [0m: Example 52
+18:58:21 [shap] [92mINFO    [0m: Example 53
+19:00:04 [shap] [92mINFO    [0m: Example 54
+19:01:56 [shap] [92mINFO    [0m: Example 55
+19:03:27 [shap] [92mINFO    [0m: Example 56
+19:05:28 [shap] [92mINFO    [0m: Example 57
+19:07:12 [shap] [92mINFO    [0m: Example 58
+19:09:10 [shap] [92mINFO    [0m: Example 59
+19:11:05 [shap] [92mINFO    [0m: Example 60
+19:12:59 [shap] [92mINFO    [0m: Example 61
+19:15:08 [shap] [92mINFO    [0m: Example 62
+19:16:38 [shap] [92mINFO    [0m: Example 63
+19:17:54 [shap] [92mINFO    [0m: Example 64
+19:19:43 [shap] [92mINFO    [0m: Example 65
+19:21:55 [shap] [92mINFO    [0m: Example 66
+19:23:59 [shap] [92mINFO    [0m: Example 67
+19:25:21 [shap] [92mINFO    [0m: Example 68
+19:26:40 [shap] [92mINFO    [0m: Example 69
+19:28:00 [shap] [92mINFO    [0m: Example 70
+19:29:42 [shap] [92mINFO    [0m: Example 71
+19:31:14 [shap] [92mINFO    [0m: Example 72
+19:32:53 [shap] [92mINFO    [0m: Example 73
+19:34:11 [shap] [92mINFO    [0m: Example 74
+19:35:56 [shap] [92mINFO    [0m: Example 75
+19:37:13 [shap] [92mINFO    [0m: Example 76
+19:39:09 [shap] [92mINFO    [0m: Example 77
+19:41:18 [shap] [92mINFO    [0m: Example 78
+19:42:33 [shap] [92mINFO    [0m: Example 79
+19:44:44 [shap] [92mINFO    [0m: Example 80
+19:46:16 [shap] [92mINFO    [0m: Example 81
+19:48:17 [shap] [92mINFO    [0m: Example 82
+19:49:46 [shap] [92mINFO    [0m: Example 83
+19:51:03 [shap] [92mINFO    [0m: Example 84
+19:52:48 [shap] [92mINFO    [0m: Example 85
+19:54:23 [shap] [92mINFO    [0m: Example 86
+19:56:14 [shap] [92mINFO    [0m: Example 87
+19:58:18 [shap] [92mINFO    [0m: Example 88
+20:00:03 [shap] [92mINFO    [0m: Example 89
+20:01:45 [shap] [92mINFO    [0m: Example 90
+20:03:26 [shap] [92mINFO    [0m: Example 91
+20:05:18 [shap] [92mINFO    [0m: Example 92
+20:06:57 [shap] [92mINFO    [0m: Example 93
+20:08:29 [shap] [92mINFO    [0m: Example 94
+20:10:40 [shap] [92mINFO    [0m: Example 95
+20:12:01 [shap] [92mINFO    [0m: Example 96
+20:13:36 [shap] [92mINFO    [0m: Example 97
+20:14:44 [shap] [92mINFO    [0m: Example 98
+20:16:24 [shap] [92mINFO    [0m: Example 99
+20:18:03 [shap] [92mINFO    [0m: Tests are done. Time elapsed 2:48:30.840694
+None
+Ran ['loo-posthoc-slow', 'loo-cot-slow'] on comve data with model falcon-7b-chat. Reporting accuracy and faithfulness percentage.
+
+Accuracy %                         : 38.00  
+Atanasova Counterfact %            : 0.00  
+Atanasova Input from Expl %        : 0.00  
+CC-SHAP post-hoc mean score        : 0.00  
+Accuracy CoT %                     : 37.00  
+Turpin %                           : 0.00  
+Lanham Early Answering %           : 0.00  
+Lanham Filler %                    : 0.00  
+Lanham Mistake %                   : 0.00  
+Lanham Paraphrase %                : 0.00  
+CC-SHAP CoT mean score             : 0.00  
+CC-SHAP CoT Alternative mean score : 0.00  
+LOO Post-hoc MSE mean score        : 0.00  
+LOO Post-hoc Cosim mean score      : 0.00  
+LOO CoT MSE mean score             : 0.00  
+LOO CoT Cosim mean score           : 0.00  
+LOO slow Post-hoc MSE mean score   : 0.40  
+LOO slow Post-hoc Cosim mean score : 0.20  
+LOO slow CoT MSE mean score        : 0.41  
+LOO slow CoT Cosim mean score      : 0.27  
+
+JOB STATISTICS
+==============
+Job ID: 9677328
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 02:48:17
+CPU Efficiency: 5.53% of 2-02:41:42 core-walltime
+Job Wall-clock time: 02:48:59
+Memory Utilized: 1.03 GB
+Memory Efficiency: 0.86% of 120.00 GB
