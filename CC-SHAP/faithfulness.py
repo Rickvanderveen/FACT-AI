@@ -107,11 +107,11 @@ TESTS = [
     # 'turpin',
     # 'lanham', # Needs a helper model
     # 'cc_shap-cot',
-    'loo-posthoc',
-    'loo-cot',
+    # 'loo-posthoc',
+    # 'loo-cot',
     # 'loo-posthoc-slow',
     # 'loo-cot-slow',
-    # 'cc_shap-cot-other-input',
+    'cc_shap-cot-other-input',
 ]
 
 LABELS = {

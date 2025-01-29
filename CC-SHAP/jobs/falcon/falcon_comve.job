@@ -6,7 +6,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=9
 #SBATCH --time=10:00:00
-#SBATCH --output=falcon_100_comve_loo_%A.out
+#SBATCH --output=falcon_100_comve_loo_slow_%A.out
 
 module purge
 module load 2024
@@ -16,4 +16,4 @@ cd $HOME/FACT-AI/CC-SHAP/
 
 source activate fact
 
-srun python3 faithfulness.py comve falcon-7b-chat 100 "partition" 500 0.68 --result_dir="loo_test"
+srun python3 faithfulness.py comve falcon-7b-chat 100 "partition" 500 0.68 --result_dir="loo_slow_test"

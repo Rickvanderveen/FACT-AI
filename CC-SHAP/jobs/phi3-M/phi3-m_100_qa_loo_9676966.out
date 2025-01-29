@@ -1,0 +1,163 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+17:18:02 [shap] [92mINFO    [0m: Cuda is available: True
+17:18:03 [shap] [92mINFO    [0m: Args: Namespace(c_task='disambiguation_qa', model_name='phi3-medium-chat', number_of_samples=100, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.68, classify_pred=False, result_dir='loo_test')
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:02<00:10,  2.09s/it]Loading checkpoint shards:  33%|███▎      | 2/6 [00:04<00:08,  2.18s/it]Loading checkpoint shards:  50%|█████     | 3/6 [00:06<00:06,  2.19s/it]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:08<00:04,  2.19s/it]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:10<00:02,  2.20s/it]Loading checkpoint shards: 100%|██████████| 6/6 [00:12<00:00,  2.01s/it]Loading checkpoint shards: 100%|██████████| 6/6 [00:12<00:00,  2.10s/it]
+17:18:16 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:13.231212
+17:18:16 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+17:18:16 [shap] [92mINFO    [0m: Preparing data...
+17:18:16 [shap] [92mINFO    [0m: Done preparing data. Running test...
+17:18:16 [shap] [92mINFO    [0m: Example 0
+17:18:43 [shap] [92mINFO    [0m: Example 1
+17:19:11 [shap] [92mINFO    [0m: Example 2
+17:19:38 [shap] [92mINFO    [0m: Example 3
+17:20:02 [shap] [92mINFO    [0m: Example 4
+17:20:26 [shap] [92mINFO    [0m: Example 5
+17:20:54 [shap] [92mINFO    [0m: Example 6
+17:21:23 [shap] [92mINFO    [0m: Example 7
+17:21:50 [shap] [92mINFO    [0m: Example 8
+17:22:19 [shap] [92mINFO    [0m: Example 9
+17:22:43 [shap] [92mINFO    [0m: Example 10
+17:23:06 [shap] [92mINFO    [0m: Example 11
+17:23:32 [shap] [92mINFO    [0m: Example 12
+17:24:02 [shap] [92mINFO    [0m: Example 13
+17:24:29 [shap] [92mINFO    [0m: Example 14
+17:24:54 [shap] [92mINFO    [0m: Example 15
+17:25:21 [shap] [92mINFO    [0m: Example 16
+17:25:44 [shap] [92mINFO    [0m: Example 17
+17:26:12 [shap] [92mINFO    [0m: Example 18
+17:26:40 [shap] [92mINFO    [0m: Example 19
+17:27:07 [shap] [92mINFO    [0m: Example 20
+17:27:35 [shap] [92mINFO    [0m: Example 21
+17:28:02 [shap] [92mINFO    [0m: Example 22
+17:28:28 [shap] [92mINFO    [0m: Example 23
+17:28:56 [shap] [92mINFO    [0m: Example 24
+17:29:27 [shap] [92mINFO    [0m: Example 25
+17:29:55 [shap] [92mINFO    [0m: Example 26
+17:30:19 [shap] [92mINFO    [0m: Example 27
+17:30:45 [shap] [92mINFO    [0m: Example 28
+17:31:14 [shap] [92mINFO    [0m: Example 29
+17:31:39 [shap] [92mINFO    [0m: Example 30
+17:32:03 [shap] [92mINFO    [0m: Example 31
+17:32:24 [shap] [92mINFO    [0m: Example 32
+17:32:50 [shap] [92mINFO    [0m: Example 33
+17:33:19 [shap] [92mINFO    [0m: Example 34
+17:33:46 [shap] [92mINFO    [0m: Example 35
+17:34:13 [shap] [92mINFO    [0m: Example 36
+17:34:38 [shap] [92mINFO    [0m: Example 37
+17:35:04 [shap] [92mINFO    [0m: Example 38
+17:35:32 [shap] [92mINFO    [0m: Example 39
+17:36:01 [shap] [92mINFO    [0m: Example 40
+17:36:29 [shap] [92mINFO    [0m: Example 41
+17:36:54 [shap] [92mINFO    [0m: Example 42
+17:37:21 [shap] [92mINFO    [0m: Example 43
+17:37:45 [shap] [92mINFO    [0m: Example 44
+17:38:14 [shap] [92mINFO    [0m: Example 45
+17:38:41 [shap] [92mINFO    [0m: Example 46
+17:39:09 [shap] [92mINFO    [0m: Example 47
+17:39:36 [shap] [92mINFO    [0m: Example 48
+17:40:02 [shap] [92mINFO    [0m: Example 49
+17:40:28 [shap] [92mINFO    [0m: Example 50
+17:40:54 [shap] [92mINFO    [0m: Example 51
+17:41:24 [shap] [92mINFO    [0m: Example 52
+17:41:53 [shap] [92mINFO    [0m: Example 53
+17:42:20 [shap] [92mINFO    [0m: Example 54
+17:42:47 [shap] [92mINFO    [0m: Example 55
+17:43:13 [shap] [92mINFO    [0m: Example 56
+17:43:36 [shap] [92mINFO    [0m: Example 57
+17:44:03 [shap] [92mINFO    [0m: Example 58
+17:44:29 [shap] [92mINFO    [0m: Example 59
+17:44:57 [shap] [92mINFO    [0m: Example 60
+17:45:24 [shap] [92mINFO    [0m: Example 61
+17:45:51 [shap] [92mINFO    [0m: Example 62
+17:46:18 [shap] [92mINFO    [0m: Example 63
+17:46:43 [shap] [92mINFO    [0m: Example 64
+17:47:08 [shap] [92mINFO    [0m: Example 65
+17:47:35 [shap] [92mINFO    [0m: Example 66
+17:48:02 [shap] [92mINFO    [0m: Example 67
+17:48:28 [shap] [92mINFO    [0m: Example 68
+17:48:53 [shap] [92mINFO    [0m: Example 69
+17:49:21 [shap] [92mINFO    [0m: Example 70
+17:49:49 [shap] [92mINFO    [0m: Example 71
+17:50:14 [shap] [92mINFO    [0m: Example 72
+17:50:39 [shap] [92mINFO    [0m: Example 73
+17:51:06 [shap] [92mINFO    [0m: Example 74
+17:51:31 [shap] [92mINFO    [0m: Example 75
+17:51:59 [shap] [92mINFO    [0m: Example 76
+17:52:24 [shap] [92mINFO    [0m: Example 77
+17:52:51 [shap] [92mINFO    [0m: Example 78
+17:53:18 [shap] [92mINFO    [0m: Example 79
+17:53:42 [shap] [92mINFO    [0m: Example 80
+17:54:11 [shap] [92mINFO    [0m: Example 81
+17:54:41 [shap] [92mINFO    [0m: Example 82
+17:55:03 [shap] [92mINFO    [0m: Example 83
+17:55:28 [shap] [92mINFO    [0m: Example 84
+17:55:52 [shap] [92mINFO    [0m: Example 85
+17:56:18 [shap] [92mINFO    [0m: Example 86
+17:56:44 [shap] [92mINFO    [0m: Example 87
+17:57:13 [shap] [92mINFO    [0m: Example 88
+17:57:38 [shap] [92mINFO    [0m: Example 89
+17:58:06 [shap] [92mINFO    [0m: Example 90
+17:58:31 [shap] [92mINFO    [0m: Example 91
+17:58:57 [shap] [92mINFO    [0m: Example 92
+17:59:21 [shap] [92mINFO    [0m: Example 93
+17:59:48 [shap] [92mINFO    [0m: Example 94
+18:00:15 [shap] [92mINFO    [0m: Example 95
+18:00:41 [shap] [92mINFO    [0m: Example 96
+18:01:07 [shap] [92mINFO    [0m: Example 97
+18:01:34 [shap] [92mINFO    [0m: Example 98
+18:02:02 [shap] [92mINFO    [0m: Example 99
+18:02:27 [shap] [92mINFO    [0m: Tests are done. Time elapsed 0:44:10.521582
+<|endoftext|>
+Ran ['loo-posthoc', 'loo-cot'] on disambiguation_qa data with model phi3-medium-chat. Reporting accuracy and faithfulness percentage.
+
+Accuracy %                         : 73.00  
+Atanasova Counterfact %            : 0.00  
+Atanasova Input from Expl %        : 0.00  
+CC-SHAP post-hoc mean score        : 0.00  
+Accuracy CoT %                     : 68.00  
+Turpin %                           : 0.00  
+Lanham Early Answering %           : 0.00  
+Lanham Filler %                    : 0.00  
+Lanham Mistake %                   : 0.00  
+Lanham Paraphrase %                : 0.00  
+CC-SHAP CoT mean score             : 0.00  
+CC-SHAP CoT Alternative mean score : 0.00  
+LOO Post-hoc MSE mean score        : 0.14  
+LOO Post-hoc Cosim mean score      : 0.04  
+LOO CoT MSE mean score             : 0.14  
+LOO CoT Cosim mean score           : 0.01  
+LOO slow Post-hoc MSE mean score   : 0.00  
+LOO slow Post-hoc Cosim mean score : 0.00  
+LOO slow CoT MSE mean score        : 0.00  
+LOO slow CoT Cosim mean score      : 0.00  
+
+JOB STATISTICS
+==============
+Job ID: 9676966
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:45:19
+CPU Efficiency: 5.60% of 13:29:06 core-walltime
+Job Wall-clock time: 00:44:57
+Memory Utilized: 4.26 GB
+Memory Efficiency: 3.55% of 120.00 GB
