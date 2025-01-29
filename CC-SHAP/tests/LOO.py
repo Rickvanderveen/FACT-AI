@@ -72,6 +72,7 @@ def faithfulness_loo_test(
         modified_prompt = " ".join(words[:i] + words[i+1:])  # Remove one word at a time
         modified_prompts.append(modified_prompt)
 
+    print("Fast explain", expl_type)
     # Generate all explanations at once (for better speed), so keep in mind this is all explanations at once
     new_generated_explanation = pipeline.lm_generate(modified_prompts, max_new_tokens_explanation, repeat_input=False, padding=True)
     # generate all embeddings at once (for every possible LOO explanation)

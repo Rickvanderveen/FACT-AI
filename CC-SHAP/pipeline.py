@@ -71,6 +71,11 @@ class Pipeline:
             padding_side='left'
         )
 
+        print(tokenizer.pad_token)
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token = tokenizer.eos_token
+            model.config.pad_token_id = model.config.eos_token_id
+
         model.generation_config.is_decoder = True
         model.generation_config.max_new_tokens = max_new_tokens
         model.generation_config.min_new_tokens = 1
@@ -254,11 +259,18 @@ class Pipeline:
 
         # Tokenizes the prompt to token ids
         if isinstance(prompt, list):
-            input_ids = tokenizer(prompt, return_tensors="pt", padding=padding).input_ids.cuda()
+            tokenized_input = tokenizer(prompt, return_tensors="pt", padding=padding)
+            input_ids = tokenized_input["input_ids"].cuda()
+            attention_mask = tokenized_input["attention_mask"].cuda()
+            generated_ids = model.generate(
+                input_ids,
+                attention_mask=attention_mask,
+                max_new_tokens=max_new_tokens
+        )
         else:
-            input_ids = tokenizer([prompt], return_tensors="pt", padding=padding).input_ids.cuda()
-        # Generate text
-        generated_ids = model.generate(input_ids, max_new_tokens=max_new_tokens)
+            tokenized_input = tokenizer([prompt], return_tensors="pt", padding=padding)
+            input_ids = tokenized_input["input_ids"].cuda()
+            generated_ids = model.generate(input_ids, max_new_tokens=max_new_tokens)        
 
         # prevent the model from repeating the input
         if not repeat_input:
