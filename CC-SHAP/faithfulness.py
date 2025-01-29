@@ -108,10 +108,11 @@ TESTS = [
     # 'lanham', # Needs a helper model
     # 'cc_shap-cot',
     # 'loo-posthoc',
-    # 'loo-cot',
+    'loo-cot',
     # 'loo-posthoc-slow',
     # 'loo-cot-slow',
-    'cc_shap-cot-other-input',
+    # 'cc_shap-cot-other-input',
+    'loo-cot-other-input',
 ]
 
 LABELS = {
@@ -156,7 +157,7 @@ logger.info(f"Using the {str(explainer)} explainer")
 res_dict = {}
 formatted_inputs, correct_answers, wrong_answers = [], [], []
 correct_predictions, correct_predictions_cot = 0, 0
-atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum, loo_post_sum, loo_post_mse_sum, loo_cot_sum, loo_cot_mse_sum, loo_slow_cot_sum, loo_slow_cot_mse_sum, loo_slow_post_mse_sum, loo_slow_post_sum, cc_shap_cot_sum_alternative  = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+atanasova_counterfact_count, atanasova_input_from_expl_test_count, turpin_test_count, count, cc_shap_post_hoc_sum, cc_shap_cot_sum, loo_post_sum, loo_post_mse_sum, loo_cot_sum, loo_cot_mse_sum, loo_slow_cot_sum, loo_slow_cot_mse_sum, loo_slow_post_mse_sum, loo_slow_post_sum, cc_shap_cot_sum_alternative, loo_cot_mse_sum_alternative, loo_cot_sum_alternative  = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 lanham_early_count, lanham_mistake_count, lanham_paraphrase_count, lanham_filler_count = 0, 0, 0, 0
 
 logger.info("Preparing data...")
@@ -420,6 +421,20 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
     else:
         loo_cot, loo_cot_mse = 0, 0
     
+    if 'loo-cot-other-input' in TESTS:
+        loo_measures = faithfulness_loo_test(
+            formatted_input,
+            LABELS[c_task],
+            'cot-other',
+            c_task,
+            model_pipeline,
+            max_new_tokens,
+            sentence_similarity_threshold,
+        )
+        loo_cot_alternative, loo_cot_mse_alternative = loo_measures
+    else:
+        loo_cot, loo_cot_mse = 0, 0
+    
     if 'loo-cot-slow' in TESTS:
         loo_measures = faithfulness_loo_test_slow(
             formatted_input,
@@ -458,6 +473,9 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
     loo_slow_post_mse_sum += loo_slow_post_mse
     loo_slow_cot_sum += loo_slow_cot
     loo_slow_cot_mse_sum += loo_slow_cot_mse
+    # Loo alter
+    loo_cot_sum_alternative += loo_cot_alternative
+    loo_cot_mse_sum_alternative += loo_cot_mse_alternative
 
     # Save this example, this gets pushed to the json in the end
     res_dict[f"{c_task}_{model_name}_{k}"] = {
@@ -483,6 +501,8 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         "loo_cosim_posthoc": f"{loo_post:.2f}",
         "loo_mse_cot": f"{loo_cot_mse:.2f}",
         "loo_cosim_cot": f"{loo_cot:.2f}",
+        "loo_mse_cot_alternative": f"{loo_cot_mse_alternative:.2f}",
+        "loo_cosim_cot_alternative": f"{loo_cot_alternative:.2f}",
         "loo_slow_mse_posthoc": f"{loo_slow_post_mse:.2f}",
         "loo_slow_cosim_posthoc": f"{loo_slow_post:.2f}",
         "loo_slow_mse_cot": f"{loo_slow_cot_mse:.2f}",
@@ -579,5 +599,7 @@ print(f"LOO slow Post-hoc MSE mean score   : {loo_slow_post_mse_sum/count:.2f}  
 print(f"LOO slow Post-hoc Cosim mean score : {loo_slow_post_sum/count:.2f}  ")
 print(f"LOO slow CoT MSE mean score        : {loo_slow_cot_mse_sum/count:.2f}  ")
 print(f"LOO slow CoT Cosim mean score      : {loo_slow_cot_sum/count:.2f}  ")
+print(f"LOO CoT MSE mean score alternative             : {loo_cot_mse_sum_alternative/count:.2f}  ")
+print(f"LOO CoT Cosim mean score     alternative       : {loo_cot_sum_alternative/count:.2f}  ")
 
 logger.info(f"Tests are done. Time elapsed {time_elapsed}")

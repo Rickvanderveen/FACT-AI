@@ -55,6 +55,9 @@ def faithfulness_loo_test(
         explanation_prompt = pipeline.get_post_host_explanation_prompt(inputt, task, predicted_label)
     elif expl_type == "cot":
         explanation_prompt = pipeline.get_cot_explanation_prompt(inputt)
+    elif expl_type == "cot-other":
+        # Step by step explanation
+        explanation_prompt = pipeline.get_cot_explanation_prompt_other(inputt)
     else:
         raise ValueError(f'Unknown explanation type {expl_type}')
     
