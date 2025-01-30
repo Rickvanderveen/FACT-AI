@@ -103,16 +103,16 @@ visualize = False
 TESTS = [
     # 'atanasova_counterfactual',
     # 'atanasova_input_from_expl',
-    # 'cc_shap-posthoc',
+    'cc_shap-posthoc',
     # 'turpin',
     # 'lanham', # Needs a helper model
-    # 'cc_shap-cot',
-    # 'loo-posthoc',
-    # 'loo-cot',
-    # 'loo-posthoc-slow',
-    # 'loo-cot-slow',
-    'cc_shap-cot-other-input',
-    'loo-cot-other-input',
+    'cc_shap-cot',
+    'loo-posthoc',
+    'loo-cot',
+    'loo-posthoc-slow',
+    'loo-cot-slow',
+    # 'cc_shap-cot-other-input',
+    # 'loo-cot-other-input',
 ]
 
 LABELS = {
@@ -304,6 +304,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         atanasova_input_from_expl = 0
 
     if 'cc_shap-posthoc' in TESTS:
+        cc_shap_posthoc_start = time.time()
         cc_shap_measures = cc_shap.cc_shap_measure(
             formatted_input,
             LABELS[c_task],
@@ -315,11 +316,14 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             max_evaluations = explainer_max_evaluations,
             use_separate_classify_prediction = use_separate_classify_prediction
         )
+        cc_shap_posthoc_time = datetime.timedelta(seconds=time.time() - cc_shap_posthoc_start)
         score_post_hoc, dist_correl_ph, mse_ph, var_ph, kl_div_ph, js_div_ph, shap_plot_info_ph = cc_shap_measures
     else:
         score_post_hoc, dist_correl_ph, mse_ph, var_ph, kl_div_ph, js_div_ph, shap_plot_info_ph = 0, 0, 0, 0, 0, 0, 0
+        cc_shap_posthoc_time = -1
     
     if 'loo-posthoc' in TESTS:
+        loo_posthoc_start = time.time()
         loo_measures = faithfulness_loo_test(
             formatted_input,
             LABELS[c_task],
@@ -329,11 +333,14 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             max_new_tokens,
             sentence_similarity_threshold,
         )
+        loo_posthoc_time = datetime.timedelta(seconds=time.time() - loo_posthoc_start)
         loo_post, loo_post_mse = loo_measures
     else:
         loo_post, loo_post_mse = 0, 0
+        loo_posthoc_time = -1
     
     if 'loo-posthoc-slow' in TESTS:
+        loo_posthoc_slow_start = time.time()
         loo_measures = faithfulness_loo_test_slow(
             formatted_input,
             LABELS[c_task],
@@ -343,9 +350,11 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             max_new_tokens,
             sentence_similarity_threshold,
         )
+        loo_posthoc_slow_time = datetime.timedelta(seconds=time.time() - loo_posthoc_slow_start)
         loo_slow_post, loo_slow_post_mse = loo_measures
     else:
         loo_slow_post, loo_slow_post_mse = 0, 0
+        loo_posthoc_slow_time = -1
 
     #-----------------------
     # # COT tests
@@ -378,6 +387,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         lanham_early, lanham_mistake, lanham_paraphrase, lanham_filler = 0, 0, 0, 0
 
     if 'cc_shap-cot' in TESTS:
+        cc_shap_cot_start = time.time()
         cc_shap_measures = cc_shap.cc_shap_measure(
             formatted_input,
             LABELS[c_task],
@@ -388,9 +398,11 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             max_new_tokens,
             max_evaluations = explainer_max_evaluations,
         )
+        cc_shap_cot_time = datetime.timedelta(seconds=time.time() - cc_shap_cot_start)
         score_cot, dist_correl_cot, mse_cot, var_cot, kl_div_cot, js_div_cot, shap_plot_info_cot = cc_shap_measures
     else:
         score_cot, dist_correl_cot, mse_cot, var_cot, kl_div_cot, js_div_cot, shap_plot_info_cot = 0, 0, 0, 0, 0, 0, 0
+        cc_shap_cot_time = -1
     
     if 'cc_shap-cot-other-input' in TESTS:
         cc_shap_measures = cc_shap.cc_shap_measure(
@@ -408,6 +420,7 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         score_cot_alternative, dist_correl_cot_alternative, mse_cot_alternative, var_cot_alternative, kl_div_cot_alternative, js_div_cot_alternative, shap_plot_info_cot_alternative = 0, 0, 0, 0, 0, 0, 0
     
     if 'loo-cot' in TESTS:
+        loo_cot_start = time.time()
         loo_measures = faithfulness_loo_test(
             formatted_input,
             LABELS[c_task],
@@ -418,8 +431,10 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             sentence_similarity_threshold,
         )
         loo_cot, loo_cot_mse = loo_measures
+        loo_cot_time = datetime.timedelta(seconds=time.time() - loo_cot_start)
     else:
         loo_cot, loo_cot_mse = 0, 0
+        loo_cot_time = -1
     
     if 'loo-cot-other-input' in TESTS:
         loo_measures = faithfulness_loo_test(
@@ -433,9 +448,10 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         )
         loo_cot_alternative, loo_cot_mse_alternative = loo_measures
     else:
-        loo_cot, loo_cot_mse = 0, 0
+        loo_cot_alternative, loo_cot_mse_alternative = 0, 0
     
     if 'loo-cot-slow' in TESTS:
+        loo_cot_slow_start = time.time()
         loo_measures = faithfulness_loo_test_slow(
             formatted_input,
             LABELS[c_task],
@@ -445,9 +461,11 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
             max_new_tokens,
             sentence_similarity_threshold,
         )
+        loo_cot_slow_time = datetime.timedelta(seconds=time.time() - loo_cot_slow_start)
         loo_slow_cot, loo_slow_cot_mse = loo_measures
     else:
         loo_slow_cot, loo_slow_cot_mse = 0, 0
+        loo_cot_slow_time = -1
     
     #-----------
     # Finalize/Save the results
@@ -507,6 +525,12 @@ for k, formatted_input, correct_answer, wrong_answer in zip(range(len(formatted_
         "loo_slow_cosim_posthoc": f"{loo_slow_post:.2f}",
         "loo_slow_mse_cot": f"{loo_slow_cot_mse:.2f}",
         "loo_slow_cosim_cot": f"{loo_slow_cot:.2f}",
+        "cc_shap_posthoc_time": str(cc_shap_posthoc_time),
+        "cc_shap_cot_time": str(cc_shap_cot_time),
+        "loo_posthoc_time": str(loo_posthoc_time),
+        "loo_cot_time": str(loo_cot_time),
+        "loo_posthoc_slow_time": str(loo_posthoc_slow_time),
+        "loo_cot_slow_time": str(loo_cot_slow_time),
         "other_measures_post_hoc": {
             "dist_correl": f"{dist_correl_ph:.2f}",
             "mse": f"{mse_ph:.2f}",
