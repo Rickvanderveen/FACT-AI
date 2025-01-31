@@ -1,0 +1,183 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+23:55:18 [shap] [92mINFO    [0m: Cuda is available: True
+23:55:19 [shap] [92mINFO    [0m: Args: Namespace(c_task='disambiguation_qa', model_name='falcon3-7B-chat', number_of_samples=100, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.68, classify_pred=False, result_dir='alt_prompt')
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:08,  2.89s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:05<00:05,  2.97s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:08<00:02,  2.83s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  1.98s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.32s/it]
+23:55:29 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:10.063323
+23:55:29 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+23:55:29 [shap] [92mINFO    [0m: Preparing data...
+23:55:29 [shap] [92mINFO    [0m: Done preparing data. Running test...
+23:55:29 [shap] [92mINFO    [0m: Example 0
+23:58:46 [shap] [92mINFO    [0m: Example 1
+00:02:01 [shap] [92mINFO    [0m: Example 2
+00:05:19 [shap] [92mINFO    [0m: Example 3
+00:08:33 [shap] [92mINFO    [0m: Example 4
+00:11:26 [shap] [92mINFO    [0m: Example 5
+00:14:44 [shap] [92mINFO    [0m: Example 6
+00:17:52 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+00:18:00 [shap] [92mINFO    [0m: Example 7
+00:21:16 [shap] [92mINFO    [0m: Example 8
+00:24:32 [shap] [92mINFO    [0m: Example 9
+00:27:46 [shap] [92mINFO    [0m: Example 10
+00:31:04 [shap] [92mINFO    [0m: Example 11
+00:34:21 [shap] [92mINFO    [0m: Example 12
+00:37:38 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+00:37:47 [shap] [92mINFO    [0m: Example 13
+00:40:54 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+00:41:01 [shap] [92mINFO    [0m: Example 14
+00:43:57 [shap] [92mINFO    [0m: Example 15
+00:47:20 [shap] [92mINFO    [0m: Example 16
+00:50:35 [shap] [92mINFO    [0m: Example 17
+00:53:49 [shap] [92mINFO    [0m: Example 18
+00:56:57 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+00:57:04 [shap] [92mINFO    [0m: Example 19
+01:00:14 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+01:00:22 [shap] [92mINFO    [0m: Example 20
+01:03:40 [shap] [92mINFO    [0m: Example 21
+01:06:57 [shap] [92mINFO    [0m: Example 22
+01:09:57 [shap] [92mINFO    [0m: Example 23
+01:13:12 [shap] [92mINFO    [0m: Example 24
+01:16:30 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+01:16:38 [shap] [92mINFO    [0m: Example 25
+01:19:50 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+01:19:57 [shap] [92mINFO    [0m: Example 26
+01:23:14 [shap] [92mINFO    [0m: Example 27
+01:26:29 [shap] [92mINFO    [0m: Example 28
+01:29:40 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+01:29:48 [shap] [92mINFO    [0m: Example 29
+01:33:06 [shap] [92mINFO    [0m: Example 30
+01:36:25 [shap] [92mINFO    [0m: Example 31
+01:39:35 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+01:39:43 [shap] [92mINFO    [0m: Example 32
+01:42:59 [shap] [92mINFO    [0m: Example 33
+01:46:18 [shap] [92mINFO    [0m: Example 34
+01:49:36 [shap] [92mINFO    [0m: Example 35
+01:52:54 [shap] [92mINFO    [0m: Example 36
+01:56:09 [shap] [92mINFO    [0m: Example 37
+01:59:25 [shap] [92mINFO    [0m: Example 38
+02:02:41 [shap] [92mINFO    [0m: Example 39
+02:05:51 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+02:05:59 [shap] [92mINFO    [0m: Example 40
+02:09:06 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+02:09:14 [shap] [92mINFO    [0m: Example 41
+02:12:29 [shap] [92mINFO    [0m: Example 42
+02:15:49 [shap] [92mINFO    [0m: Example 43
+02:19:02 [shap] [92mINFO    [0m: Example 44
+02:22:18 [shap] [92mINFO    [0m: Example 45
+02:25:37 [shap] [92mINFO    [0m: Example 46
+02:28:58 [shap] [92mINFO    [0m: Example 47
+02:32:16 [shap] [92mINFO    [0m: Example 48
+02:35:32 [shap] [92mINFO    [0m: Example 49
+02:38:47 [shap] [92mINFO    [0m: Example 50
+02:41:50 [shap] [92mINFO    [0m: Example 51
+02:45:16 [shap] [92mINFO    [0m: Example 52
+02:48:27 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+02:48:35 [shap] [92mINFO    [0m: Example 53
+02:51:50 [shap] [92mINFO    [0m: Example 54
+02:55:10 [shap] [92mINFO    [0m: Example 55
+02:58:26 [shap] [92mINFO    [0m: Example 56
+03:01:46 [shap] [92mINFO    [0m: Example 57
+03:04:57 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+03:05:04 [shap] [92mINFO    [0m: Example 58
+03:08:14 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+03:08:22 [shap] [92mINFO    [0m: Example 59
+03:11:07 [shap] [92mINFO    [0m: Example 60
+03:14:25 [shap] [92mINFO    [0m: Example 61
+03:17:41 [shap] [92mINFO    [0m: Example 62
+03:20:59 [shap] [92mINFO    [0m: Example 63
+03:24:17 [shap] [92mINFO    [0m: Example 64
+03:27:35 [shap] [92mINFO    [0m: Example 65
+03:30:53 [shap] [92mINFO    [0m: Example 66
+03:34:11 [shap] [92mINFO    [0m: Example 67
+03:37:23 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+03:37:30 [shap] [92mINFO    [0m: Example 68
+03:40:41 [shap] [92mINFO    [0m: Example 69
+03:43:53 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+03:44:01 [shap] [92mINFO    [0m: Example 70
+03:47:15 [shap] [92mINFO    [0m: Example 71
+03:50:32 [shap] [92mINFO    [0m: Example 72
+03:53:46 [shap] [92mINFO    [0m: Example 73
+03:57:04 [shap] [92mINFO    [0m: Example 74
+04:00:05 [shap] [92mINFO    [0m: Example 75
+04:03:22 [shap] [92mINFO    [0m: Example 76
+04:06:37 [shap] [92mINFO    [0m: Example 77
+04:09:54 [shap] [92mINFO    [0m: Example 78
+04:13:10 [shap] [92mINFO    [0m: Example 79
+04:16:25 [shap] [92mINFO    [0m: Example 80
+04:19:48 [shap] [92mINFO    [0m: Example 81
+04:23:12 [shap] [92mINFO    [0m: Example 82
+04:26:26 [shap] [92mINFO    [0m: Example 83
+04:29:42 [shap] [92mINFO    [0m: Example 84
+04:32:58 [shap] [92mINFO    [0m: Example 85
+04:36:13 [shap] [92mINFO    [0m: Example 86
+04:39:30 [shap] [92mINFO    [0m: Example 87
+04:42:41 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+04:42:49 [shap] [92mINFO    [0m: Example 88
+04:46:06 [shap] [92mINFO    [0m: Example 89
+04:49:15 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+04:49:23 [shap] [92mINFO    [0m: Example 90
+04:52:40 [shap] [92mINFO    [0m: Example 91
+04:55:56 [shap] [92mINFO    [0m: Example 92
+04:59:04 [shap] [92mINFO    [0m: Example 93
+05:02:24 [shap] [92mINFO    [0m: Example 94
+05:05:40 [shap] [92mINFO    [0m: Example 95
+05:08:56 [shap] [92mINFO    [0m: Example 96
+05:12:12 [shap] [92mINFO    [0m: Example 97
+05:15:27 [shap] [92mINFO    [0m: Example 98
+05:18:42 [shap] [92mINFO    [0m: Example 99
+05:21:51 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+05:21:58 [shap] [92mINFO    [0m: Tests are done. Time elapsed 5:26:29.597075
+Ran ['cc_shap-cot-other-input', 'loo-cot-other-input'] on disambiguation_qa data with model falcon3-7B-chat. Reporting accuracy and faithfulness percentage.
+
+Accuracy %                         : 45.00  
+Atanasova Counterfact %            : 0.00  
+Atanasova Input from Expl %        : 0.00  
+CC-SHAP post-hoc mean score        : 0.00  
+Accuracy CoT %                     : 52.00  
+Turpin %                           : 0.00  
+Lanham Early Answering %           : 0.00  
+Lanham Filler %                    : 0.00  
+Lanham Mistake %                   : 0.00  
+Lanham Paraphrase %                : 0.00  
+CC-SHAP CoT mean score             : 0.00  
+CC-SHAP CoT Alternative mean score : 0.31  
+LOO Post-hoc MSE mean score        : 0.00  
+LOO Post-hoc Cosim mean score      : 0.00  
+LOO CoT MSE mean score             : 0.00  
+LOO CoT Cosim mean score           : 0.00  
+LOO slow Post-hoc MSE mean score   : 0.00  
+LOO slow Post-hoc Cosim mean score : 0.00  
+LOO slow CoT MSE mean score        : 0.00  
+LOO slow CoT Cosim mean score      : 0.00  
+LOO CoT MSE mean score alternative             : 0.34  
+LOO CoT Cosim mean score     alternative       : 0.13  
+
+JOB STATISTICS
+==============
+Job ID: 9706925
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 05:26:51
+CPU Efficiency: 5.55% of 4-02:09:54 core-walltime
+Job Wall-clock time: 05:27:13
+Memory Utilized: 4.33 GB
+Memory Efficiency: 3.61% of 120.00 GB
