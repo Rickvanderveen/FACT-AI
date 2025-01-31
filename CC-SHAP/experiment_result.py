@@ -102,6 +102,49 @@ class ExperimentResult:
 
         return np.array(cc_shap_cot_values)
 
+    def get_time_variable_average(self, variable):
+
+        times = []
+        
+        for example_name in self.examples_names():
+            timesample = self.get_example(example_name)[variable]
+            timesample = datetime.datetime.strptime(timesample, "%H:%M:%S.%f").time()
+            
+            # Time to second conversion
+            total_seconds = timesample.hour * 3600 + timesample.minute * 60 + timesample.second
+            times.append(total_seconds)
+
+        # Second mean
+        mean_seconds = np.mean(times)
+        # Convert back to time
+        hours, remainder = divmod(mean_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        if hours != 0:
+            return f"{hours}h {int(minutes)}m {round(seconds)}s"
+        else:
+            return f"{int(minutes)}m {round(seconds)}s"
+
+    def get_total_time_variable(self, variable):
+
+        times = []
+        
+        for example_name in self.examples_names():
+            timesample = self.get_example(example_name)[variable]
+            timesample = datetime.datetime.strptime(timesample, "%H:%M:%S.%f").time()
+            
+            # Time to second conversion
+            total_seconds = timesample.hour * 3600 + timesample.minute * 60 + timesample.second
+            times.append(total_seconds)
+
+        # get the total seconds
+        sum_seconds = np.sum(times)
+        # Convert back to time
+        hours, remainder = divmod(sum_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        return f"{hours}h {minutes}m {seconds}s"
+
+
     def describe(self, variable):
         variable_values = self.get_variable(variable)
 
