@@ -1,0 +1,951 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Channels:
+ - conda-forge
+ - pytorch
+ - nvidia
+ - defaults
+Platform: linux-64
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /home/rvdveen/.conda/envs/fact
+
+  added / updated specs:
+    - _libgcc_mutex==0.1=conda_forge
+    - _openmp_mutex==4.5=2_kmp_llvm
+    - abseil-cpp==20211102.0=hd4dd3e8_0
+    - accelerate==0.24.1=pyhd8ed1ab_0
+    - aiofiles==22.1.0=py311h06a4308_0
+    - aiohttp==3.8.5=py311h5eee18b_0
+    - aiosignal==1.2.0=pyhd3eb1b0_0
+    - aiosqlite==0.18.0=py311h06a4308_0
+    - anyio==3.5.0=py311h06a4308_0
+    - argon2-cffi-bindings==21.2.0=py311h5eee18b_0
+    - argon2-cffi==21.3.0=pyhd3eb1b0_0
+    - arrow-cpp==11.0.0=h374c478_2
+    - asttokens==2.0.5=pyhd3eb1b0_0
+    - async-timeout==4.0.2=py311h06a4308_0
+    - attrs==23.1.0=py311h06a4308_0
+    - aws-c-common==0.6.8=h5eee18b_1
+    - aws-c-event-stream==0.1.6=h6a678d5_6
+    - aws-checksums==0.1.11=h5eee18b_2
+    - aws-sdk-cpp==1.8.185=h721c034_1
+    - babel==2.11.0=py311h06a4308_0
+    - backcall==0.2.0=pyhd3eb1b0_0
+    - beautifulsoup4==4.12.2=py311h06a4308_0
+    - blas==1.0=mkl
+    - bleach==4.1.0=pyhd3eb1b0_0
+    - boost-cpp==1.82.0=hdb19cb5_2
+    - bottleneck==1.3.5=py311hbed6279_0
+    - brotli-bin==1.0.9=h5eee18b_7
+    - brotli-python==1.0.9=py311h6a678d5_7
+    - brotli==1.0.9=h5eee18b_7
+    - bzip2==1.0.8=h7b6447c_0
+    - c-ares==1.19.1=h5eee18b_0
+    - ca-certificates==2023.08.22=h06a4308_0
+    - catalogue==2.0.7=py311h06a4308_0
+    - certifi==2023.7.22=pyhd8ed1ab_0
+    - cffi==1.15.1=py311h5eee18b_3
+    - charset-normalizer==2.0.4=pyhd3eb1b0_0
+    - click==8.1.7=py311h06a4308_0
+    - cloudpickle==2.2.1=py311h06a4308_0
+    - colorama==0.4.6=py311h06a4308_0
+    - comm==0.1.2=py311h06a4308_0
+    - confection==0.0.4=py311h92b7b1e_0
+    - contourpy==1.0.5=py311hdb19cb5_0
+    - cryptography==41.0.3=py311hdda0065_0
+    - cuda-cudart==11.8.89=0
+    - cuda-cupti==11.8.87=0
+    - cuda-libraries==11.8.0=0
+    - cuda-nvrtc==11.8.89=0
+    - cuda-nvtx==11.8.86=0
+    - cuda-runtime==11.8.0=0
+    - cycler==0.11.0=pyhd3eb1b0_0
+    - cymem==2.0.6=py311h6a678d5_0
+    - cyrus-sasl==2.1.28=h52b45da_1
+    - cython-blis==0.7.9=py311hf4808d0_0
+    - dataclasses==0.8=pyh6d0b6a4_7
+    - datasets==2.12.0=py311h06a4308_0
+    - dbus==1.13.18=hb2f20db_0
+    - debugpy==1.6.7=py311h6a678d5_0
+    - decorator==5.1.1=pyhd3eb1b0_0
+    - defusedxml==0.7.1=pyhd3eb1b0_0
+    - dill==0.3.6=py311h06a4308_0
+    - entrypoints==0.4=py311h06a4308_0
+    - executing==0.8.3=pyhd3eb1b0_0
+    - expat==2.5.0=h6a678d5_0
+    - ffmpeg==4.3=hf484d3e_0
+    - filelock==3.9.0=py311h06a4308_0
+    - fontconfig==2.14.1=h4c34cd2_2
+    - fonttools==4.25.0=pyhd3eb1b0_0
+    - freetype==2.12.1=h4a9f257_0
+    - frozenlist==1.4.0=py311h5eee18b_0
+    - fsspec==2023.9.2=py311h06a4308_0
+    - gflags==2.2.2=he6710b0_0
+    - giflib==5.2.1=h5eee18b_3
+    - glib==2.69.1=he621ea3_2
+    - glog==0.5.0=h2531618_0
+    - gmp==6.2.1=h295c915_3
+    - gmpy2==2.1.2=py311hc9b5ff0_0
+    - gnutls==3.6.15=he1e5248_0
+    - grpc-cpp==1.48.2=he1ff14a_1
+    - gst-plugins-base==1.14.1=h6a678d5_1
+    - gstreamer==1.14.1=h5eee18b_1
+    - huggingface_hub==0.17.3=py311h06a4308_0
+    - icu==73.1=h6a678d5_0
+    - idna==3.4=py311h06a4308_0
+    - importlib-metadata==6.0.0=py311h06a4308_0
+    - importlib_metadata==6.0.0=hd3eb1b0_0
+    - intel-openmp==2023.1.0=hdb19cb5_46305
+    - ipykernel==6.25.0=py311h92b7b1e_0
+    - ipython==8.15.0=py311h06a4308_0
+    - ipython_genutils==0.2.0=pyhd3eb1b0_1
+    - ipywidgets==8.0.4=py311h06a4308_0
+    - jedi==0.18.1=py311h06a4308_1
+    - jinja2==3.1.2=py311h06a4308_0
+    - joblib==1.2.0=py311h06a4308_0
+    - jpeg==9e=h5eee18b_1
+    - json5==0.9.6=pyhd3eb1b0_0
+    - jsonschema-specifications==2023.7.1=py311h06a4308_0
+    - jsonschema==4.19.2=py311h06a4308_0
+    - jupyter==1.0.0=py311h06a4308_8
+    - jupyter_client==7.4.9=py311h06a4308_0
+    - jupyter_console==6.6.3=py311h06a4308_0
+    - jupyter_core==5.5.0=py311h06a4308_0
+    - jupyter_events==0.8.0=py311h06a4308_0
+    - jupyter_server==1.23.4=py311h06a4308_0
+    - jupyter_server_fileid==0.9.0=py311h06a4308_0
+    - jupyter_server_ydoc==0.8.0=py311h06a4308_1
+    - jupyter_ydoc==0.2.4=py311h06a4308_0
+    - jupyterlab==3.6.3=py311h06a4308_0
+    - jupyterlab_pygments==0.1.2=py_0
+    - jupyterlab_server==2.22.0=py311h06a4308_0
+    - jupyterlab_widgets==3.0.5=py311h06a4308_0
+    - kiwisolver==1.4.4=py311h6a678d5_0
+    - krb5==1.20.1=h143b758_1
+    - lame==3.100=h7b6447c_0
+    - langcodes==3.3.0=pyhd3eb1b0_0
+    - lcms2==2.12=h3be6417_0
+    - ld_impl_linux-64==2.38=h1181459_1
+    - lerc==3.0=h295c915_0
+    - libboost==1.82.0=h109eef0_2
+    - libbrotlicommon==1.0.9=h5eee18b_7
+    - libbrotlidec==1.0.9=h5eee18b_7
+    - libbrotlienc==1.0.9=h5eee18b_7
+    - libclang13==14.0.6=default_he11475f_1
+    - libclang==14.0.6=default_hc6dbbc7_1
+    - libcublas==11.11.3.6=0
+    - libcufft==10.9.0.58=0
+    - libcufile==1.8.0.34=0
+    - libcups==2.4.2=h2d74bed_1
+    - libcurand==10.3.4.52=0
+    - libcurl==8.4.0=h251f7ec_0
+    - libcusolver==11.4.1.48=0
+    - libcusparse==11.7.5.86=0
+    - libdeflate==1.17=h5eee18b_1
+    - libedit==3.1.20221030=h5eee18b_0
+    - libev==4.33=h7f8727e_1
+    - libevent==2.1.12=hdbd6064_1
+    - libffi==3.4.4=h6a678d5_0
+    - libgcc-ng==13.2.0=h807b86a_2
+    - libgfortran-ng==11.2.0=h00389a5_1
+    - libgfortran5==11.2.0=h1234567_1
+    - libiconv==1.16=h7f8727e_2
+    - libidn2==2.3.4=h5eee18b_0
+    - libjpeg-turbo==2.0.0=h9bf148f_0
+    - libllvm14==14.0.6=hdb19cb5_3
+    - libnghttp2==1.57.0=h2d74bed_0
+    - libnpp==11.8.0.86=0
+    - libnvjpeg==11.9.0.86=0
+    - libpng==1.6.39=h5eee18b_0
+    - libpq==12.15=hdbd6064_1
+    - libprotobuf==3.20.3=he621ea3_0
+    - libsodium==1.0.18=h7b6447c_0
+    - libssh2==1.10.0=hdbd6064_2
+    - libstdcxx-ng==13.2.0=h7e041cc_2
+    - libtasn1==4.19.0=h5eee18b_0
+    - libthrift==0.15.0=h1795dd8_2
+    - libtiff==4.5.1=h6a678d5_0
+    - libunistring==0.9.10=h27cfd23_0
+    - libuuid==1.41.5=h5eee18b_0
+    - libwebp-base==1.3.2=h5eee18b_0
+    - libwebp==1.3.2=h11a3e52_0
+    - libxcb==1.15=h7f8727e_0
+    - libxkbcommon==1.0.1=h5eee18b_1
+    - libxml2==2.10.4=hf1b16e4_1
+    - llvm-openmp==14.0.6=h9e868ea_0
+    - llvmlite==0.40.1=py311he621ea3_0
+    - lz4-c==1.9.4=h6a678d5_0
+    - markupsafe==2.1.1=py311h5eee18b_0
+    - matplotlib-base==3.8.0=py311ha02d727_0
+    - matplotlib-inline==0.1.6=py311h06a4308_0
+    - matplotlib==3.8.0=py311h06a4308_0
+    - mistune==2.0.4=py311h06a4308_0
+    - mkl-service==2.4.0=py311h5eee18b_1
+    - mkl==2023.1.0=h213fc3f_46343
+    - mkl_fft==1.3.8=py311h5eee18b_0
+    - mkl_random==1.2.4=py311hdb19cb5_0
+    - mpc==1.1.0=h10f8cd9_1
+    - mpfr==4.0.2=hb69a4c5_1
+    - mpmath==1.3.0=py311h06a4308_0
+    - multidict==6.0.2=py311h5eee18b_0
+    - multiprocess==0.70.14=py311h06a4308_0
+    - munkres==1.1.4=py_0
+    - murmurhash==1.0.7=py311h6a678d5_0
+    - mysql==5.7.24=h721c034_2
+    - nbclassic==0.5.5=py311h06a4308_0
+    - nbclient==0.8.0=py311h06a4308_0
+    - nbconvert==7.10.0=py311h06a4308_0
+    - nbformat==5.9.2=py311h06a4308_0
+    - ncurses==6.4=h6a678d5_0
+    - nest-asyncio==1.5.6=py311h06a4308_0
+    - nettle==3.7.3=hbbd107a_1
+    - networkx==3.1=py311h06a4308_0
+    - nltk==3.8.1=py311h06a4308_0
+    - notebook-shim==0.2.2=py311h06a4308_0
+    - notebook==6.5.4=py311h06a4308_1
+    - numba==0.57.1=py311h96b013e_0
+    - numexpr==2.8.7=py311h65dcdc2_0
+    - numpy-base==1.24.3=py311hf175353_1
+    - numpy==1.24.3=py311h08b1b3b_1
+    - openh264==2.1.1=h4ff587b_0
+    - openjpeg==2.4.0=h3ad879b_0
+    - openssl==3.1.4=hd590300_0
+    - orc==1.7.4=hb3bc3d3_1
+    - packaging==23.1=py311h06a4308_0
+    - pandas==2.1.1=py311ha02d727_0
+    - pandocfilters==1.5.0=pyhd3eb1b0_0
+    - parso==0.8.3=pyhd3eb1b0_0
+    - pathy==0.10.1=py311h06a4308_0
+    - pcre==8.45=h295c915_0
+    - pexpect==4.8.0=pyhd3eb1b0_3
+    - pickleshare==0.7.5=pyhd3eb1b0_1003
+    - pillow==10.0.1=py311ha6cbd5a_0
+    - pip==23.3=py311h06a4308_0
+    - platformdirs==3.10.0=py311h06a4308_0
+    - ply==3.11=py311h06a4308_0
+    - preshed==3.0.6=py311h6a678d5_0
+    - prometheus_client==0.14.1=py311h06a4308_0
+    - prompt-toolkit==3.0.36=py311h06a4308_0
+    - prompt_toolkit==3.0.36=hd3eb1b0_0
+    - protobuf==3.20.3=py311hcafe171_1
+    - psutil==5.9.0=py311h5eee18b_0
+    - ptyprocess==0.7.0=pyhd3eb1b0_2
+    - pure_eval==0.2.2=pyhd3eb1b0_0
+    - pyarrow==11.0.0=py311hd8e8d9b_1
+    - pycparser==2.21=pyhd3eb1b0_0
+    - pydantic==1.10.12=py311h5eee18b_1
+    - pygments==2.15.1=py311h06a4308_1
+    - pyopenssl==23.2.0=py311h06a4308_0
+    - pyparsing==3.0.9=py311h06a4308_0
+    - pyqt5-sip==12.13.0=py311h5eee18b_0
+    - pyqt==5.15.10=py311h6a678d5_0
+    - pysocks==1.7.1=py311h06a4308_0
+    - python-dateutil==2.8.2=pyhd3eb1b0_0
+    - python-fastjsonschema==2.16.2=py311h06a4308_0
+    - python-json-logger==2.0.7=py311h06a4308_0
+    - python-tzdata==2023.3=pyhd3eb1b0_0
+    - python-xxhash==2.0.2=py311h5eee18b_1
+    - python==3.11.5=h955ad1f_0
+    - python_abi==3.11=2_cp311
+    - pytorch-cuda==11.8=h7e8668a_5
+    - pytorch-mutex==1.0=cuda
+    - pytorch==2.1.0=py3.11_cuda11.8_cudnn8.7.0_0
+    - pytz==2023.3.post1=py311h06a4308_0
+    - pyyaml==6.0.1=py311h5eee18b_0
+    - pyzmq==23.2.0=py311h6a678d5_0
+    - qt-main==5.15.2=h53bd1ea_10
+    - qtconsole==5.4.2=py311h06a4308_0
+    - qtpy==2.2.0=py311h06a4308_0
+    - re2==2022.04.01=h295c915_0
+    - readline==8.2=h5eee18b_0
+    - referencing==0.30.2=py311h06a4308_0
+    - regex==2023.10.3=py311h5eee18b_0
+    - requests==2.31.0=py311h06a4308_0
+    - responses==0.13.3=pyhd3eb1b0_0
+    - rfc3339-validator==0.1.4=py311h06a4308_0
+    - rfc3986-validator==0.1.1=py311h06a4308_0
+    - rpds-py==0.10.6=py311hb02cf49_0
+    - sacremoses==0.0.43=pyhd3eb1b0_0
+    - safetensors==0.4.0=py311h24d97f6_0
+    - scikit-learn==1.2.2=py311h6a678d5_1
+    - scipy==1.11.3=py311h08b1b3b_0
+    - send2trash==1.8.0=pyhd3eb1b0_1
+    - sentencepiece==0.1.99=py311hdb19cb5_0
+    - setuptools==68.0.0=py311h06a4308_0
+    - shellingham==1.5.0=py311h06a4308_0
+    - sip==6.7.12=py311h6a678d5_0
+    - six==1.16.0=pyhd3eb1b0_1
+    - slicer==0.0.7=pyhd3eb1b0_0
+    - smart_open==5.2.1=py311h06a4308_0
+    - snappy==1.1.9=h295c915_0
+    - sniffio==1.2.0=py311h06a4308_1
+    - soupsieve==2.5=py311h06a4308_0
+    - spacy-legacy==3.0.12=py311h06a4308_0
+    - spacy-loggers==1.0.4=py311h06a4308_0
+    - spacy==3.5.3=py311h4cb112f_0
+    - sqlite==3.41.2=h5eee18b_0
+    - srsly==2.4.8=py311h6a678d5_0
+    - stack_data==0.2.0=pyhd3eb1b0_0
+    - sympy==1.11.1=py311h06a4308_0
+    - tbb==2021.8.0=hdb19cb5_0
+    - terminado==0.17.1=py311h06a4308_0
+    - thinc==8.1.10=py311h4cb112f_0
+    - threadpoolctl==2.2.0=pyh0d69192_0
+    - tinycss2==1.2.1=py311h06a4308_0
+    - tk==8.6.12=h1ccaba5_0
+    - tokenizers==0.14.1=py311h6640629_2
+    - torchaudio==2.1.0=py311_cu118
+    - torchtriton==2.1.0=py311
+    - torchvision==0.16.0=py311_cu118
+    - tornado==6.3.3=py311h5eee18b_0
+    - tqdm==4.65.0=py311h92b7b1e_0
+    - traitlets==5.7.1=py311h06a4308_0
+    - transformers==4.35.0=pyhd8ed1ab_0
+    - typer==0.4.1=py311h06a4308_0
+    - typing-extensions==4.7.1=py311h06a4308_0
+    - typing_extensions==4.7.1=py311h06a4308_0
+    - tzdata==2023c=h04d1e81_0
+    - urllib3==1.26.18=py311h06a4308_0
+    - utf8proc==2.6.1=h27cfd23_0
+    - wasabi==0.9.1=py311h06a4308_0
+    - wcwidth==0.2.5=pyhd3eb1b0_0
+    - webencodings==0.5.1=py311h06a4308_1
+    - websocket-client==0.58.0=py311h06a4308_4
+    - wheel==0.41.2=py311h06a4308_0
+    - widgetsnbextension==4.0.5=py311h06a4308_0
+    - xxhash==0.8.0=h7f8727e_3
+    - xz==5.4.2=h5eee18b_0
+    - y-py==0.5.9=py311h52d8a92_0
+    - yaml==0.2.5=h7b6447c_0
+    - yarl==1.8.1=py311h5eee18b_0
+    - ypy-websocket==0.8.2=py311h06a4308_0
+    - zeromq==4.3.4=h2531618_0
+    - zipp==3.11.0=py311h06a4308_0
+    - zlib==1.2.13=h5eee18b_0
+    - zstd==1.5.5=hc292b87_0
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    _libgcc_mutex-0.1          |      conda_forge           3 KB  conda-forge
+    _openmp_mutex-4.5          |       2_kmp_llvm           6 KB  conda-forge
+    accelerate-0.24.1          |     pyhd8ed1ab_0         172 KB  conda-forge
+    aiofiles-22.1.0            |  py311h06a4308_0          28 KB
+    aiohttp-3.8.5              |  py311h5eee18b_0         576 KB
+    aiosqlite-0.18.0           |  py311h06a4308_0          45 KB
+    anyio-3.5.0                |  py311h06a4308_0         214 KB
+    argon2-cffi-bindings-21.2.0|  py311h5eee18b_0          33 KB
+    arrow-cpp-11.0.0           |       h374c478_2        10.2 MB
+    async-timeout-4.0.2        |  py311h06a4308_0          13 KB
+    attrs-23.1.0               |  py311h06a4308_0         161 KB
+    aws-c-common-0.6.8         |       h5eee18b_1         177 KB
+    aws-c-event-stream-0.1.6   |       h6a678d5_6          25 KB
+    aws-checksums-0.1.11       |       h5eee18b_2          48 KB
+    aws-sdk-cpp-1.8.185        |       h721c034_1         2.2 MB
+    babel-2.11.0               |  py311h06a4308_0         6.1 MB
+    backcall-0.2.0             |     pyhd3eb1b0_0          13 KB
+    beautifulsoup4-4.12.2      |  py311h06a4308_0         268 KB
+    blas-1.0                   |              mkl           1 KB  conda-forge
+    bottleneck-1.3.5           |  py311hbed6279_0         133 KB
+    brotli-1.0.9               |       h5eee18b_7          18 KB
+    brotli-bin-1.0.9           |       h5eee18b_7          19 KB
+    brotli-python-1.0.9        |  py311h6a678d5_7         318 KB
+    bzip2-1.0.8                |       h7b6447c_0          78 KB
+    ca-certificates-2023.08.22 |       h06a4308_0         123 KB
+    catalogue-2.0.7            |  py311h06a4308_0          40 KB
+    certifi-2023.7.22          |     pyhd8ed1ab_0         150 KB  conda-forge
+    cffi-1.15.1                |  py311h5eee18b_3         283 KB
+    click-8.1.7                |  py311h06a4308_0         221 KB
+    cloudpickle-2.2.1          |  py311h06a4308_0          51 KB
+    colorama-0.4.6             |  py311h06a4308_0          36 KB
+    comm-0.1.2                 |  py311h06a4308_0          14 KB
+    confection-0.0.4           |  py311h92b7b1e_0          86 KB
+    contourpy-1.0.5            |  py311hdb19cb5_0         212 KB
+    cryptography-41.0.3        |  py311hdda0065_0         2.0 MB
+    cuda-cudart-11.8.89        |                0         197 KB  nvidia
+    cuda-cupti-11.8.87         |                0        25.3 MB  nvidia
+    cuda-libraries-11.8.0      |                0           1 KB  nvidia
+    cuda-nvrtc-11.8.89         |                0        19.1 MB  nvidia
+    cuda-nvtx-11.8.86          |                0          57 KB  nvidia
+    cuda-runtime-11.8.0        |                0           1 KB  nvidia
+    cymem-2.0.6                |  py311h6a678d5_0          39 KB
+    cython-blis-0.7.9          |  py311hf4808d0_0         7.3 MB
+    dataclasses-0.8            |     pyh6d0b6a4_7           8 KB
+    datasets-2.12.0            |  py311h06a4308_0         860 KB
+    debugpy-1.6.7              |  py311h6a678d5_0         2.4 MB
+    dill-0.3.6                 |  py311h06a4308_0         214 KB
+    entrypoints-0.4            |  py311h06a4308_0          17 KB
+    expat-2.5.0                |       h6a678d5_0         172 KB
+    ffmpeg-4.3                 |       hf484d3e_0         9.9 MB  pytorch
+    filelock-3.9.0             |  py311h06a4308_0          21 KB
+    fonttools-4.25.0           |     pyhd3eb1b0_0         632 KB
+    frozenlist-1.4.0           |  py311h5eee18b_0          52 KB
+    fsspec-2023.9.2            |  py311h06a4308_0         354 KB
+    gflags-2.2.2               |       he6710b0_0         126 KB
+    glib-2.69.1                |       he621ea3_2         1.9 MB
+    glog-0.5.0                 |       h2531618_0         101 KB
+    gmp-6.2.1                  |       h295c915_3         544 KB
+    gmpy2-2.1.2                |  py311hc9b5ff0_0         191 KB
+    gnutls-3.6.15              |       he1e5248_0         1.0 MB
+    huggingface_hub-0.17.3     |  py311h06a4308_0         451 KB
+    idna-3.4                   |  py311h06a4308_0          96 KB
+    importlib-metadata-6.0.0   |  py311h06a4308_0          46 KB
+    importlib_metadata-6.0.0   |       hd3eb1b0_0           8 KB
+    intel-openmp-2023.1.0      |   hdb19cb5_46305        17.1 MB
+    ipykernel-6.25.0           |  py311h92b7b1e_0         302 KB
+    ipython-8.15.0             |  py311h06a4308_0         1.4 MB
+    ipywidgets-8.0.4           |  py311h06a4308_0         249 KB
+    jedi-0.18.1                |  py311h06a4308_1         1.1 MB
+    jinja2-3.1.2               |  py311h06a4308_0         295 KB
+    joblib-1.2.0               |  py311h06a4308_0         527 KB
+    jsonschema-4.19.2          |  py311h06a4308_0         190 KB
+    jsonschema-specifications-2023.7.1|  py311h06a4308_0          15 KB
+    jupyter-1.0.0              |  py311h06a4308_8           7 KB
+    jupyter_client-7.4.9       |  py311h06a4308_0         263 KB
+    jupyter_console-6.6.3      |  py311h06a4308_0          57 KB
+    jupyter_core-5.5.0         |  py311h06a4308_0          91 KB
+    jupyter_events-0.8.0       |  py311h06a4308_0          41 KB
+    jupyter_server-1.23.4      |  py311h06a4308_0         444 KB
+    jupyter_server_fileid-0.9.0|  py311h06a4308_0          36 KB
+    jupyter_server_ydoc-0.8.0  |  py311h06a4308_1          25 KB
+    jupyter_ydoc-0.2.4         |  py311h06a4308_0          18 KB
+    jupyterlab-3.6.3           |  py311h06a4308_0         4.1 MB
+    jupyterlab_server-2.22.0   |  py311h06a4308_0         108 KB
+    jupyterlab_widgets-3.0.5   |  py311h06a4308_0         179 KB
+    kiwisolver-1.4.4           |  py311h6a678d5_0          70 KB
+    lame-3.100                 |       h7b6447c_0         323 KB
+    langcodes-3.3.0            |     pyhd3eb1b0_0         151 KB
+    libbrotlicommon-1.0.9      |       h5eee18b_7          70 KB
+    libbrotlidec-1.0.9         |       h5eee18b_7          31 KB
+    libbrotlienc-1.0.9         |       h5eee18b_7         264 KB
+    libcublas-11.11.3.6        |                0       364.0 MB  nvidia
+    libcufft-10.9.0.58         |                0       142.8 MB  nvidia
+    libcufile-1.8.0.34         |                0         1.0 MB  nvidia
+    libcurand-10.3.4.52        |                0        51.8 MB  nvidia
+    libcurl-8.4.0              |       h251f7ec_0         411 KB
+    libcusolver-11.4.1.48      |                0        96.5 MB  nvidia
+    libcusparse-11.7.5.86      |                0       176.3 MB  nvidia
+    libedit-3.1.20221030       |       h5eee18b_0         181 KB
+    libffi-3.4.4               |       h6a678d5_0         142 KB
+    libgcc-ng-13.2.0           |       h807b86a_2         753 KB  conda-forge
+    libiconv-1.16              |       h7f8727e_2         736 KB
+    libidn2-2.3.4              |       h5eee18b_0         146 KB
+    libjpeg-turbo-2.0.0        |       h9bf148f_0         950 KB  pytorch
+    libnpp-11.8.0.86           |                0       147.8 MB  nvidia
+    libnvjpeg-11.9.0.86        |                0         2.4 MB  nvidia
+    libpq-12.15                |       hdbd6064_1         2.4 MB
+    libssh2-1.10.0             |       hdbd6064_2         292 KB
+    libstdcxx-ng-13.2.0        |       h7e041cc_2         3.7 MB  conda-forge
+    libtasn1-4.19.0            |       h5eee18b_0          63 KB
+    libunistring-0.9.10        |       h27cfd23_0         536 KB
+    libwebp-1.3.2              |       h11a3e52_0          87 KB
+    libxml2-2.10.4             |       hf1b16e4_1         753 KB
+    llvm-openmp-14.0.6         |       h9e868ea_0         4.4 MB
+    llvmlite-0.40.1            |  py311he621ea3_0         2.8 MB
+    lz4-c-1.9.4                |       h6a678d5_0         154 KB
+    markupsafe-2.1.1           |  py311h5eee18b_0          25 KB
+    matplotlib-3.8.0           |  py311h06a4308_0           8 KB
+    matplotlib-base-3.8.0      |  py311ha02d727_0         7.7 MB
+    matplotlib-inline-0.1.6    |  py311h06a4308_0          18 KB
+    mistune-2.0.4              |  py311h06a4308_0         107 KB
+    mkl-2023.1.0               |   h213fc3f_46343       171.6 MB
+    mkl-service-2.4.0          |  py311h5eee18b_1          54 KB
+    mkl_fft-1.3.8              |  py311h5eee18b_0         225 KB
+    mkl_random-1.2.4           |  py311hdb19cb5_0         316 KB
+    mpc-1.1.0                  |       h10f8cd9_1          90 KB
+    mpfr-4.0.2                 |       hb69a4c5_1         487 KB
+    mpmath-1.3.0               |  py311h06a4308_0         1.0 MB
+    multidict-6.0.2            |  py311h5eee18b_0          54 KB
+    multiprocess-0.70.14       |  py311h06a4308_0         322 KB
+    munkres-1.1.4              |             py_0          13 KB
+    murmurhash-1.0.7           |  py311h6a678d5_0          25 KB
+    nbclassic-0.5.5            |  py311h06a4308_0         6.1 MB
+    nbclient-0.8.0             |  py311h06a4308_0         120 KB
+    nbconvert-7.10.0           |  py311h06a4308_0         513 KB
+    nbformat-5.9.2             |  py311h06a4308_0         158 KB
+    nest-asyncio-1.5.6         |  py311h06a4308_0          17 KB
+    nettle-3.7.3               |       hbbd107a_1         809 KB
+    networkx-3.1               |  py311h06a4308_0         3.3 MB
+    nltk-3.8.1                 |  py311h06a4308_0         2.8 MB
+    notebook-6.5.4             |  py311h06a4308_1         667 KB
+    notebook-shim-0.2.2        |  py311h06a4308_0          25 KB
+    numba-0.57.1               |  py311h96b013e_0         5.3 MB  conda-forge
+    numexpr-2.8.7              |  py311h65dcdc2_0         167 KB
+    numpy-1.24.3               |  py311h08b1b3b_1          11 KB
+    numpy-base-1.24.3          |  py311hf175353_1         7.2 MB
+    openh264-2.1.1             |       h4ff587b_0         711 KB
+    openssl-3.1.4              |       hd590300_0         2.5 MB  conda-forge
+    packaging-23.1             |  py311h06a4308_0         100 KB
+    pandas-2.1.1               |  py311ha02d727_0        14.9 MB
+    pathy-0.10.1               |  py311h06a4308_0         110 KB
+    pcre-8.45                  |       h295c915_0         207 KB
+    pillow-10.0.1              |  py311ha6cbd5a_0         896 KB
+    pip-23.3                   |  py311h06a4308_0         3.3 MB
+    platformdirs-3.10.0        |  py311h06a4308_0          37 KB
+    ply-3.11                   |  py311h06a4308_0         111 KB
+    preshed-3.0.6              |  py311h6a678d5_0         107 KB
+    prometheus_client-0.14.1   |  py311h06a4308_0         120 KB
+    prompt-toolkit-3.0.36      |  py311h06a4308_0         707 KB
+    prompt_toolkit-3.0.36      |       hd3eb1b0_0           5 KB
+    protobuf-3.20.3            |  py311hcafe171_1         374 KB  conda-forge
+    psutil-5.9.0               |  py311h5eee18b_0         463 KB
+    pyarrow-11.0.0             |  py311hd8e8d9b_1         4.2 MB
+    pydantic-1.10.12           |  py311h5eee18b_1         2.4 MB
+    pygments-2.15.1            |  py311h06a4308_1         2.1 MB
+    pyopenssl-23.2.0           |  py311h06a4308_0         121 KB
+    pyparsing-3.0.9            |  py311h06a4308_0         204 KB
+    pyqt-5.15.10               |  py311h6a678d5_0         5.7 MB
+    pyqt5-sip-12.13.0          |  py311h5eee18b_0          95 KB
+    pysocks-1.7.1              |  py311h06a4308_0          35 KB
+    python-3.11.5              |       h955ad1f_0        32.7 MB
+    python-dateutil-2.8.2      |     pyhd3eb1b0_0         233 KB
+    python-fastjsonschema-2.16.2|  py311h06a4308_0         247 KB
+    python-json-logger-2.0.7   |  py311h06a4308_0          18 KB
+    python-xxhash-2.0.2        |  py311h5eee18b_1          20 KB
+    python_abi-3.11            |          2_cp311           5 KB  conda-forge
+    pytorch-2.1.0              |py3.11_cuda11.8_cudnn8.7.0_0        1.46 GB  pytorch
+    pytorch-cuda-11.8          |       h7e8668a_5           3 KB  pytorch
+    pytorch-mutex-1.0          |             cuda           3 KB  pytorch
+    pytz-2023.3.post1          |  py311h06a4308_0         216 KB
+    pyyaml-6.0.1               |  py311h5eee18b_0         210 KB
+    pyzmq-23.2.0               |  py311h6a678d5_0         527 KB
+    qtconsole-5.4.2            |  py311h06a4308_0         254 KB
+    qtpy-2.2.0                 |  py311h06a4308_0         101 KB
+    referencing-0.30.2         |  py311h06a4308_0          77 KB
+    regex-2023.10.3            |  py311h5eee18b_0         427 KB
+    requests-2.31.0            |  py311h06a4308_0         124 KB
+    responses-0.13.3           |     pyhd3eb1b0_0          24 KB
+    rfc3339-validator-0.1.4    |  py311h06a4308_0          10 KB
+    rfc3986-validator-0.1.1    |  py311h06a4308_0          10 KB
+    rpds-py-0.10.6             |  py311hb02cf49_0        1007 KB
+    sacremoses-0.0.43          |     pyhd3eb1b0_0         284 KB
+    safetensors-0.4.0          |  py311h24d97f6_0         1.1 MB
+    scikit-learn-1.2.2         |  py311h6a678d5_1         8.8 MB
+    scipy-1.11.3               |  py311h08b1b3b_0        22.0 MB
+    send2trash-1.8.0           |     pyhd3eb1b0_1          19 KB
+    sentencepiece-0.1.99       |  py311hdb19cb5_0         4.7 MB
+    setuptools-68.0.0          |  py311h06a4308_0         1.2 MB
+    shellingham-1.5.0          |  py311h06a4308_0          21 KB
+    sip-6.7.12                 |  py311h6a678d5_0         603 KB
+    slicer-0.0.7               |     pyhd3eb1b0_0          18 KB
+    smart_open-5.2.1           |  py311h06a4308_0          96 KB
+    snappy-1.1.9               |       h295c915_0         636 KB
+    sniffio-1.2.0              |  py311h06a4308_1          16 KB
+    soupsieve-2.5              |  py311h06a4308_0          92 KB
+    spacy-3.5.3                |  py311h4cb112f_0         6.0 MB
+    spacy-legacy-3.0.12        |  py311h06a4308_0          66 KB
+    spacy-loggers-1.0.4        |  py311h06a4308_0          25 KB
+    sqlite-3.41.2              |       h5eee18b_0         1.2 MB
+    srsly-2.4.8                |  py311h6a678d5_0         715 KB
+    sympy-1.11.1               |  py311h06a4308_0        16.4 MB
+    terminado-0.17.1           |  py311h06a4308_0          37 KB
+    thinc-8.1.10               |  py311h4cb112f_0         1.0 MB
+    tinycss2-1.2.1             |  py311h06a4308_0          46 KB
+    tk-8.6.12                  |       h1ccaba5_0         3.0 MB
+    tokenizers-0.14.1          |  py311h6640629_2         2.7 MB  conda-forge
+    torchaudio-2.1.0           |      py311_cu118         6.2 MB  pytorch
+    torchtriton-2.1.0          |            py311        91.0 MB  pytorch
+    torchvision-0.16.0         |      py311_cu118         8.5 MB  pytorch
+    tornado-6.3.3              |  py311h5eee18b_0         852 KB
+    tqdm-4.65.0                |  py311h92b7b1e_0         160 KB
+    traitlets-5.7.1            |  py311h06a4308_0         259 KB
+    transformers-4.35.0        |     pyhd8ed1ab_0         2.7 MB  conda-forge
+    typer-0.4.1                |  py311h06a4308_0          66 KB
+    typing-extensions-4.7.1    |  py311h06a4308_0           9 KB
+    typing_extensions-4.7.1    |  py311h06a4308_0          73 KB
+    tzdata-2023c               |       h04d1e81_0         116 KB
+    urllib3-1.26.18            |  py311h06a4308_0         251 KB
+    utf8proc-2.6.1             |       h27cfd23_0         308 KB
+    wasabi-0.9.1               |  py311h06a4308_0          49 KB
+    webencodings-0.5.1         |  py311h06a4308_1          25 KB
+    websocket-client-0.58.0    |  py311h06a4308_4          87 KB
+    wheel-0.41.2               |  py311h06a4308_0         145 KB
+    widgetsnbextension-4.0.5   |  py311h06a4308_0         875 KB
+    xxhash-0.8.0               |       h7f8727e_3          83 KB
+    xz-5.4.2                   |       h5eee18b_0         642 KB
+    y-py-0.5.9                 |  py311h52d8a92_0         1.3 MB
+    yarl-1.8.1                 |  py311h5eee18b_0          94 KB
+    ypy-websocket-0.8.2        |  py311h06a4308_0          33 KB
+    zeromq-4.3.4               |       h2531618_0         331 KB
+    zipp-3.11.0                |  py311h06a4308_0          21 KB
+    zlib-1.2.13                |       h5eee18b_0         103 KB
+    zstd-1.5.5                 |       hc292b87_0         647 KB
+    ------------------------------------------------------------
+                                           Total:        3.02 GB
+
+The following NEW packages will be INSTALLED:
+
+  _libgcc_mutex      conda-forge/linux-64::_libgcc_mutex-0.1-conda_forge 
+  _openmp_mutex      conda-forge/linux-64::_openmp_mutex-4.5-2_kmp_llvm 
+  abseil-cpp         pkgs/main/linux-64::abseil-cpp-20211102.0-hd4dd3e8_0 
+  accelerate         conda-forge/noarch::accelerate-0.24.1-pyhd8ed1ab_0 
+  aiofiles           pkgs/main/linux-64::aiofiles-22.1.0-py311h06a4308_0 
+  aiohttp            pkgs/main/linux-64::aiohttp-3.8.5-py311h5eee18b_0 
+  aiosignal          pkgs/main/noarch::aiosignal-1.2.0-pyhd3eb1b0_0 
+  aiosqlite          pkgs/main/linux-64::aiosqlite-0.18.0-py311h06a4308_0 
+  anyio              pkgs/main/linux-64::anyio-3.5.0-py311h06a4308_0 
+  argon2-cffi        pkgs/main/noarch::argon2-cffi-21.3.0-pyhd3eb1b0_0 
+  argon2-cffi-bindi~ pkgs/main/linux-64::argon2-cffi-bindings-21.2.0-py311h5eee18b_0 
+  arrow-cpp          pkgs/main/linux-64::arrow-cpp-11.0.0-h374c478_2 
+  asttokens          pkgs/main/noarch::asttokens-2.0.5-pyhd3eb1b0_0 
+  async-timeout      pkgs/main/linux-64::async-timeout-4.0.2-py311h06a4308_0 
+  attrs              pkgs/main/linux-64::attrs-23.1.0-py311h06a4308_0 
+  aws-c-common       pkgs/main/linux-64::aws-c-common-0.6.8-h5eee18b_1 
+  aws-c-event-stream pkgs/main/linux-64::aws-c-event-stream-0.1.6-h6a678d5_6 
+  aws-checksums      pkgs/main/linux-64::aws-checksums-0.1.11-h5eee18b_2 
+  aws-sdk-cpp        pkgs/main/linux-64::aws-sdk-cpp-1.8.185-h721c034_1 
+  babel              pkgs/main/linux-64::babel-2.11.0-py311h06a4308_0 
+  backcall           pkgs/main/noarch::backcall-0.2.0-pyhd3eb1b0_0 
+  beautifulsoup4     pkgs/main/linux-64::beautifulsoup4-4.12.2-py311h06a4308_0 
+  blas               conda-forge/linux-64::blas-1.0-mkl 
+  bleach             pkgs/main/noarch::bleach-4.1.0-pyhd3eb1b0_0 
+  boost-cpp          pkgs/main/linux-64::boost-cpp-1.82.0-hdb19cb5_2 
+  bottleneck         pkgs/main/linux-64::bottleneck-1.3.5-py311hbed6279_0 
+  brotli             pkgs/main/linux-64::brotli-1.0.9-h5eee18b_7 
+  brotli-bin         pkgs/main/linux-64::brotli-bin-1.0.9-h5eee18b_7 
+  brotli-python      pkgs/main/linux-64::brotli-python-1.0.9-py311h6a678d5_7 
+  bzip2              pkgs/main/linux-64::bzip2-1.0.8-h7b6447c_0 
+  c-ares             pkgs/main/linux-64::c-ares-1.19.1-h5eee18b_0 
+  ca-certificates    pkgs/main/linux-64::ca-certificates-2023.08.22-h06a4308_0 
+  catalogue          pkgs/main/linux-64::catalogue-2.0.7-py311h06a4308_0 
+  certifi            conda-forge/noarch::certifi-2023.7.22-pyhd8ed1ab_0 
+  cffi               pkgs/main/linux-64::cffi-1.15.1-py311h5eee18b_3 
+  charset-normalizer pkgs/main/noarch::charset-normalizer-2.0.4-pyhd3eb1b0_0 
+  click              pkgs/main/linux-64::click-8.1.7-py311h06a4308_0 
+  cloudpickle        pkgs/main/linux-64::cloudpickle-2.2.1-py311h06a4308_0 
+  colorama           pkgs/main/linux-64::colorama-0.4.6-py311h06a4308_0 
+  comm               pkgs/main/linux-64::comm-0.1.2-py311h06a4308_0 
+  confection         pkgs/main/linux-64::confection-0.0.4-py311h92b7b1e_0 
+  contourpy          pkgs/main/linux-64::contourpy-1.0.5-py311hdb19cb5_0 
+  cryptography       pkgs/main/linux-64::cryptography-41.0.3-py311hdda0065_0 
+  cuda-cudart        nvidia/linux-64::cuda-cudart-11.8.89-0 
+  cuda-cupti         nvidia/linux-64::cuda-cupti-11.8.87-0 
+  cuda-libraries     nvidia/linux-64::cuda-libraries-11.8.0-0 
+  cuda-nvrtc         nvidia/linux-64::cuda-nvrtc-11.8.89-0 
+  cuda-nvtx          nvidia/linux-64::cuda-nvtx-11.8.86-0 
+  cuda-runtime       nvidia/linux-64::cuda-runtime-11.8.0-0 
+  cycler             pkgs/main/noarch::cycler-0.11.0-pyhd3eb1b0_0 
+  cymem              pkgs/main/linux-64::cymem-2.0.6-py311h6a678d5_0 
+  cyrus-sasl         pkgs/main/linux-64::cyrus-sasl-2.1.28-h52b45da_1 
+  cython-blis        pkgs/main/linux-64::cython-blis-0.7.9-py311hf4808d0_0 
+  dataclasses        pkgs/main/noarch::dataclasses-0.8-pyh6d0b6a4_7 
+  datasets           pkgs/main/linux-64::datasets-2.12.0-py311h06a4308_0 
+  dbus               pkgs/main/linux-64::dbus-1.13.18-hb2f20db_0 
+  debugpy            pkgs/main/linux-64::debugpy-1.6.7-py311h6a678d5_0 
+  decorator          pkgs/main/noarch::decorator-5.1.1-pyhd3eb1b0_0 
+  defusedxml         pkgs/main/noarch::defusedxml-0.7.1-pyhd3eb1b0_0 
+  dill               pkgs/main/linux-64::dill-0.3.6-py311h06a4308_0 
+  entrypoints        pkgs/main/linux-64::entrypoints-0.4-py311h06a4308_0 
+  executing          pkgs/main/noarch::executing-0.8.3-pyhd3eb1b0_0 
+  expat              pkgs/main/linux-64::expat-2.5.0-h6a678d5_0 
+  ffmpeg             pytorch/linux-64::ffmpeg-4.3-hf484d3e_0 
+  filelock           pkgs/main/linux-64::filelock-3.9.0-py311h06a4308_0 
+  fontconfig         pkgs/main/linux-64::fontconfig-2.14.1-h4c34cd2_2 
+  fonttools          pkgs/main/noarch::fonttools-4.25.0-pyhd3eb1b0_0 
+  freetype           pkgs/main/linux-64::freetype-2.12.1-h4a9f257_0 
+  frozenlist         pkgs/main/linux-64::frozenlist-1.4.0-py311h5eee18b_0 
+  fsspec             pkgs/main/linux-64::fsspec-2023.9.2-py311h06a4308_0 
+  gflags             pkgs/main/linux-64::gflags-2.2.2-he6710b0_0 
+  giflib             pkgs/main/linux-64::giflib-5.2.1-h5eee18b_3 
+  glib               pkgs/main/linux-64::glib-2.69.1-he621ea3_2 
+  glog               pkgs/main/linux-64::glog-0.5.0-h2531618_0 
+  gmp                pkgs/main/linux-64::gmp-6.2.1-h295c915_3 
+  gmpy2              pkgs/main/linux-64::gmpy2-2.1.2-py311hc9b5ff0_0 
+  gnutls             pkgs/main/linux-64::gnutls-3.6.15-he1e5248_0 
+  grpc-cpp           pkgs/main/linux-64::grpc-cpp-1.48.2-he1ff14a_1 
+  gst-plugins-base   pkgs/main/linux-64::gst-plugins-base-1.14.1-h6a678d5_1 
+  gstreamer          pkgs/main/linux-64::gstreamer-1.14.1-h5eee18b_1 
+  huggingface_hub    pkgs/main/linux-64::huggingface_hub-0.17.3-py311h06a4308_0 
+  icu                pkgs/main/linux-64::icu-73.1-h6a678d5_0 
+  idna               pkgs/main/linux-64::idna-3.4-py311h06a4308_0 
+  importlib-metadata pkgs/main/linux-64::importlib-metadata-6.0.0-py311h06a4308_0 
+  importlib_metadata pkgs/main/noarch::importlib_metadata-6.0.0-hd3eb1b0_0 
+  intel-openmp       pkgs/main/linux-64::intel-openmp-2023.1.0-hdb19cb5_46305 
+  ipykernel          pkgs/main/linux-64::ipykernel-6.25.0-py311h92b7b1e_0 
+  ipython            pkgs/main/linux-64::ipython-8.15.0-py311h06a4308_0 
+  ipython_genutils   pkgs/main/noarch::ipython_genutils-0.2.0-pyhd3eb1b0_1 
+  ipywidgets         pkgs/main/linux-64::ipywidgets-8.0.4-py311h06a4308_0 
+  jedi               pkgs/main/linux-64::jedi-0.18.1-py311h06a4308_1 
+  jinja2             pkgs/main/linux-64::jinja2-3.1.2-py311h06a4308_0 
+  joblib             pkgs/main/linux-64::joblib-1.2.0-py311h06a4308_0 
+  jpeg               pkgs/main/linux-64::jpeg-9e-h5eee18b_1 
+  json5              pkgs/main/noarch::json5-0.9.6-pyhd3eb1b0_0 
+  jsonschema         pkgs/main/linux-64::jsonschema-4.19.2-py311h06a4308_0 
+  jsonschema-specif~ pkgs/main/linux-64::jsonschema-specifications-2023.7.1-py311h06a4308_0 
+  jupyter            pkgs/main/linux-64::jupyter-1.0.0-py311h06a4308_8 
+  jupyter_client     pkgs/main/linux-64::jupyter_client-7.4.9-py311h06a4308_0 
+  jupyter_console    pkgs/main/linux-64::jupyter_console-6.6.3-py311h06a4308_0 
+  jupyter_core       pkgs/main/linux-64::jupyter_core-5.5.0-py311h06a4308_0 
+  jupyter_events     pkgs/main/linux-64::jupyter_events-0.8.0-py311h06a4308_0 
+  jupyter_server     pkgs/main/linux-64::jupyter_server-1.23.4-py311h06a4308_0 
+  jupyter_server_fi~ pkgs/main/linux-64::jupyter_server_fileid-0.9.0-py311h06a4308_0 
+  jupyter_server_yd~ pkgs/main/linux-64::jupyter_server_ydoc-0.8.0-py311h06a4308_1 
+  jupyter_ydoc       pkgs/main/linux-64::jupyter_ydoc-0.2.4-py311h06a4308_0 
+  jupyterlab         pkgs/main/linux-64::jupyterlab-3.6.3-py311h06a4308_0 
+  jupyterlab_pygmen~ pkgs/main/noarch::jupyterlab_pygments-0.1.2-py_0 
+  jupyterlab_server  pkgs/main/linux-64::jupyterlab_server-2.22.0-py311h06a4308_0 
+  jupyterlab_widgets pkgs/main/linux-64::jupyterlab_widgets-3.0.5-py311h06a4308_0 
+  kiwisolver         pkgs/main/linux-64::kiwisolver-1.4.4-py311h6a678d5_0 
+  krb5               pkgs/main/linux-64::krb5-1.20.1-h143b758_1 
+  lame               pkgs/main/linux-64::lame-3.100-h7b6447c_0 
+  langcodes          pkgs/main/noarch::langcodes-3.3.0-pyhd3eb1b0_0 
+  lcms2              pkgs/main/linux-64::lcms2-2.12-h3be6417_0 
+  ld_impl_linux-64   pkgs/main/linux-64::ld_impl_linux-64-2.38-h1181459_1 
+  lerc               pkgs/main/linux-64::lerc-3.0-h295c915_0 
+  libboost           pkgs/main/linux-64::libboost-1.82.0-h109eef0_2 
+  libbrotlicommon    pkgs/main/linux-64::libbrotlicommon-1.0.9-h5eee18b_7 
+  libbrotlidec       pkgs/main/linux-64::libbrotlidec-1.0.9-h5eee18b_7 
+  libbrotlienc       pkgs/main/linux-64::libbrotlienc-1.0.9-h5eee18b_7 
+  libclang           pkgs/main/linux-64::libclang-14.0.6-default_hc6dbbc7_1 
+  libclang13         pkgs/main/linux-64::libclang13-14.0.6-default_he11475f_1 
+  libcublas          nvidia/linux-64::libcublas-11.11.3.6-0 
+  libcufft           nvidia/linux-64::libcufft-10.9.0.58-0 
+  libcufile          nvidia/linux-64::libcufile-1.8.0.34-0 
+  libcups            pkgs/main/linux-64::libcups-2.4.2-h2d74bed_1 
+  libcurand          nvidia/linux-64::libcurand-10.3.4.52-0 
+  libcurl            pkgs/main/linux-64::libcurl-8.4.0-h251f7ec_0 
+  libcusolver        nvidia/linux-64::libcusolver-11.4.1.48-0 
+  libcusparse        nvidia/linux-64::libcusparse-11.7.5.86-0 
+  libdeflate         pkgs/main/linux-64::libdeflate-1.17-h5eee18b_1 
+  libedit            pkgs/main/linux-64::libedit-3.1.20221030-h5eee18b_0 
+  libev              pkgs/main/linux-64::libev-4.33-h7f8727e_1 
+  libevent           pkgs/main/linux-64::libevent-2.1.12-hdbd6064_1 
+  libffi             pkgs/main/linux-64::libffi-3.4.4-h6a678d5_0 
+  libgcc-ng          conda-forge/linux-64::libgcc-ng-13.2.0-h807b86a_2 
+  libgfortran-ng     pkgs/main/linux-64::libgfortran-ng-11.2.0-h00389a5_1 
+  libgfortran5       pkgs/main/linux-64::libgfortran5-11.2.0-h1234567_1 
+  libiconv           pkgs/main/linux-64::libiconv-1.16-h7f8727e_2 
+  libidn2            pkgs/main/linux-64::libidn2-2.3.4-h5eee18b_0 
+  libjpeg-turbo      pytorch/linux-64::libjpeg-turbo-2.0.0-h9bf148f_0 
+  libllvm14          pkgs/main/linux-64::libllvm14-14.0.6-hdb19cb5_3 
+  libnghttp2         pkgs/main/linux-64::libnghttp2-1.57.0-h2d74bed_0 
+  libnpp             nvidia/linux-64::libnpp-11.8.0.86-0 
+  libnvjpeg          nvidia/linux-64::libnvjpeg-11.9.0.86-0 
+  libpng             pkgs/main/linux-64::libpng-1.6.39-h5eee18b_0 
+  libpq              pkgs/main/linux-64::libpq-12.15-hdbd6064_1 
+  libprotobuf        pkgs/main/linux-64::libprotobuf-3.20.3-he621ea3_0 
+  libsodium          pkgs/main/linux-64::libsodium-1.0.18-h7b6447c_0 
+  libssh2            pkgs/main/linux-64::libssh2-1.10.0-hdbd6064_2 
+  libstdcxx-ng       conda-forge/linux-64::libstdcxx-ng-13.2.0-h7e041cc_2 
+  libtasn1           pkgs/main/linux-64::libtasn1-4.19.0-h5eee18b_0 
+  libthrift          pkgs/main/linux-64::libthrift-0.15.0-h1795dd8_2 
+  libtiff            pkgs/main/linux-64::libtiff-4.5.1-h6a678d5_0 
+  libunistring       pkgs/main/linux-64::libunistring-0.9.10-h27cfd23_0 
+  libuuid            pkgs/main/linux-64::libuuid-1.41.5-h5eee18b_0 
+  libwebp            pkgs/main/linux-64::libwebp-1.3.2-h11a3e52_0 
+  libwebp-base       pkgs/main/linux-64::libwebp-base-1.3.2-h5eee18b_0 
+  libxcb             pkgs/main/linux-64::libxcb-1.15-h7f8727e_0 
+  libxkbcommon       pkgs/main/linux-64::libxkbcommon-1.0.1-h5eee18b_1 
+  libxml2            pkgs/main/linux-64::libxml2-2.10.4-hf1b16e4_1 
+  llvm-openmp        pkgs/main/linux-64::llvm-openmp-14.0.6-h9e868ea_0 
+  llvmlite           pkgs/main/linux-64::llvmlite-0.40.1-py311he621ea3_0 
+  lz4-c              pkgs/main/linux-64::lz4-c-1.9.4-h6a678d5_0 
+  markupsafe         pkgs/main/linux-64::markupsafe-2.1.1-py311h5eee18b_0 
+  matplotlib         pkgs/main/linux-64::matplotlib-3.8.0-py311h06a4308_0 
+  matplotlib-base    pkgs/main/linux-64::matplotlib-base-3.8.0-py311ha02d727_0 
+  matplotlib-inline  pkgs/main/linux-64::matplotlib-inline-0.1.6-py311h06a4308_0 
+  mistune            pkgs/main/linux-64::mistune-2.0.4-py311h06a4308_0 
+  mkl                pkgs/main/linux-64::mkl-2023.1.0-h213fc3f_46343 
+  mkl-service        pkgs/main/linux-64::mkl-service-2.4.0-py311h5eee18b_1 
+  mkl_fft            pkgs/main/linux-64::mkl_fft-1.3.8-py311h5eee18b_0 
+  mkl_random         pkgs/main/linux-64::mkl_random-1.2.4-py311hdb19cb5_0 
+  mpc                pkgs/main/linux-64::mpc-1.1.0-h10f8cd9_1 
+  mpfr               pkgs/main/linux-64::mpfr-4.0.2-hb69a4c5_1 
+  mpmath             pkgs/main/linux-64::mpmath-1.3.0-py311h06a4308_0 
+  multidict          pkgs/main/linux-64::multidict-6.0.2-py311h5eee18b_0 
+  multiprocess       pkgs/main/linux-64::multiprocess-0.70.14-py311h06a4308_0 
+  munkres            pkgs/main/noarch::munkres-1.1.4-py_0 
+  murmurhash         pkgs/main/linux-64::murmurhash-1.0.7-py311h6a678d5_0 
+  mysql              pkgs/main/linux-64::mysql-5.7.24-h721c034_2 
+  nbclassic          pkgs/main/linux-64::nbclassic-0.5.5-py311h06a4308_0 
+  nbclient           pkgs/main/linux-64::nbclient-0.8.0-py311h06a4308_0 
+  nbconvert          pkgs/main/linux-64::nbconvert-7.10.0-py311h06a4308_0 
+  nbformat           pkgs/main/linux-64::nbformat-5.9.2-py311h06a4308_0 
+  ncurses            pkgs/main/linux-64::ncurses-6.4-h6a678d5_0 
+  nest-asyncio       pkgs/main/linux-64::nest-asyncio-1.5.6-py311h06a4308_0 
+  nettle             pkgs/main/linux-64::nettle-3.7.3-hbbd107a_1 
+  networkx           pkgs/main/linux-64::networkx-3.1-py311h06a4308_0 
+  nltk               pkgs/main/linux-64::nltk-3.8.1-py311h06a4308_0 
+  notebook           pkgs/main/linux-64::notebook-6.5.4-py311h06a4308_1 
+  notebook-shim      pkgs/main/linux-64::notebook-shim-0.2.2-py311h06a4308_0 
+  numba              conda-forge/linux-64::numba-0.57.1-py311h96b013e_0 
+  numexpr            pkgs/main/linux-64::numexpr-2.8.7-py311h65dcdc2_0 
+  numpy              pkgs/main/linux-64::numpy-1.24.3-py311h08b1b3b_1 
+  numpy-base         pkgs/main/linux-64::numpy-base-1.24.3-py311hf175353_1 
+  openh264           pkgs/main/linux-64::openh264-2.1.1-h4ff587b_0 
+  openjpeg           pkgs/main/linux-64::openjpeg-2.4.0-h3ad879b_0 
+  openssl            conda-forge/linux-64::openssl-3.1.4-hd590300_0 
+  orc                pkgs/main/linux-64::orc-1.7.4-hb3bc3d3_1 
+  packaging          pkgs/main/linux-64::packaging-23.1-py311h06a4308_0 
+  pandas             pkgs/main/linux-64::pandas-2.1.1-py311ha02d727_0 
+  pandocfilters      pkgs/main/noarch::pandocfilters-1.5.0-pyhd3eb1b0_0 
+  parso              pkgs/main/noarch::parso-0.8.3-pyhd3eb1b0_0 
+  pathy              pkgs/main/linux-64::pathy-0.10.1-py311h06a4308_0 
+  pcre               pkgs/main/linux-64::pcre-8.45-h295c915_0 
+  pexpect            pkgs/main/noarch::pexpect-4.8.0-pyhd3eb1b0_3 
+  pickleshare        pkgs/main/noarch::pickleshare-0.7.5-pyhd3eb1b0_1003 
+  pillow             pkgs/main/linux-64::pillow-10.0.1-py311ha6cbd5a_0 
+  pip                pkgs/main/linux-64::pip-23.3-py311h06a4308_0 
+  platformdirs       pkgs/main/linux-64::platformdirs-3.10.0-py311h06a4308_0 
+  ply                pkgs/main/linux-64::ply-3.11-py311h06a4308_0 
+  preshed            pkgs/main/linux-64::preshed-3.0.6-py311h6a678d5_0 
+  prometheus_client  pkgs/main/linux-64::prometheus_client-0.14.1-py311h06a4308_0 
+  prompt-toolkit     pkgs/main/linux-64::prompt-toolkit-3.0.36-py311h06a4308_0 
+  prompt_toolkit     pkgs/main/noarch::prompt_toolkit-3.0.36-hd3eb1b0_0 
+  protobuf           conda-forge/linux-64::protobuf-3.20.3-py311hcafe171_1 
+  psutil             pkgs/main/linux-64::psutil-5.9.0-py311h5eee18b_0 
+  ptyprocess         pkgs/main/noarch::ptyprocess-0.7.0-pyhd3eb1b0_2 
+  pure_eval          pkgs/main/noarch::pure_eval-0.2.2-pyhd3eb1b0_0 
+  pyarrow            pkgs/main/linux-64::pyarrow-11.0.0-py311hd8e8d9b_1 
+  pycparser          pkgs/main/noarch::pycparser-2.21-pyhd3eb1b0_0 
+  pydantic           pkgs/main/linux-64::pydantic-1.10.12-py311h5eee18b_1 
+  pygments           pkgs/main/linux-64::pygments-2.15.1-py311h06a4308_1 
+  pyopenssl          pkgs/main/linux-64::pyopenssl-23.2.0-py311h06a4308_0 
+  pyparsing          pkgs/main/linux-64::pyparsing-3.0.9-py311h06a4308_0 
+  pyqt               pkgs/main/linux-64::pyqt-5.15.10-py311h6a678d5_0 
+  pyqt5-sip          pkgs/main/linux-64::pyqt5-sip-12.13.0-py311h5eee18b_0 
+  pysocks            pkgs/main/linux-64::pysocks-1.7.1-py311h06a4308_0 
+  python             pkgs/main/linux-64::python-3.11.5-h955ad1f_0 
+  python-dateutil    pkgs/main/noarch::python-dateutil-2.8.2-pyhd3eb1b0_0 
+  python-fastjsonsc~ pkgs/main/linux-64::python-fastjsonschema-2.16.2-py311h06a4308_0 
+  python-json-logger pkgs/main/linux-64::python-json-logger-2.0.7-py311h06a4308_0 
+  python-tzdata      pkgs/main/noarch::python-tzdata-2023.3-pyhd3eb1b0_0 
+  python-xxhash      pkgs/main/linux-64::python-xxhash-2.0.2-py311h5eee18b_1 
+  python_abi         conda-forge/linux-64::python_abi-3.11-2_cp311 
+  pytorch            pytorch/linux-64::pytorch-2.1.0-py3.11_cuda11.8_cudnn8.7.0_0 
+  pytorch-cuda       pytorch/linux-64::pytorch-cuda-11.8-h7e8668a_5 
+  pytorch-mutex      pytorch/noarch::pytorch-mutex-1.0-cuda 
+  pytz               pkgs/main/linux-64::pytz-2023.3.post1-py311h06a4308_0 
+  pyyaml             pkgs/main/linux-64::pyyaml-6.0.1-py311h5eee18b_0 
+  pyzmq              pkgs/main/linux-64::pyzmq-23.2.0-py311h6a678d5_0 
+  qt-main            pkgs/main/linux-64::qt-main-5.15.2-h53bd1ea_10 
+  qtconsole          pkgs/main/linux-64::qtconsole-5.4.2-py311h06a4308_0 
+  qtpy               pkgs/main/linux-64::qtpy-2.2.0-py311h06a4308_0 
+  re2                pkgs/main/linux-64::re2-2022.04.01-h295c915_0 
+  readline           pkgs/main/linux-64::readline-8.2-h5eee18b_0 
+  referencing        pkgs/main/linux-64::referencing-0.30.2-py311h06a4308_0 
+  regex              pkgs/main/linux-64::regex-2023.10.3-py311h5eee18b_0 
+  requests           pkgs/main/linux-64::requests-2.31.0-py311h06a4308_0 
+  responses          pkgs/main/noarch::responses-0.13.3-pyhd3eb1b0_0 
+  rfc3339-validator  pkgs/main/linux-64::rfc3339-validator-0.1.4-py311h06a4308_0 
+  rfc3986-validator  pkgs/main/linux-64::rfc3986-validator-0.1.1-py311h06a4308_0 
+  rpds-py            pkgs/main/linux-64::rpds-py-0.10.6-py311hb02cf49_0 
+  sacremoses         pkgs/main/noarch::sacremoses-0.0.43-pyhd3eb1b0_0 
+  safetensors        pkgs/main/linux-64::safetensors-0.4.0-py311h24d97f6_0 
+  scikit-learn       pkgs/main/linux-64::scikit-learn-1.2.2-py311h6a678d5_1 
+  scipy              pkgs/main/linux-64::scipy-1.11.3-py311h08b1b3b_0 
+  send2trash         pkgs/main/noarch::send2trash-1.8.0-pyhd3eb1b0_1 
+  sentencepiece      pkgs/main/linux-64::sentencepiece-0.1.99-py311hdb19cb5_0 
+  setuptools         pkgs/main/linux-64::setuptools-68.0.0-py311h06a4308_0 
+  shellingham        pkgs/main/linux-64::shellingham-1.5.0-py311h06a4308_0 
+  sip                pkgs/main/linux-64::sip-6.7.12-py311h6a678d5_0 
+  six                pkgs/main/noarch::six-1.16.0-pyhd3eb1b0_1 
+  slicer             pkgs/main/noarch::slicer-0.0.7-pyhd3eb1b0_0 
+  smart_open         pkgs/main/linux-64::smart_open-5.2.1-py311h06a4308_0 
+  snappy             pkgs/main/linux-64::snappy-1.1.9-h295c915_0 
+  sniffio            pkgs/main/linux-64::sniffio-1.2.0-py311h06a4308_1 
+  soupsieve          pkgs/main/linux-64::soupsieve-2.5-py311h06a4308_0 
+  spacy              pkgs/main/linux-64::spacy-3.5.3-py311h4cb112f_0 
+  spacy-legacy       pkgs/main/linux-64::spacy-legacy-3.0.12-py311h06a4308_0 
+  spacy-loggers      pkgs/main/linux-64::spacy-loggers-1.0.4-py311h06a4308_0 
+  sqlite             pkgs/main/linux-64::sqlite-3.41.2-h5eee18b_0 
+  srsly              pkgs/main/linux-64::srsly-2.4.8-py311h6a678d5_0 
+  stack_data         pkgs/main/noarch::stack_data-0.2.0-pyhd3eb1b0_0 
+  sympy              pkgs/main/linux-64::sympy-1.11.1-py311h06a4308_0 
+  tbb                pkgs/main/linux-64::tbb-2021.8.0-hdb19cb5_0 
+  terminado          pkgs/main/linux-64::terminado-0.17.1-py311h06a4308_0 
+  thinc              pkgs/main/linux-64::thinc-8.1.10-py311h4cb112f_0 
+  threadpoolctl      pkgs/main/noarch::threadpoolctl-2.2.0-pyh0d69192_0 
+  tinycss2           pkgs/main/linux-64::tinycss2-1.2.1-py311h06a4308_0 
+  tk                 pkgs/main/linux-64::tk-8.6.12-h1ccaba5_0 
+  tokenizers         conda-forge/linux-64::tokenizers-0.14.1-py311h6640629_2 
+  torchaudio         pytorch/linux-64::torchaudio-2.1.0-py311_cu118 
+  torchtriton        pytorch/linux-64::torchtriton-2.1.0-py311 
+  torchvision        pytorch/linux-64::torchvision-0.16.0-py311_cu118 
+  tornado            pkgs/main/linux-64::tornado-6.3.3-py311h5eee18b_0 
+  tqdm               pkgs/main/linux-64::tqdm-4.65.0-py311h92b7b1e_0 
+  traitlets          pkgs/main/linux-64::traitlets-5.7.1-py311h06a4308_0 
+  transformers       conda-forge/noarch::transformers-4.35.0-pyhd8ed1ab_0 
+  typer              pkgs/main/linux-64::typer-0.4.1-py311h06a4308_0 
+  typing-extensions  pkgs/main/linux-64::typing-extensions-4.7.1-py311h06a4308_0 
+  typing_extensions  pkgs/main/linux-64::typing_extensions-4.7.1-py311h06a4308_0 
+  tzdata             pkgs/main/noarch::tzdata-2023c-h04d1e81_0 
+  urllib3            pkgs/main/linux-64::urllib3-1.26.18-py311h06a4308_0 
+  utf8proc           pkgs/main/linux-64::utf8proc-2.6.1-h27cfd23_0 
+  wasabi             pkgs/main/linux-64::wasabi-0.9.1-py311h06a4308_0 
+  wcwidth            pkgs/main/noarch::wcwidth-0.2.5-pyhd3eb1b0_0 
+  webencodings       pkgs/main/linux-64::webencodings-0.5.1-py311h06a4308_1 
+  websocket-client   pkgs/main/linux-64::websocket-client-0.58.0-py311h06a4308_4 
+  wheel              pkgs/main/linux-64::wheel-0.41.2-py311h06a4308_0 
+  widgetsnbextension pkgs/main/linux-64::widgetsnbextension-4.0.5-py311h06a4308_0 
+  xxhash             pkgs/main/linux-64::xxhash-0.8.0-h7f8727e_3 
+  xz                 pkgs/main/linux-64::xz-5.4.2-h5eee18b_0 
+  y-py               pkgs/main/linux-64::y-py-0.5.9-py311h52d8a92_0 
+  yaml               pkgs/main/linux-64::yaml-0.2.5-h7b6447c_0 
+  yarl               pkgs/main/linux-64::yarl-1.8.1-py311h5eee18b_0 
+  ypy-websocket      pkgs/main/linux-64::ypy-websocket-0.8.2-py311h06a4308_0 
+  zeromq             pkgs/main/linux-64::zeromq-4.3.4-h2531618_0 
+  zipp               pkgs/main/linux-64::zipp-3.11.0-py311h06a4308_0 
+  zlib               pkgs/main/linux-64::zlib-1.2.13-h5eee18b_0 
+  zstd               pkgs/main/linux-64::zstd-1.5.5-hc292b87_0 
+
+
+
+Downloading and Extracting Packages: ...working... done
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... 
+
+    Installed package of scikit-learn can be accelerated using scikit-learn-intelex.
+    More details are available here: https://intel.github.io/scikit-learn-intelex
+
+    For example:
+
+        $ conda install scikit-learn-intelex
+        $ python -m sklearnex my_application.py
+
+    
+
+done
+#
+# To activate this environment, use
+#
+#     $ conda activate fact
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+
+JOB STATISTICS
+==============
+Job ID: 9592035
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:08:39
+CPU Efficiency: 2.12% of 06:48:36 core-walltime
+Job Wall-clock time: 00:22:42
+Memory Utilized: 2.47 GB
+Memory Efficiency: 2.06% of 120.00 GB

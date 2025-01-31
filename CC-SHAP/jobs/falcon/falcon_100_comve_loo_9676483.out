@@ -1,0 +1,161 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+17:00:24 [shap] [92mINFO    [0m: Cuda is available: True
+17:00:25 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='falcon-7b-chat', number_of_samples=100, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.68, classify_pred=False, result_dir='loo_test')
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.17s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  2.85s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.05s/it]
+The `use_auth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+17:00:32 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:06.660571
+17:00:32 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+17:00:32 [shap] [92mINFO    [0m: Preparing data...
+17:00:32 [shap] [92mINFO    [0m: Done preparing data. Running test...
+17:00:32 [shap] [92mINFO    [0m: Example 0
+17:00:51 [shap] [92mINFO    [0m: Example 1
+17:01:02 [shap] [92mINFO    [0m: Example 2
+17:01:14 [shap] [92mINFO    [0m: Example 3
+17:01:26 [shap] [92mINFO    [0m: Example 4
+17:01:38 [shap] [92mINFO    [0m: Example 5
+17:01:52 [shap] [92mINFO    [0m: Example 6
+17:02:08 [shap] [92mINFO    [0m: Example 7
+17:02:22 [shap] [92mINFO    [0m: Example 8
+17:02:36 [shap] [92mINFO    [0m: Example 9
+17:02:50 [shap] [92mINFO    [0m: Example 10
+17:03:02 [shap] [92mINFO    [0m: Example 11
+17:03:15 [shap] [92mINFO    [0m: Example 12
+17:03:30 [shap] [92mINFO    [0m: Example 13
+17:03:43 [shap] [92mINFO    [0m: Example 14
+17:03:55 [shap] [92mINFO    [0m: Example 15
+17:04:09 [shap] [92mINFO    [0m: Example 16
+17:04:22 [shap] [92mINFO    [0m: Example 17
+17:04:37 [shap] [92mINFO    [0m: Example 18
+17:04:52 [shap] [92mINFO    [0m: Example 19
+17:05:07 [shap] [92mINFO    [0m: Example 20
+17:05:19 [shap] [92mINFO    [0m: Example 21
+17:05:31 [shap] [92mINFO    [0m: Example 22
+17:05:47 [shap] [92mINFO    [0m: Example 23
+17:05:59 [shap] [92mINFO    [0m: Example 24
+17:06:11 [shap] [92mINFO    [0m: Example 25
+17:06:24 [shap] [92mINFO    [0m: Example 26
+17:06:38 [shap] [92mINFO    [0m: Example 27
+17:06:53 [shap] [92mINFO    [0m: Example 28
+17:07:06 [shap] [92mINFO    [0m: Example 29
+17:07:19 [shap] [92mINFO    [0m: Example 30
+17:07:33 [shap] [92mINFO    [0m: Example 31
+17:07:49 [shap] [92mINFO    [0m: Example 32
+17:08:04 [shap] [92mINFO    [0m: Example 33
+17:08:19 [shap] [92mINFO    [0m: Example 34
+17:08:33 [shap] [92mINFO    [0m: Example 35
+17:08:43 [shap] [92mINFO    [0m: Example 36
+17:08:55 [shap] [92mINFO    [0m: Example 37
+17:09:07 [shap] [92mINFO    [0m: Example 38
+17:09:19 [shap] [92mINFO    [0m: Example 39
+17:09:33 [shap] [92mINFO    [0m: Example 40
+17:09:50 [shap] [92mINFO    [0m: Example 41
+17:10:05 [shap] [92mINFO    [0m: Example 42
+17:10:19 [shap] [92mINFO    [0m: Example 43
+17:10:35 [shap] [92mINFO    [0m: Example 44
+17:10:47 [shap] [92mINFO    [0m: Example 45
+17:11:02 [shap] [92mINFO    [0m: Example 46
+17:11:17 [shap] [92mINFO    [0m: Example 47
+17:11:31 [shap] [92mINFO    [0m: Example 48
+17:11:43 [shap] [92mINFO    [0m: Example 49
+17:11:57 [shap] [92mINFO    [0m: Example 50
+17:12:11 [shap] [92mINFO    [0m: Example 51
+17:12:25 [shap] [92mINFO    [0m: Example 52
+17:12:36 [shap] [92mINFO    [0m: Example 53
+17:12:51 [shap] [92mINFO    [0m: Example 54
+17:13:05 [shap] [92mINFO    [0m: Example 55
+17:13:17 [shap] [92mINFO    [0m: Example 56
+17:13:32 [shap] [92mINFO    [0m: Example 57
+17:13:46 [shap] [92mINFO    [0m: Example 58
+17:14:02 [shap] [92mINFO    [0m: Example 59
+17:14:17 [shap] [92mINFO    [0m: Example 60
+17:14:32 [shap] [92mINFO    [0m: Example 61
+17:14:47 [shap] [92mINFO    [0m: Example 62
+17:15:01 [shap] [92mINFO    [0m: Example 63
+17:15:13 [shap] [92mINFO    [0m: Example 64
+17:15:26 [shap] [92mINFO    [0m: Example 65
+17:15:42 [shap] [92mINFO    [0m: Example 66
+17:15:57 [shap] [92mINFO    [0m: Example 67
+17:16:09 [shap] [92mINFO    [0m: Example 68
+17:16:22 [shap] [92mINFO    [0m: Example 69
+17:16:34 [shap] [92mINFO    [0m: Example 70
+17:16:48 [shap] [92mINFO    [0m: Example 71
+17:17:03 [shap] [92mINFO    [0m: Example 72
+17:17:17 [shap] [92mINFO    [0m: Example 73
+17:17:29 [shap] [92mINFO    [0m: Example 74
+17:17:44 [shap] [92mINFO    [0m: Example 75
+17:17:59 [shap] [92mINFO    [0m: Example 76
+17:18:14 [shap] [92mINFO    [0m: Example 77
+17:18:29 [shap] [92mINFO    [0m: Example 78
+17:18:41 [shap] [92mINFO    [0m: Example 79
+17:18:57 [shap] [92mINFO    [0m: Example 80
+17:19:13 [shap] [92mINFO    [0m: Example 81
+17:19:27 [shap] [92mINFO    [0m: Example 82
+17:19:41 [shap] [92mINFO    [0m: Example 83
+17:19:56 [shap] [92mINFO    [0m: Example 84
+17:20:11 [shap] [92mINFO    [0m: Example 85
+17:20:25 [shap] [92mINFO    [0m: Example 86
+17:20:40 [shap] [92mINFO    [0m: Example 87
+17:20:56 [shap] [92mINFO    [0m: Example 88
+17:21:12 [shap] [92mINFO    [0m: Example 89
+17:21:24 [shap] [92mINFO    [0m: Example 90
+17:21:37 [shap] [92mINFO    [0m: Example 91
+17:21:51 [shap] [92mINFO    [0m: Example 92
+17:22:05 [shap] [92mINFO    [0m: Example 93
+17:22:18 [shap] [92mINFO    [0m: Example 94
+17:22:33 [shap] [92mINFO    [0m: Example 95
+17:22:45 [shap] [92mINFO    [0m: Example 96
+17:22:58 [shap] [92mINFO    [0m: Example 97
+17:23:12 [shap] [92mINFO    [0m: Example 98
+17:23:25 [shap] [92mINFO    [0m: Example 99
+17:23:40 [shap] [92mINFO    [0m: Tests are done. Time elapsed 0:23:07.829313
+None
+Ran ['loo-posthoc', 'loo-cot'] on comve data with model falcon-7b-chat. Reporting accuracy and faithfulness percentage.
+
+Accuracy %                         : 38.00  
+Atanasova Counterfact %            : 0.00  
+Atanasova Input from Expl %        : 0.00  
+CC-SHAP post-hoc mean score        : 0.00  
+Accuracy CoT %                     : 37.00  
+Turpin %                           : 0.00  
+Lanham Early Answering %           : 0.00  
+Lanham Filler %                    : 0.00  
+Lanham Mistake %                   : 0.00  
+Lanham Paraphrase %                : 0.00  
+CC-SHAP CoT mean score             : 0.00  
+CC-SHAP CoT Alternative mean score : 0.00  
+LOO Post-hoc MSE mean score        : 0.40  
+LOO Post-hoc Cosim mean score      : 0.20  
+LOO CoT MSE mean score             : 0.41  
+LOO CoT Cosim mean score           : 0.27  
+LOO slow Post-hoc MSE mean score   : 0.00  
+LOO slow Post-hoc Cosim mean score : 0.00  
+LOO slow CoT MSE mean score        : 0.00  
+LOO slow CoT Cosim mean score      : 0.00  
+
+JOB STATISTICS
+==============
+Job ID: 9676483
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:24:00
+CPU Efficiency: 5.62% of 07:07:12 core-walltime
+Job Wall-clock time: 00:23:44
+Memory Utilized: 1.10 GB
+Memory Efficiency: 0.91% of 120.00 GB

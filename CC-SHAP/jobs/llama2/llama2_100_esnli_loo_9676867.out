@@ -1,0 +1,106 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+17:11:27 [shap] [92mINFO    [0m: Cuda is available: True
+17:11:27 [shap] [92mINFO    [0m: Args: Namespace(c_task='esnli', model_name='llama2-7b-chat', number_of_samples=100, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.68, classify_pred=False, result_dir='loo_test')
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:05<00:05,  5.83s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.64s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.97s/it]
+The `use_auth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+17:11:36 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:08.777716
+17:11:36 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+17:11:36 [shap] [92mINFO    [0m: Preparing data...
+17:11:36 [shap] [92mINFO    [0m: Done preparing data. Running test...
+17:11:36 [shap] [92mINFO    [0m: Example 0
+`do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+`do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+`do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+`do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+17:12:08 [shap] [92mINFO    [0m: Example 1
+`do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+`do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+`do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+`do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+None
+Traceback (most recent call last):
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/faithfulness.py", line 410, in <module>
+    loo_measures = faithfulness_loo_test(
+                   ^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/tests/LOO.py", line 76, in faithfulness_loo_test
+    new_generated_explanation = pipeline.lm_generate(modified_prompts, max_new_tokens_explanation, repeat_input=False, padding=True)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/rvdveen/FACT-AI/CC-SHAP/pipeline.py", line 265, in lm_generate
+    generated_ids = model.generate(
+                    ^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/generation/utils.py", line 1719, in generate
+    return self.sample(
+           ^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/generation/utils.py", line 2801, in sample
+    outputs = self(
+              ^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py", line 1034, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py", line 922, in forward
+    layer_outputs = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py", line 672, in forward
+    hidden_states, self_attn_weights, present_key_value = self.self_attn(
+                                                          ^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/rvdveen/.conda/envs/fact/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py", line 382, in forward
+    key_states = torch.cat([past_key_value[0], key_states], dim=2)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 108.00 MiB. GPU 0 has a total capacty of 39.50 GiB of which 102.12 MiB is free. Including non-PyTorch memory, this process has 39.39 GiB memory in use. Of the allocated memory 38.48 GiB is allocated by PyTorch, and 433.17 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+srun: error: gcn36: task 0: Exited with exit code 1
+srun: Terminating StepId=9676867.0
+
+JOB STATISTICS
+==============
+Job ID: 9676867
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:02:16
+CPU Efficiency: 7.26% of 00:31:12 core-walltime
+Job Wall-clock time: 00:01:44
+Memory Utilized: 1.03 GB
+Memory Efficiency: 0.86% of 120.00 GB

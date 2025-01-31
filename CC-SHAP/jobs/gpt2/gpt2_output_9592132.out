@@ -1,0 +1,65 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+"is" with a literal. Did you mean "=="?
+"is" with a literal. Did you mean "=="?
+"is" with a literal. Did you mean "=="?
+"is" with a literal. Did you mean "=="?
+"is not" with a literal. Did you mean "!="?
+"is not" with a literal. Did you mean "!="?
+02:12:06 [shap] [92mINFO    [0m: Cuda is available: True
+02:12:06 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='gpt2', number_of_samples=1, explainer_type='partition', max_evaluations=500, classify_pred=False)
+Downloading config.json:   0%|          | 0.00/665 [00:00<?, ?B/s]Downloading config.json: 100%|██████████| 665/665 [00:00<00:00, 5.87MB/s]
+Downloading model.safetensors:   0%|          | 0.00/548M [00:00<?, ?B/s]Downloading model.safetensors:   6%|▌         | 31.5M/548M [00:00<00:02, 256MB/s]Downloading model.safetensors:  11%|█▏        | 62.9M/548M [00:00<00:01, 255MB/s]Downloading model.safetensors:  17%|█▋        | 94.4M/548M [00:00<00:01, 256MB/s]Downloading model.safetensors:  23%|██▎       | 126M/548M [00:00<00:01, 253MB/s] Downloading model.safetensors:  29%|██▊       | 157M/548M [00:00<00:01, 250MB/s]Downloading model.safetensors:  34%|███▍      | 189M/548M [00:00<00:01, 255MB/s]Downloading model.safetensors:  40%|████      | 220M/548M [00:00<00:01, 253MB/s]Downloading model.safetensors:  46%|████▌     | 252M/548M [00:00<00:01, 251MB/s]Downloading model.safetensors:  52%|█████▏    | 283M/548M [00:01<00:01, 252MB/s]Downloading model.safetensors:  57%|█████▋    | 315M/548M [00:01<00:00, 254MB/s]Downloading model.safetensors:  63%|██████▎   | 346M/548M [00:01<00:00, 254MB/s]Downloading model.safetensors:  69%|██████▉   | 377M/548M [00:01<00:00, 253MB/s]Downloading model.safetensors:  75%|███████▍  | 409M/548M [00:01<00:00, 254MB/s]Downloading model.safetensors:  80%|████████  | 440M/548M [00:01<00:00, 253MB/s]Downloading model.safetensors:  86%|████████▌ | 472M/548M [00:01<00:00, 252MB/s]Downloading model.safetensors:  92%|█████████▏| 503M/548M [00:01<00:00, 248MB/s]Downloading model.safetensors:  98%|█████████▊| 535M/548M [00:02<00:00, 248MB/s]Downloading model.safetensors: 100%|██████████| 548M/548M [00:02<00:00, 252MB/s]
+The `use_auth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+Downloading generation_config.json:   0%|          | 0.00/124 [00:00<?, ?B/s]Downloading generation_config.json: 100%|██████████| 124/124 [00:00<00:00, 1.24MB/s]
+Downloading tokenizer_config.json:   0%|          | 0.00/26.0 [00:00<?, ?B/s]Downloading tokenizer_config.json: 100%|██████████| 26.0/26.0 [00:00<00:00, 234kB/s]
+Downloading vocab.json:   0%|          | 0.00/1.04M [00:00<?, ?B/s]Downloading vocab.json: 100%|██████████| 1.04M/1.04M [00:00<00:00, 4.25MB/s]Downloading vocab.json: 100%|██████████| 1.04M/1.04M [00:00<00:00, 4.25MB/s]
+Downloading merges.txt:   0%|          | 0.00/456k [00:00<?, ?B/s]Downloading merges.txt: 100%|██████████| 456k/456k [00:00<00:00, 68.1MB/s]
+Downloading tokenizer.json:   0%|          | 0.00/1.36M [00:00<?, ?B/s]Downloading tokenizer.json: 100%|██████████| 1.36M/1.36M [00:00<00:00, 16.3MB/s]
+02:12:12 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:05.939156
+02:12:12 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+02:12:12 [shap] [92mINFO    [0m: Preparing data...
+02:12:12 [shap] [92mINFO    [0m: Done preparing data. Running test...
+02:12:12 [shap] [92mINFO    [0m: Example 0
+02:13:17 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+02:13:17 [shap] [92mINFO    [0m: Tests are done. Time elapsed 0:01:04.934020
+Ran ['cc_shap-posthoc'] on comve data with model gpt2. Reporting accuracy and faithfulness percentage.
+
+Accuracy %                  : 0.00  
+Atanasova Counterfact %     : 0.00  
+Atanasova Input from Expl % : 0.00  
+CC-SHAP post-hoc mean score : 0.17  
+Accuracy CoT %              : 0.00  
+Turpin %                    : 0.00  
+Lanham Early Answering %    : 0.00  
+Lanham Filler %             : 0.00  
+Lanham Mistake %            : 0.00  
+Lanham Paraphrase %         : 0.00  
+CC-SHAP CoT mean score      : 0.00  
+
+JOB STATISTICS
+==============
+Job ID: 9592132
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:01:20
+CPU Efficiency: 4.44% of 00:30:00 core-walltime
+Job Wall-clock time: 00:01:40
+Memory Utilized: 1.71 GB
+Memory Efficiency: 1.43% of 120.00 GB

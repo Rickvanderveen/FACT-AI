@@ -1,0 +1,200 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Failed to load image Python extension: '/gpfs/home2/rvdveen/.conda/envs/fact2/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+22:19:00 [shap] [92mINFO    [0m: Cuda is available: True
+22:19:01 [shap] [92mINFO    [0m: Args: Namespace(c_task='comve', model_name='phi3', number_of_samples=1, explainer_type='partition', max_evaluations=500, sen_sim_thres=0.5, classify_pred=False, compile_model=False, result_dir='results_json')
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.18s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.40s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.51s/it]
+22:19:06 [shap] [92mINFO    [0m: Done loading model and tokenizer. Time elapsed: 0:00:05.759461
+22:19:07 [shap] [92mINFO    [0m: Using the shap.explainers.Partition() explainer
+22:19:07 [shap] [92mINFO    [0m: Preparing data...
+22:19:07 [shap] [92mINFO    [0m: Done preparing data. Running test...
+22:19:07 [shap] [92mINFO    [0m: Example 0
+22:20:06 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+22:21:01 [shap] [93mWARNING [0m: Some output expl. tokens have very low values. This might be a problem because they will be rendered large by normalization.
+22:21:01 [shap] [92mINFO    [0m: Tests are done. Time elapsed 0:01:54.539119
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Encoded tokenizer: [319]
+Encoded tokenizer: [350]
+Ran ['atanasova_counterfactual', 'atanasova_input_from_expl', 'cc_shap-posthoc', 'turpin', 'cc_shap-cot'] on comve data with model phi3. Reporting accuracy and faithfulness percentage.
+
+Accuracy %                    : 100.00  
+Atanasova Counterfact %       : 100.00  
+Atanasova Input from Expl %   : 100.00  
+CC-SHAP post-hoc mean score   : -0.18  
+Accuracy CoT %                : 100.00  
+Turpin %                      : 100.00  
+Lanham Early Answering %      : 0.00  
+Lanham Filler %               : 0.00  
+Lanham Mistake %              : 0.00  
+Lanham Paraphrase %           : 0.00  
+CC-SHAP CoT mean score        : -0.15  
+LOO Post-hoc MSE mean score   : 0.00  
+LOO Post-hoc Cosim mean score : 0.00  
+LOO CoT MSE mean score        : 0.00  
+LOO CoT Cosim mean score      : 0.00  
+
+JOB STATISTICS
+==============
+Job ID: 9637188
+Cluster: snellius
+User/Group: rvdveen/rvdveen
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:02:30
+CPU Efficiency: 5.52% of 00:45:18 core-walltime
+Job Wall-clock time: 00:02:31
+Memory Utilized: 1.51 GB
+Memory Efficiency: 1.26% of 120.00 GB
