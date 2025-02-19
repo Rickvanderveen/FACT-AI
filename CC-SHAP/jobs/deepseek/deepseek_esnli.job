@@ -18,4 +18,4 @@ source activate fact
 
 # pip install --upgrade transformers
 # pip install "accelerate>=0.26.0"
-srun python3 faithfulness.py esnli deepseek 1 "partition" 500 0.68 --result_dir="deepseek"
+srun python3 faithfulness.py esnli deepseek 20 "partition" 500 0.68 --result_dir="deepseek"
