@@ -35,6 +35,7 @@ MODELS = {
     'phi3': 'microsoft/Phi-3-mini-4k-instruct', # 3.82B params
     'phi3-medium-chat': 'microsoft/Phi-3-medium-4k-instruct', # 14B params
     'phi4': 'microsoft/phi-4', # 14.7B params
+    'deepseek': 'deepseek-ai/DeepSeek-R1-Distill-Llama-8B'
 }
 
 logger = logging.getLogger("shap")
