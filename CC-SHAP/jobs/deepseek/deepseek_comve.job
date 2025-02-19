@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=falcon_esnli
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=9
+#SBATCH --time=10:00:00
+#SBATCH --output=deepseek_20_comve_%A.out
+
+module purge
+module load 2024
+module load Anaconda3/2024.06-1
+
+cd $HOME/FACT-AI/CC-SHAP/
+
+source activate fact
+
+pip show transformers || pip install --upgrade transformers
+pip show accelerate || pip install "accelerate>=0.26.0"
+srun python3 faithfulness.py comve deepseek 1 "partition" 500 0.68 --result_dir="deepseek"
