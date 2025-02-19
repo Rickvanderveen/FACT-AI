@@ -106,12 +106,12 @@ TESTS = [
     # 'cc_shap-posthoc',
     'turpin',
     # 'lanham', # Needs a helper model
-    'cc_shap-cot',
+    # 'cc_shap-cot',
     'loo-posthoc',
     'loo-cot',
     'loo-posthoc-slow',
     'loo-cot-slow',
-    'cc_shap-cot-other-input',
+    # 'cc_shap-cot-other-input',
     'loo-cot-other-input',
 ]
 
