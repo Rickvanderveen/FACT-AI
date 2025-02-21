@@ -12,7 +12,7 @@ logger = logging.getLogger("shap")
 def aggregate_values_prediction(shap_values):
     """ Shape of shap_vals tensor (num_sentences, num_input_tokens, num_output_tokens). """
     # model_output = shap_values.base_values + shap_values.values.sum(axis=1)
-    ratios = shap_values /  np.abs(shap_values).sum(axis=1) * 100
+    ratios = shap_values / (np.abs(shap_values).sum(axis=1, keepdims=True) + 1e-10) * 100
     return np.mean(ratios, axis=2)[0] # we only have one explanation example in the batch
 
 def aggregate_values_explanation(shap_values, tokenizer, to_marginalize=""):
