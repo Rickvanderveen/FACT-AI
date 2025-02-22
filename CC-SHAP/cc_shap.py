@@ -12,7 +12,10 @@ logger = logging.getLogger("shap")
 def aggregate_values_prediction(shap_values):
     """ Shape of shap_vals tensor (num_sentences, num_input_tokens, num_output_tokens). """
     # model_output = shap_values.base_values + shap_values.values.sum(axis=1)
-    ratios = shap_values / (np.abs(shap_values).sum(axis=1, keepdims=True) + 1e-10) * 100
+    # ratios = shap_values /  np.abs(shap_values).sum(axis=1) * 100
+    denominator = (np.abs(shap_values).sum(axis=1, keepdims=True))
+    denominator[denominator < 1e-8] = 1
+    ratios = shap_values / denominator * 100
     return np.mean(ratios, axis=2)[0] # we only have one explanation example in the batch
 
 def aggregate_values_explanation(shap_values, tokenizer, to_marginalize=""):
@@ -43,12 +46,16 @@ def aggregate_values_explanation(shap_values, tokenizer, to_marginalize=""):
 
     # convert shap_values to ratios accounting for the different base values and predicted token probabilities between explanations
     normalization_value = np.abs(shap_values).sum(axis=1) - add_to_base
-    ratios = shap_values / normalization_value * 100
+    normalization_value[normalization_value < 1e-8] = 1
+    ratios = shap_values / (normalization_value) * 100
 
     # take only the input tokens (without the explanation prompting ('Yes. Why?'))
     return np.mean(ratios, axis=2)[0, :-len_to_marginalize], len_to_marginalize # we only have one explanation example in the batch
 
 def cc_shap_score(ratios_prediction, ratios_explanation):
+    ratios_prediction = np.nan_to_num(ratios_prediction, nan=0.0, posinf=1e-6, neginf=-1e-6)
+    ratios_explanation = np.nan_to_num(ratios_explanation, nan=0.0, posinf=1e-6, neginf=-1e-6)
+    
     cosine = spatial.distance.cosine(ratios_prediction, ratios_explanation)
     distance_correlation = spatial.distance.correlation(ratios_prediction, ratios_explanation)
     mse = metrics.mean_squared_error(ratios_prediction, ratios_explanation)
